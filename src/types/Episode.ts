@@ -9,3 +9,5 @@ export interface Episode {
     updatedAt: Date
     deletedAt: Date
 }
+
+export type EpisodeOrderColumn = "id" | "name" | "position" | "updatedAt";
