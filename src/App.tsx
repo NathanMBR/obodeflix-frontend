@@ -1,15 +1,40 @@
-import { useState } from "react"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+import CssBaseline from "@mui/material/CssBaseline";
+import { Container } from "@mui/material";
+
+import {
+  Main
+} from "./pages"
+
+const themes = {
+  darkTheme: createTheme(
+    {
+      palette: {
+        mode: "dark"
+      }
+    }
+  ),
+
+  lightTheme: createTheme(
+    {
+      palette: {
+        mode: "light"
+      }
+    }
+  )
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const theme = localStorage.getItem("theme") === "light" ? themes.lightTheme : themes.darkTheme
 
   return (
     <>
-      <h1>Hello, world!</h1>
-
-      <p>Count: {count}</p>
-      <button onClick={() => setCount(previousCount => previousCount + 1)}>+</button>
-      <button onClick={() => setCount(previousCount => previousCount - 1)}>-</button>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container>
+          <Main />
+        </Container>
+      </ThemeProvider>
     </>
   )
 }
