@@ -1,1 +1,1 @@
-export const getDurationTime = (duration: number) => `${Math.floor(duration / 60)}:${duration % 60}`;
+export const getDurationTime = (duration: number) => `${Math.floor(duration / 60) < 10 ? "0" : ""}${Math.floor(duration / 60)}min${duration % 60 < 10 ? "0" : ""}${duration % 60}s`;
