@@ -7,7 +7,7 @@ export interface Episode {
     position: number
     createdAt: Date
     updatedAt: Date
-    deletedAt: Date
+    deletedAt: Date | null
 }
 
 export type EpisodeOrderColumn = "id" | "name" | "position" | "updatedAt";
