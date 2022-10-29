@@ -3,6 +3,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Container } from "@mui/material";
 
 import {
+  Navbar,
+  Footer
+} from "./components";
+import {
   Main
 } from "./pages"
 
@@ -31,9 +35,13 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container>
+        <Navbar />
+
+        <Container style={{ marginTop: 96, marginBottom: 64 }}>
           <Main />
         </Container>
+
+        <Footer />
       </ThemeProvider>
     </>
   )
