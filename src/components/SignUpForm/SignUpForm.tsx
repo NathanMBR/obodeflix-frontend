@@ -112,7 +112,7 @@ export const SignUpForm = (props: SignUpFormProps) => {
                             <TextField
                                 inputRef={nameRef}
                                 name="name"
-                                label="Name"
+                                label="Nome"
                                 type="text"
                                 onChange={handleFormValidation}
                                 error={nameError}
