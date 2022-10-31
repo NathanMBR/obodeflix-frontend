@@ -21,7 +21,7 @@ export const EpisodeCard = (props: EpisodeCardProps) => {
 
     return (
         <>
-            <Grid item xs={12} alignItems="stretch" key={episode.id}>
+            <Grid item xs={12} alignItems="stretch">
                 <Paper elevation={12}>
                     <Card>
                         <CardContent>
