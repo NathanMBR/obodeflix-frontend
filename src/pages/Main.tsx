@@ -10,7 +10,6 @@ import {
 import { EpisodeCard } from "../components";
 
 export const Main = () => {
-    console.log(import.meta.env.VITE_APP_API_URL)
     const [page, setPage] = useState(1);
     const [quantity, setQuantity] = useState(20);
     const [orderColumn, setOrderColumn] = useState<EpisodeOrderColumn>("id");
@@ -75,7 +74,7 @@ export const Main = () => {
                             seasonId: 1,
                             duration: 1445,
                             path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_04_[H264][AAC][BD-720p][Hi10P][E00DEF89].mkv",
-                            position: 1,
+                            position: 4,
                             createdAt: new Date(),
                             updatedAt: new Date(),
                             deletedAt: null
@@ -87,7 +86,7 @@ export const Main = () => {
                             seasonId: 1,
                             duration: 1437,
                             path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_05_[H264][AAC][BD-720p][Hi10P][E9BFF95E].mkv",
-                            position: 2,
+                            position: 5,
                             createdAt: new Date(),
                             updatedAt: new Date(),
                             deletedAt: null
@@ -99,15 +98,84 @@ export const Main = () => {
                             seasonId: 1,
                             duration: 1436,
                             path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_06_[H264][AAC][BD-720p][Hi10P][DE4A6988].mkv",
-                            position: 3,
+                            position: 6,
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            deletedAt: null
+                        },
+
+                        {
+                            id: 7,
+                            name: "Episódio 7 - Divergência da Singularidade",
+                            seasonId: 1,
+                            duration: 1445,
+                            path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_07_[H264][AAC][BD-720p][Hi10P][2B8B0C78].mkv",
+                            position: 7,
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            deletedAt: null
+                        },
+
+                        {
+                            id: 8,
+                            name: "Episódio 8 - Teoria do Caos Homeostática I",
+                            seasonId: 1,
+                            duration: 1437,
+                            path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_08_[H264][AAC][BD-720p][Hi10P][A4AD7EE5].mkv",
+                            position: 8,
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            deletedAt: null
+                        },
+
+                        {
+                            id: 9,
+                            name: "Episódio 9 - Teoria do Caos Homeostática II",
+                            seasonId: 1,
+                            duration: 1436,
+                            path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_09_[H264][AAC][BD-720p][Hi10P][CC204F84].mkv",
+                            position: 9,
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            deletedAt: null
+                        },
+
+                        {
+                            id: 10,
+                            name: "Episódio 10 - Teoria do Caos Homeostática III",
+                            seasonId: 1,
+                            duration: 1445,
+                            path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_10_[H264][AAC][BD-720p][Hi10P][70F695A4].mkv",
+                            position: 10,
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            deletedAt: null
+                        },
+
+                        {
+                            id: 11,
+                            name: "Episódio 11 - Dogma no Horizonte de Eventos",
+                            seasonId: 1,
+                            duration: 1437,
+                            path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_11_[H264][AAC][BD-720p][Hi10P][FEC7403B].mkv",
+                            position: 11,
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            deletedAt: null
+                        },
+
+                        {
+                            id: 12,
+                            name: "Episódio 12 - Dogma na Ergosfera",
+                            seasonId: 1,
+                            duration: 1436,
+                            path: "/Steins;Gate/[Dollars_Fansub]_Steins;Gate_12_[H264][AAC][BD-720p][Hi10P][7BF325AE].mkv",
+                            position: 12,
                             createdAt: new Date(),
                             updatedAt: new Date(),
                             deletedAt: null
                         }
                     ]
-                        .sort(
-                            (episodeA, episodeB) => episodeA.id > episodeB.id ? -1 : 1
-                        )
                 }
             )
         },
@@ -116,8 +184,6 @@ export const Main = () => {
 
     useEffect(
         () => {
-            console.log(paginatedEpisodes)
-
             paginatedEpisodes
                 ? setEpisodes(paginatedEpisodes.data)
                 : setEpisodes([])
@@ -128,7 +194,7 @@ export const Main = () => {
     return (
         <>
             <Typography variant="h3" component="h2">Episódios mais recentes</Typography>
-            <Divider />
+            <Divider style={{ marginBottom: 16 }} />
             {
                 episodes.length > 0
                     ? <>
@@ -136,7 +202,7 @@ export const Main = () => {
                         <Grid container spacing={2}>
                             {
                                 episodes.map(
-                                    episode => <EpisodeCard episode={episode} />
+                                    episode => <EpisodeCard episode={episode} key={episode.id} />
                                 )
                             }
                         </Grid>
