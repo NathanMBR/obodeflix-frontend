@@ -22,10 +22,10 @@ export interface SignUpFormProps {
 export const SignUpForm = (props: SignUpFormProps) => {
     const { handleSubmit } = props;
 
-    const nameRef = useRef();
-    const emailRef = useRef();
+    const nameRef = useRef<TextFieldProps>();
+    const emailRef = useRef<TextFieldProps>();
     const passwordRef = useRef<TextFieldProps>();
-    const confirmPasswordRef = useRef();
+    const confirmPasswordRef = useRef<TextFieldProps>();
 
     const [nameError, setNameError] = useState(false);
     const [emailError, setEmailError] = useState(false);
@@ -152,6 +152,12 @@ export const SignUpForm = (props: SignUpFormProps) => {
                             <Button
                                 type="submit"
                                 variant="contained"
+                                disabled={
+                                    !nameRef.current?.value || nameError ||
+                                    !emailRef.current?.value || emailError ||
+                                    !passwordRef.current?.value || passwordError ||
+                                    !confirmPasswordRef.current?.value || confirmPasswordError
+                                }
                             >
                                 Criar conta
                             </Button>
