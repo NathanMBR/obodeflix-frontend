@@ -7,6 +7,7 @@ import {
 import {
     Button,
     Card,
+    CircularProgress,
     Divider,
     Paper,
     Stack,
@@ -17,10 +18,14 @@ import {
 
 export interface SignUpFormProps {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => void
+    isRequestLoading: boolean
 }
 
 export const SignUpForm = (props: SignUpFormProps) => {
-    const { handleSubmit } = props;
+    const {
+        handleSubmit,
+        isRequestLoading
+    } = props;
 
     const nameRef = useRef<TextFieldProps>();
     const emailRef = useRef<TextFieldProps>();
@@ -71,10 +76,22 @@ export const SignUpForm = (props: SignUpFormProps) => {
             .set(
                 "password",
                 () => {
-                    if (value && value.length < 8) {
-                        setPasswordError(true);
-                        setPasswordHelperText("A senha deve ter pelo menos 8 caracteres");
-                        return;
+                    if (value) {
+                        if (value.length < 8) {
+                            setPasswordError(true);
+                            setPasswordHelperText("A senha deve ter pelo menos 8 caracteres");
+                            return;
+                        }
+
+                        const confirmPasswordInput = confirmPasswordRef.current;
+                        if (confirmPasswordInput && confirmPasswordInput.value && confirmPasswordInput.value !== value) {
+                            setConfirmPasswordError(true);
+                            setConfirmPasswordHelperText("As senhas devem ser iguais");
+                            return;
+                        } else {
+                            setConfirmPasswordError(false);
+                            setConfirmPasswordHelperText("");
+                        }
                     }
 
                     setPasswordError(false);
@@ -149,17 +166,25 @@ export const SignUpForm = (props: SignUpFormProps) => {
                                 helperText={confirmPasswordHelperText}
                             />
 
+
                             <Button
                                 type="submit"
                                 variant="contained"
                                 disabled={
+                                    isRequestLoading ||
                                     !nameRef.current?.value || nameError ||
                                     !emailRef.current?.value || emailError ||
                                     !passwordRef.current?.value || passwordError ||
                                     !confirmPasswordRef.current?.value || confirmPasswordError
                                 }
                             >
-                                Criar conta
+                                {
+                                    isRequestLoading
+                                        ? <CircularProgress
+                                            size={24}
+                                        />
+                                        : "Criar conta"
+                                }
                             </Button>
                         </Stack>
                     </form>
