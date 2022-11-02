@@ -4,3 +4,4 @@ export * from "./Footer";
 export * from "./EpisodeCard";
 export * from "./SignUpForm";
 export * from "./ErrorCard";
+export * from "./SuccessCard";
