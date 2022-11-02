@@ -1,13 +1,13 @@
 export type UserTypes = "COMMON" | "ADMIN";
 
 export interface User {
-    id: number;
+    readonly id: number;
 
-    name: string;
-    email: string;
-    type: UserTypes;
+    readonly name: string;
+    readonly email: string;
+    readonly type: UserTypes;
 
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
+    readonly createdAt: Date;
+    readonly updatedAt: Date;
+    readonly deletedAt: Date | null;
 }

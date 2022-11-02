@@ -1,7 +1,7 @@
 export interface Pagination<T extends Record<string, any>> {
-    quantityPerPage: number
-    totalQuantity: number
-    currentPage: number
-    lastPage: number
-    data: Array<T>
+    readonly quantityPerPage: number
+    readonly totalQuantity: number
+    readonly currentPage: number
+    readonly lastPage: number
+    readonly data: Array<T>
 }

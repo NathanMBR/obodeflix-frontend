@@ -1,13 +1,15 @@
 export interface Episode {
-    id: number
-    name: string
-    seasonId: number
-    duration: number
-    path: string
-    position: number
-    createdAt: Date
-    updatedAt: Date
-    deletedAt: Date | null
+    readonly id: number
+
+    readonly name: string
+    readonly seasonId: number
+    readonly duration: number
+    readonly path: string
+    readonly position: number
+
+    readonly createdAt: Date
+    readonly updatedAt: Date
+    readonly deletedAt: Date | null
 }
 
 export type EpisodeOrderColumn = "id" | "name" | "position" | "updatedAt";
