@@ -19,7 +19,8 @@ import {
 } from "./components";
 import {
   Main,
-  SignUp
+  SignUp,
+  Login
 } from "./pages"
 
 import "./App.css"
@@ -64,6 +65,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
             </Routes>
           </Container>
 
