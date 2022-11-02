@@ -11,3 +11,17 @@ export interface User {
     readonly updatedAt: Date;
     readonly deletedAt: Date | null;
 }
+
+export class User implements User {
+    constructor(
+        public readonly id: number,
+
+        public readonly name: string,
+        public readonly email: string,
+        public readonly type: UserTypes,
+
+        public readonly createdAt: Date,
+        public readonly updatedAt: Date,
+        public readonly deletedAt: Date | null
+    ) { }
+}
