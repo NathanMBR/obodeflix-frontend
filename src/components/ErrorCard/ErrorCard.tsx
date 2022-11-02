@@ -56,7 +56,7 @@ export const ErrorCard = (props: ErrorCardProps) => {
                 <ErrorOutline color="warning" sx={errorOutlineStyle} />
                 <Typography variant="h4" component="h2">Erro de autenticação</Typography>
                 <Divider />
-                <Typography variant="body1">É necessário refazer o login</Typography>
+                <Typography variant="body1">É necessário refazer o login.</Typography>
             </>
         )
         .set(
@@ -65,7 +65,7 @@ export const ErrorCard = (props: ErrorCardProps) => {
                 <ErrorOutline color="error" sx={errorOutlineStyle} />
                 <Typography variant="h4" component="h2">Não autorizado</Typography>
                 <Divider />
-                <Typography variant="body1">Você não possui as permissões necessárias para acessar esse recurso.</Typography>
+                <Typography variant="body1">Você não possui as permissões necessárias para acessar este recurso.</Typography>
             </>
         )
         .set(
