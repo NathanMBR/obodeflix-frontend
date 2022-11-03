@@ -1,5 +1,7 @@
 export type SeriesNameLanguages = "ENGLISH" | "JAPANESE";
 
+export type SeriesOrderColumn = "id" | "mainName" | "updatedAt";
+
 export interface Series {
     readonly id: number;
 
