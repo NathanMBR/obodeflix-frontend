@@ -193,7 +193,7 @@ export const Main = () => {
 
     return (
         <>
-            <Typography variant="h3" component="h2">Episódios mais recentes</Typography>
+            <Typography variant="h4" component="h2">Episódios mais recentes</Typography>
             <Divider style={{ marginBottom: 16 }} />
             {
                 episodes.length > 0
