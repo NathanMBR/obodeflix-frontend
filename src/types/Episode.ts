@@ -1,3 +1,5 @@
+export type EpisodeOrderColumn = "id" | "name" | "position" | "updatedAt";
+
 export interface Episode {
     readonly id: number
 
@@ -12,4 +14,30 @@ export interface Episode {
     readonly deletedAt: Date | null
 }
 
-export type EpisodeOrderColumn = "id" | "name" | "position" | "updatedAt";
+export class EpisodeBuilder implements Episode {
+    public readonly id: Episode["id"]
+
+    public readonly name: Episode["name"]
+    public readonly seasonId: Episode["seasonId"]
+    public readonly duration: Episode["duration"]
+    public readonly path: Episode["path"]
+    public readonly position: Episode["position"]
+
+    public readonly createdAt: Episode["createdAt"]
+    public readonly updatedAt: Episode["updatedAt"]
+    public readonly deletedAt: Episode["deletedAt"]
+
+    constructor(
+        private readonly episodeData: Episode
+    ) {
+        this.id = episodeData.id
+        this.name = episodeData.name
+        this.seasonId = episodeData.seasonId
+        this.duration = episodeData.duration
+        this.path = episodeData.path
+        this.position = episodeData.position
+        this.createdAt = episodeData.createdAt
+        this.updatedAt = episodeData.updatedAt
+        this.deletedAt = episodeData.deletedAt
+    }
+}
