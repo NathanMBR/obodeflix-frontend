@@ -8,6 +8,8 @@ import {
 import { DarkMode } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
+import { AuthenticatedMenu } from "./AuthenticatedMenu";
+
 export interface NavbarProps {
     handleThemeChange: () => void
 };
@@ -30,17 +32,27 @@ export const Navbar = (props: NavbarProps) => {
                             <DarkMode />
                         </Button>
                         <Link to="/">
-                            <Button color="inherit">Home</Button>
+                            <Button color="inherit">Início</Button>
                         </Link>
                         <Link to="/series">
                             <Button color="inherit">Séries</Button>
                         </Link>
-                        <Link to="/login">
-                            <Button color="inherit">Fazer login</Button>
-                        </Link>
-                        <Link to="/signup">
-                            <Button color="inherit" variant="outlined">Criar conta</Button>
-                        </Link>
+
+                        {
+                            localStorage.getItem("token")
+                                ? <>
+                                    <AuthenticatedMenu />
+                                </>
+
+                                : <>
+                                    <Link to="/login">
+                                        <Button color="inherit">Fazer login</Button>
+                                    </Link>
+                                    <Link to="/signup">
+                                        <Button color="inherit" variant="outlined">Criar conta</Button>
+                                    </Link>
+                                </>
+                        }
                     </Stack>
                 </Toolbar>
             </AppBar>
