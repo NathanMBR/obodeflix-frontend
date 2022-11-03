@@ -12,6 +12,11 @@ import {
 import { API_URL } from "../settings";
 
 export const SignUp = () => {
+    if (localStorage.getItem("token")) {
+        window.location.href = "/";
+        return null;
+    }
+
     const [isRequestLoading, setIsRequestLoading] = useState(false);
     const [showError, setShowError] = useState(false);
     const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
