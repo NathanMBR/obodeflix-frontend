@@ -11,6 +11,8 @@ import {
 } from "react";
 import { Link } from "react-router-dom";
 
+import { AdminMenu } from "./AdminMenu";
+
 export const AuthenticatedMenu = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
@@ -46,12 +48,7 @@ export const AuthenticatedMenu = () => {
 
                 {
                     localStorage.getItem("type") === "ADMIN"
-                        ? <>
-                            <Divider variant="middle" />
-                            <Link to="/admin">
-                                <MenuItem onClick={handleCloseMenu}>Administração</MenuItem>
-                            </Link>
-                        </>
+                        ? <AdminMenu handleCloseMenu={handleCloseMenu} />
                         : null
                 }
 
