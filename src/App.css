@@ -8,3 +8,7 @@ a:active {
     color: inherit;
     display: inline-block;
 }
+
+body {
+    overflow-y: scroll;
+}
