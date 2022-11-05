@@ -24,6 +24,7 @@ export interface PaginationFiltersCardProps<GenericOrderColumn extends string> {
 
     orderColumns: Array<[GenericOrderColumn, string]>;
     handleOrderColumnChange: (event: SelectChangeEvent<GenericOrderColumn>) => void;
+    currentOrderColumn: GenericOrderColumn;
 }
 
 export const PaginationFiltersCard = <GenericOrderColumn extends string>(props: PaginationFiltersCardProps<GenericOrderColumn>) => {
@@ -38,10 +39,9 @@ export const PaginationFiltersCard = <GenericOrderColumn extends string>(props: 
         handleOrderByChange,
 
         orderColumns,
-        handleOrderColumnChange
+        handleOrderColumnChange,
+        currentOrderColumn
     } = props;
-
-    const defaultOrderColumn = orderColumns[0][0];
 
     return (
         <>
@@ -66,7 +66,7 @@ export const PaginationFiltersCard = <GenericOrderColumn extends string>(props: 
 
                             <Stack direction="row" style={{ justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
                                 <Typography variant="body1">Ordenar por</Typography>
-                                <Select value={defaultOrderColumn} onChange={handleOrderColumnChange}>
+                                <Select value={currentOrderColumn} onChange={handleOrderColumnChange}>
                                     {
                                         orderColumns.map(
                                             (orderColumn, index) => {
