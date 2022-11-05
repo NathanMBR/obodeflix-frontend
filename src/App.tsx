@@ -20,7 +20,8 @@ import {
 import {
   Main,
   SignUp,
-  Login
+  Login,
+  AllSeries
 } from "./pages"
 
 import "./App.css"
@@ -66,6 +67,7 @@ function App() {
               <Route path="/" element={<Main />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/series" element={<AllSeries />} />
             </Routes>
           </Container>
 
