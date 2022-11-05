@@ -37,6 +37,7 @@ export interface PaginatedContentProps<GenericOrderColumn extends string> {
 
     orderColumns: Array<[GenericOrderColumn, string]>;
     handleOrderColumnChange: (event: SelectChangeEvent<GenericOrderColumn>) => void;
+    currentOrderColumn: GenericOrderColumn;
 }
 
 export const PaginatedContent = <GenericOrderColumn extends string>(props: PaginatedContentProps<GenericOrderColumn>) => {
@@ -60,7 +61,8 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
         handleOrderByChange,
 
         orderColumns,
-        handleOrderColumnChange
+        handleOrderColumnChange,
+        currentOrderColumn
     } = props;
 
     const stackStyle = {
@@ -80,8 +82,9 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
                 <Typography variant="h4" component="h2">{contentTitle}</Typography>
 
                 {
-                    !hidePaginationContent
-                        ? <>
+                    hidePaginationContent || isRequestLoading
+                        ? null
+                        : <>
                             <MUIPagination
                                 page={page}
                                 count={lastPage}
@@ -92,19 +95,25 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
                                 showLastButton
                             />
                         </>
-                        : null
                 }
             </Stack>
             <Divider style={{ marginBottom: 16 }} />
             {
                 isRequestLoading
-                    ? <>
+                    ? <div style={{ textAlign: "center", height: "70vh" }}>
+                        <CircularProgress />
+                    </div>
+                    : <>
                         {
                             currentQuantity > 0
                                 ? <>
                                     <Stack direction="row" sx={stackStyle}>
-                                        <Typography variant="body1">Exibindo {currentQuantity} de {totalQuantity}</Typography>
-                                        <IconButton>
+                                        <Typography variant="body1">
+                                            {
+                                                `Exibindo ${currentQuantity} de ${totalQuantity} resultado${totalQuantity > 1 ? "s" : ""}`
+                                            }
+                                        </Typography>
+                                        <IconButton onClick={handleToggleFilters}>
                                             <Tune color="inherit" />
                                             <PaginationFiltersCard<GenericOrderColumn>
                                                 isOpen={isFilterOpen}
@@ -118,6 +127,7 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
 
                                                 orderColumns={orderColumns}
                                                 handleOrderColumnChange={handleOrderColumnChange}
+                                                currentOrderColumn={currentOrderColumn}
                                             />
                                         </IconButton>
                                     </Stack>
@@ -131,9 +141,6 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
                                 </>
                         }
                     </>
-                    : <div style={{ textAlign: "center", height: "70vh" }}>
-                        <CircularProgress />
-                    </div>
             }
         </>
     );
