@@ -4,8 +4,9 @@ import {
 } from "@mui/material/styles"
 import {
   Container,
-  CssBaseline
+  CssBaseline,
 } from "@mui/material";
+import { CSSProperties } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -21,7 +22,8 @@ import {
   Main,
   SignUp,
   Login,
-  AllSeries
+  AllSeries,
+  NotFound
 } from "./pages"
 
 import "./App.css"
@@ -55,6 +57,13 @@ function App() {
     localStorage.setItem("theme", newTheme);
   }
 
+  const containerStyle: CSSProperties = {
+    minHeight: "74.5vh",
+    marginTop: 96,
+    marginBottom: 64,
+    position: "relative"
+  }
+
   return (
     <>
       <ThemeProvider theme={themes[theme]}>
@@ -62,12 +71,14 @@ function App() {
           <CssBaseline />
           <Navbar handleThemeChange={handleThemeChange} />
 
-          <Container style={{ marginTop: 96, marginBottom: 64 }}>
+          <Container style={containerStyle}>
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/series" element={<AllSeries />} />
+
+              <Route path="/*" element={<NotFound />} />
             </Routes>
           </Container>
 
