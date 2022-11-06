@@ -13,10 +13,11 @@ import {
     useState
 } from "react";
 
-import { OrderBy } from "../../types";
+import {
+    OrderBy,
+    ReactContent
+} from "../../types";
 import { PaginationFiltersCard } from "../../components";
-
-type ReactContent = JSX.Element | Array<JSX.Element>;
 
 export interface PaginatedContentProps<GenericOrderColumn extends string> {
     children?: ReactContent;
