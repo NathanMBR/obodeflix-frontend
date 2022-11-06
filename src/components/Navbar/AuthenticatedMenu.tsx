@@ -29,6 +29,7 @@ export const AuthenticatedMenu = () => {
 
     const handleLogoutClick = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("type");
         window.location.reload();
     }
 
