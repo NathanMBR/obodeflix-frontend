@@ -1,6 +1,7 @@
 import {
     Grid,
-    SelectChangeEvent
+    SelectChangeEvent,
+    Typography
 } from "@mui/material";
 import {
     ChangeEvent,
@@ -45,7 +46,13 @@ export const AllSeries = () => {
                 .finally(() => setIsRequestLoading(false));
 
         },
-        [page, quantity, orderColumn, orderBy]
+
+        [
+            page,
+            quantity,
+            orderColumn,
+            orderBy
+        ]
     );
 
     useEffect(
@@ -54,20 +61,23 @@ export const AllSeries = () => {
                 ? setSeries(paginatedSeries.data)
                 : setSeries([]);
         },
-        [paginatedSeries]
+
+        [
+            paginatedSeries
+        ]
     );
 
     const handlePageChange = (_event: ChangeEvent<unknown>, page: number) => {
         setPage(page);
-    }
+    };
 
     const handleOrderColumnChange = (event: SelectChangeEvent<SeriesOrderColumn>) => {
         setOrderColumn(event.target.value as SeriesOrderColumn);
-    }
+    };
 
     const handleOrderByChange = (event: SelectChangeEvent<OrderBy>) => {
         setOrderBy(event.target.value as OrderBy);
-    }
+    };
 
     const handleQuantityChange = (event: SelectChangeEvent<number>) => {
         const newQuantity = Number(event.target.value);
@@ -76,12 +86,12 @@ export const AllSeries = () => {
             return;
 
         setQuantity(newQuantity);
-    }
+    };
 
     const handleErrorClose = () => {
         setStatusCode(null);
         window.location.href = "/";
-    }
+    };
 
     const handleFetchResponse = async (response: Response) => {
         const data = await response.json();
@@ -93,7 +103,11 @@ export const AllSeries = () => {
 
         const builtPaginatedSeries = new PaginationBuilder<Series>(data);
         setPaginatedSeries(builtPaginatedSeries);
-    }
+    };
+
+    const noContentMessage = <>
+        <Typography variant="body1">Não há séries a serem exibidas.</Typography>
+    </>;
 
     return (
         <>
@@ -103,7 +117,7 @@ export const AllSeries = () => {
                 isRequestLoading={isRequestLoading}
                 currentQuantity={series.length}
                 totalQuantity={paginatedSeries?.totalQuantity || 0}
-                noContentMessage="Não há séries a serem exibidas."
+                noContent={noContentMessage}
 
                 quantityPerPage={quantity}
                 handleQuantityPerPageChange={handleQuantityChange}
@@ -115,11 +129,13 @@ export const AllSeries = () => {
                 orderBy={orderBy}
                 handleOrderByChange={handleOrderByChange}
 
-                orderColumns={[
-                    ["id", "ID"],
-                    ["mainName", "Nome"],
-                    ["updatedAt", "Recentemente atualizado"]
-                ]}
+                orderColumns={
+                    [
+                        ["id", "ID"],
+                        ["mainName", "Nome"],
+                        ["updatedAt", "Recentemente atualizado"]
+                    ]
+                }
                 handleOrderColumnChange={handleOrderColumnChange}
                 currentOrderColumn={orderColumn}
             >
