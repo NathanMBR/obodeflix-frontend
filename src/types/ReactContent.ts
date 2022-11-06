@@ -1,0 +1,1 @@
+export type ReactContent = JSX.Element | Array<JSX.Element>;
