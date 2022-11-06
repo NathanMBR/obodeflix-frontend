@@ -16,14 +16,16 @@ import {
 import { OrderBy } from "../../types";
 import { PaginationFiltersCard } from "../../components";
 
+type ReactContent = JSX.Element | Array<JSX.Element>;
+
 export interface PaginatedContentProps<GenericOrderColumn extends string> {
-    children?: JSX.Element | Array<JSX.Element>;
+    children?: ReactContent;
     contentTitle: string;
     hidePaginationContent?: boolean;
     isRequestLoading: boolean;
     currentQuantity: number;
     totalQuantity: number;
-    noContentMessage: string;
+    noContent?: ReactContent;
 
     quantityPerPage: number;
     handleQuantityPerPageChange: (event: SelectChangeEvent<number>) => void;
@@ -48,7 +50,7 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
         isRequestLoading,
         currentQuantity,
         totalQuantity,
-        noContentMessage,
+        noContent,
 
         quantityPerPage,
         handleQuantityPerPageChange,
@@ -68,13 +70,13 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
     const stackStyle = {
         justifyContent: "space-between",
         alignItems: "center"
-    }
+    };
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     const handleToggleFilters = () => {
         setIsFilterOpen(!isFilterOpen);
-    }
+    };
 
     return (
         <>
@@ -137,7 +139,9 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
                                     }
                                 </>
                                 : <>
-                                    <Typography variant="body1">{noContentMessage}</Typography>
+                                    {
+                                        noContent
+                                    }
                                 </>
                         }
                     </>
