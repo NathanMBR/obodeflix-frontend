@@ -8,3 +8,5 @@ export * from "./SuccessCard";
 export * from "./LoginForm";
 export * from "./SeriesCard";
 export * from "./PaginationFiltersCard";
+
+export * from "./AdminPanelOption";
