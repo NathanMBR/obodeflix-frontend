@@ -1,5 +1,6 @@
 export * from "./Navbar";
 export * from "./Footer";
+export * from "./DefaultHeader";
 
 export * from "./EpisodeCard";
 export * from "./SignUpForm";
