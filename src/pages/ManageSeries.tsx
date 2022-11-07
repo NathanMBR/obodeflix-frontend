@@ -160,7 +160,7 @@ export const ManageSeries = () => {
                     />
                 </PaginatedContent>
 
-                <AdminPanelAddContentFAB href="/series/0" />
+                <AdminPanelAddContentFAB href="/admin/series/0" />
 
                 <ErrorCard
                     isOpen={!!statusCode}
