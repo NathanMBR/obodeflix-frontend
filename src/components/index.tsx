@@ -10,3 +10,4 @@ export * from "./SeriesCard";
 export * from "./PaginationFiltersCard";
 
 export * from "./AdminPanelOption";
+export * from "./AdminPanelSeriesTable";
