@@ -60,6 +60,13 @@ export const AllSeries = () => {
             paginatedSeries
                 ? setSeries(paginatedSeries.data)
                 : setSeries([]);
+
+            const isCurrentPageEmpty = paginatedSeries &&
+                paginatedSeries.data.length <= 0 &&
+                paginatedSeries.currentPage > 1;
+
+            if (isCurrentPageEmpty)
+                setPage(1)
         },
 
         [
