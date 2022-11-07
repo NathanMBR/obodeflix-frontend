@@ -5,6 +5,7 @@ import {
     Pagination as MUIPagination,
     SelectChangeEvent,
     Stack,
+    Tooltip,
     Typography
 } from "@mui/material";
 import { Tune } from "@mui/icons-material";
@@ -117,7 +118,9 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
                                             }
                                         </Typography>
                                         <IconButton onClick={handleToggleFilters}>
-                                            <Tune color="inherit" />
+                                            <Tooltip title="Gerenciar filtros">
+                                                <Tune color="inherit" />
+                                            </Tooltip>
                                             <PaginationFiltersCard<GenericOrderColumn>
                                                 isOpen={isFilterOpen}
                                                 handleClose={handleToggleFilters}
