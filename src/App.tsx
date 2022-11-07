@@ -23,7 +23,9 @@ import {
   SignUp,
   Login,
   AllSeries,
+
   AdminPanel,
+  ManageSeries,
 
   NotFound
 } from "./pages"
@@ -79,7 +81,9 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/series" element={<AllSeries />} />
+
               <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/admin/series" element={<ManageSeries />} />
 
               <Route path="/*" element={<NotFound />} />
             </Routes>
