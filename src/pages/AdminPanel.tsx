@@ -41,11 +41,14 @@ export const AdminPanel = () => {
             <Grid container spacing={2} style={{ marginTop: 2 }}>
                 {
                     panelOptions.map(
-                        (options, index) => <Grid item xs={6}>
+                        (options, index) => <Grid
+                            item
+                            xs={6}
+                            key={index}
+                        >
                             <AdminPanelOption
                                 title={options.title}
                                 link={options.link}
-                                key={index}
                             />
                         </Grid>
                     )
