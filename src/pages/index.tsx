@@ -7,3 +7,4 @@ export * from "./AdminPanel";
 export * from "./ManageSeries";
 
 export * from "./NotFound";
+export * from "./UpsertSeries";
