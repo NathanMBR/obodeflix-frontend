@@ -12,4 +12,5 @@ export * from "./PaginationFiltersCard";
 
 export * from "./AdminPanelOption";
 export * from "./AdminPanelSeriesTable";
-export * from "./AdminPanelAddContentFAB"; 
+export * from "./AdminPanelAddContentFAB";
+export * from "./AdminPanelUpsertSeriesForm";
