@@ -13,9 +13,11 @@ import { NotFound } from "../pages";
 import { PaginatedContent } from "../layouts";
 import {
     AdminPanelAddContentFAB,
+    AdminPanelDeleteSeriesCard,
     AdminPanelSeriesTable,
     ErrorCard,
-    ErrorCardStatusCodeProp
+    ErrorCardStatusCodeProp,
+    SuccessCard
 } from "../components";
 import {
     OrderBy,
@@ -41,6 +43,9 @@ export const ManageSeries = () => {
 
     const [paginatedSeries, setPaginatedSeries] = useState<Pagination<Series> | null>(null);
     const [series, setSeries] = useState<Array<Series>>([]);
+
+    const [deleteSeriesCardData, setDeleteSeriesCardData] = useState<Series | null>(null);
+    const [showSuccessCard, setShowSuccessCard] = useState(false);
 
     const handlePageChange = (_event: ChangeEvent<unknown>, page: number) => {
         setPage(page);
@@ -68,14 +73,16 @@ export const ManageSeries = () => {
         window.location.href = "/";
     };
 
+    const fetchAllSeries = async () => fetch(`${API_URL}/series/all?page=${page}&quantity=${quantity}&orderColumn=${orderColumn}&orderBy=${orderBy}`)
+        .then(handleFetchAllSeriesResponse)
+        .catch(console.error)
+        .finally(() => setIsRequestLoading(false));
+
     useEffect(
         () => {
             setIsRequestLoading(true);
 
-            fetch(`${API_URL}/series/all?page=${page}&quantity=${quantity}&orderColumn=${orderColumn}&orderBy=${orderBy}`)
-                .then(handleFetchResponse)
-                .catch(console.error)
-                .finally(() => setIsRequestLoading(false));
+            fetchAllSeries();
         },
 
         [
@@ -105,7 +112,7 @@ export const ManageSeries = () => {
         ]
     );
 
-    const handleFetchResponse = async (response: Response) => {
+    const handleFetchAllSeriesResponse = async (response: Response) => {
         const data = await response.json();
 
         if (!response.ok)
@@ -113,6 +120,53 @@ export const ManageSeries = () => {
 
         const builtPaginatedSeries = new PaginationBuilder<Series>(data);
         setPaginatedSeries(builtPaginatedSeries);
+    };
+
+    const handleDeleteSeriesResponse = async (response: Response) => {
+        if (!response.ok)
+            return setStatusCode(response.status as ErrorCardStatusCodeProp);
+
+        setShowSuccessCard(true);
+    };
+
+    const getOpenDeleteSeriesCardHandler = (series: Series) => {
+        const handleOpenDeleteSeriesCard = () => {
+            setDeleteSeriesCardData(series);
+        };
+
+        return handleOpenDeleteSeriesCard;
+    };
+
+    const getDeleteSeriesHandler = (series: Series | null) => {
+        const finishDeleteProcess = () => {
+            setDeleteSeriesCardData(null);
+
+            fetchAllSeries();
+        }
+
+        return () => {
+            if (!series)
+                return;
+
+            setIsRequestLoading(true);
+
+            fetch(
+                `${API_URL}/series/inactivate/${series.id}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            )
+                .then(handleDeleteSeriesResponse)
+                .catch(console.error)
+                .finally(finishDeleteProcess)
+        }
+    };
+
+    const handleDeleteSeriesCardClose = () => {
+        setDeleteSeriesCardData(null);
     };
 
     const noContentWarning = <Typography variant="body1">Não há séries cadastradas.</Typography>
@@ -147,26 +201,31 @@ export const ManageSeries = () => {
                     currentOrderColumn={orderColumn}
                 >
                     <AdminPanelSeriesTable
-                        dataFormat={
-                            [
-                                ["id", "ID"],
-                                ["mainName", "Nome principal"],
-                                ["alternativeName", "Nome alternativo"],
-                                ["createdAt", "Criado em"],
-                                ["updatedAt", "Atualizado em"]
-                            ]
-                        }
                         data={series}
+                        getDeleteHandler={getOpenDeleteSeriesCardHandler}
                     />
                 </PaginatedContent>
 
                 <AdminPanelAddContentFAB href="/admin/series/0" />
+
+                <AdminPanelDeleteSeriesCard
+                    series={deleteSeriesCardData}
+                    isOpen={!!deleteSeriesCardData}
+                    handleClose={handleDeleteSeriesCardClose}
+                    handleDelete={getDeleteSeriesHandler(deleteSeriesCardData)}
+                />
 
                 <ErrorCard
                     isOpen={!!statusCode}
                     statusCode={statusCode}
                     handleClose={handleErrorClose}
                     reasons={"Um erro inesperado ocorreu. Por favor, tente novamente mais tarde."}
+                />
+
+                <SuccessCard
+                    message="Série deletada com sucesso!"
+                    isOpen={showSuccessCard}
+                    handleClose={() => setShowSuccessCard(false)}
                 />
             </Box>
         </>
