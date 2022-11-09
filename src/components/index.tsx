@@ -1,16 +1,17 @@
-export * from "./Navbar";
-export * from "./Footer";
 export * from "./DefaultHeader";
+export * from "./Footer";
+export * from "./Navbar";
 
 export * from "./EpisodeCard";
-export * from "./SignUpForm";
 export * from "./ErrorCard";
-export * from "./SuccessCard";
 export * from "./LoginForm";
-export * from "./SeriesCard";
 export * from "./PaginationFiltersCard";
+export * from "./SeriesCard";
+export * from "./SignUpForm";
+export * from "./SuccessCard";
 
+export * from "./AdminPanelAddContentFAB";
+export * from "./AdminPanelDeleteSeriesCard";
 export * from "./AdminPanelOption";
 export * from "./AdminPanelSeriesTable";
-export * from "./AdminPanelAddContentFAB";
 export * from "./AdminPanelUpsertSeriesForm";
