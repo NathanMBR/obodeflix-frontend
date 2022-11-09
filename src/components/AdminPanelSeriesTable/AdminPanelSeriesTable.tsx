@@ -21,19 +21,27 @@ import { Series } from "../../types";
 import { transformExhibitionData } from "../../helpers";
 
 export interface AdminPanelSeriesTableProps {
-    data: Array<Series>
-    dataFormat: Array<[keyof Series, string]>
-};
-
-const actionIconsStyle: CSSProperties = {
-    color: "#777"
+    data: Array<Series>;
+    getDeleteHandler: (series: Series) => () => void;
 };
 
 export const AdminPanelSeriesTable = (props: AdminPanelSeriesTableProps) => {
     const {
         data,
-        dataFormat
+        getDeleteHandler
     } = props;
+
+    const dataFormat: Array<[keyof Series, string]> = [
+        ["id", "ID"],
+        ["mainName", "Nome principal"],
+        ["alternativeName", "Nome alternativo"],
+        ["createdAt", "Criado em"],
+        ["updatedAt", "Atualizado em"]
+    ];
+
+    const actionIconsStyle: CSSProperties = {
+        color: "#777"
+    };
 
     return (
         <>
@@ -85,7 +93,7 @@ export const AdminPanelSeriesTable = (props: AdminPanelSeriesTableProps) => {
                                             </Tooltip>
 
                                             <Tooltip title="Excluir série">
-                                                <IconButton>
+                                                <IconButton onClick={getDeleteHandler(row)}>
                                                     <Delete sx={actionIconsStyle} />
                                                 </IconButton>
                                             </Tooltip>
