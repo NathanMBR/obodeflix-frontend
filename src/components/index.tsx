@@ -12,6 +12,7 @@ export * from "./SuccessCard";
 
 export * from "./AdminPanelAddContentFAB";
 export * from "./AdminPanelDeleteSeriesCard";
+export * from "./AdminPanelDeleteTagCard";
 export * from "./AdminPanelOption";
 export * from "./AdminPanelSeriesTable";
 export * from "./AdminPanelTagTable";
