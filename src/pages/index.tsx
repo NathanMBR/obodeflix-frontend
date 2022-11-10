@@ -5,6 +5,7 @@ export * from "./AllSeries";
 
 export * from "./AdminPanel";
 export * from "./ManageSeries";
+export * from "./UpsertSeries";
+export * from "./ManageTags";
 
 export * from "./NotFound";
-export * from "./UpsertSeries";
