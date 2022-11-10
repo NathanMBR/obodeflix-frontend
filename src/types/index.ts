@@ -1,6 +1,7 @@
 export * from "./Episode";
 export * from "./User";
 export * from "./Series";
+export * from "./Tag";
 
 export * from "./Pagination";
 export * from "./OrderBy";
