@@ -17,3 +17,4 @@ export * from "./AdminPanelOption";
 export * from "./AdminPanelSeriesTable";
 export * from "./AdminPanelTagTable";
 export * from "./AdminPanelUpsertSeriesForm";
+export * from "./AdminPanelUpsertTagForm";
