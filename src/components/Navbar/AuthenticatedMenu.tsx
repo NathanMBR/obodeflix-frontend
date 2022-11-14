@@ -43,7 +43,7 @@ export const AuthenticatedMenu = () => {
                 onClose={handleCloseMenu}
                 anchorEl={anchorElement}
             >
-                <Link to="/profile">
+                <Link to="/profile" style={{ width: "100%" }}>
                     <MenuItem onClick={handleCloseMenu}>Perfil</MenuItem>
                 </Link>
 
