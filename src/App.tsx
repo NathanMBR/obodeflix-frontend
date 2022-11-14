@@ -28,6 +28,7 @@ import {
   ManageSeries,
   UpsertSeries,
   ManageTags,
+  UpsertTag,
 
   NotFound
 } from "./pages"
@@ -88,6 +89,7 @@ function App() {
               <Route path="/admin/series" element={<ManageSeries />} />
               <Route path="/admin/series/:id" element={<UpsertSeries />} />
               <Route path="/admin/tags" element={<ManageTags />} />
+              <Route path="/admin/tags/:id" element={<UpsertTag />} />
 
               <Route path="/*" element={<NotFound />} />
             </Routes>
