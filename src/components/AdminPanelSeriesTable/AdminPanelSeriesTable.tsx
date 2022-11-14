@@ -83,7 +83,7 @@ export const AdminPanelSeriesTable = (props: AdminPanelSeriesTableProps) => {
                                         )
                                     }
                                     <TableCell>
-                                        <Stack direction="row">
+                                        <Stack direction="row" sx={{ justifyContent: "center" }}>
                                             <Tooltip title="Editar série">
                                                 <Link to={`/admin/series/${row.id}`}>
                                                     <IconButton>
