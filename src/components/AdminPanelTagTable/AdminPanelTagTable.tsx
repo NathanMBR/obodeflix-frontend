@@ -89,9 +89,9 @@ export const AdminPanelTagTable = (props: AdminPanelTagTableProps) => {
                                     }
 
                                     <TableCell>
-                                        <Stack direction="row">
+                                        <Stack direction="row" sx={{ justifyContent: "center" }}>
                                             <Tooltip title="Editar tag">
-                                                <Link to={`/admin/tag/${row.id}`}>
+                                                <Link to={`/admin/tags/${row.id}`}>
                                                     <IconButton>
                                                         <Edit sx={actionIconsStyle} />
                                                     </IconButton>
