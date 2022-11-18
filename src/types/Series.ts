@@ -1,7 +1,21 @@
+import { Tag } from "../types";
+
 export type SeriesNameLanguages = "ENGLISH" | "JAPANESE";
 
 export type SeriesOrderColumn = "id" | "mainName" | "updatedAt";
 
+export interface SeriesTags {
+    readonly id: number;
+
+    readonly seriesId: number;
+    readonly tagId: number;
+
+    readonly createdAt: Date;
+    readonly updatedAt: Date;
+    readonly deletedAt: Date | null;
+
+    readonly tag: Tag;
+}
 export interface Series {
     readonly id: number;
 
@@ -14,6 +28,8 @@ export interface Series {
     readonly createdAt: Date;
     readonly updatedAt: Date;
     readonly deletedAt: Date | null;
+
+    readonly seriesTags: Array<SeriesTags>;
 }
 
 export class SeriesBuilder implements Series {
@@ -29,6 +45,8 @@ export class SeriesBuilder implements Series {
     public readonly updatedAt: Series["updatedAt"];
     public readonly deletedAt: Series["deletedAt"];
 
+    public readonly seriesTags: Series["seriesTags"];
+
     constructor(
         seriesData: Series
     ) {
@@ -41,5 +59,7 @@ export class SeriesBuilder implements Series {
         this.createdAt = seriesData.createdAt;
         this.updatedAt = seriesData.updatedAt;
         this.deletedAt = seriesData.deletedAt;
+
+        this.seriesTags = seriesData.seriesTags;
     }
 }
