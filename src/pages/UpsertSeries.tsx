@@ -4,6 +4,7 @@ import {
 } from "@mui/material";
 import {
     FormEvent,
+    SyntheticEvent,
     useEffect,
     useState
 } from "react";
@@ -17,8 +18,10 @@ import {
 } from "../components";
 import { NotFound } from "../pages";
 import {
+    PaginationBuilder,
     Series,
-    SeriesBuilder
+    SeriesBuilder,
+    Tag
 } from "../types";
 import { API_URL } from "../settings";
 
@@ -34,7 +37,12 @@ export const UpsertSeries = () => {
 
     const [shouldRenderTable, setShouldRenderTable] = useState(false);
     const [isRequestLoading, setIsRequestLoading] = useState(false);
+    const [areTagsLoading, setAreTagsLoading] = useState(true);
     const [series, setSeries] = useState<Series | undefined>(undefined);
+    const [tags, setTags] = useState<Array<Tag>>([]);
+    const [seriesTags, setSeriesTags] = useState<Array<Tag["id"]>>([]);
+    const [tagSearch, setTagSearch] = useState("");
+    const [tagSearchTimer, setTagSearchTimer] = useState<number | null>(null);
     const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
     const [reasons, setReasons] = useState<string | Array<string>>();
     const [wasUpsertSuccessful, setWasUpsertSuccessful] = useState(false);
@@ -50,9 +58,51 @@ export const UpsertSeries = () => {
                     .finally(() => setIsRequestLoading(false));
             } else
                 setShouldRenderTable(true);
+
+            fetch(`${API_URL}/tag/all?page=1&quantity=50&orderColumn=name&orderBy=asc`)
+                .then(handleTagsResponse)
+                .catch(console.error)
+                .finally(() => setAreTagsLoading(false));
         },
         []
     );
+
+    useEffect(
+        () => {
+            setAreTagsLoading(false);
+            const timeInMillisecondsToWaitBeforeSearching = 300;
+
+            if (tagSearchTimer)
+                clearTimeout(tagSearchTimer);
+
+            const newTagSearchTimer = setTimeout(
+                () => {
+                    setAreTagsLoading(true);
+
+                    fetch(
+                        `${API_URL}/tag/all?page=1&quantity=50&orderColumn=name&orderBy=asc${tagSearch.length > 0 ? `&search=${tagSearch}` : ""}`
+                    )
+                        .then(handleTagsResponse)
+                        .catch(console.error)
+                        .finally(() => setAreTagsLoading(false));
+                },
+                timeInMillisecondsToWaitBeforeSearching
+            );
+
+            setTagSearchTimer(newTagSearchTimer);
+        },
+        [tagSearch]
+    );
+
+    const handleTagsResponse = async (response: Response) => {
+        const data = await response.json();
+
+        if (!response.ok)
+            return setTags([]);
+
+        const builtPaginatedTags = new PaginationBuilder<Tag>(data);
+        setTags(builtPaginatedTags.data);
+    };
 
     const handleGetFetchResponse = async (response: Response) => {
         const data = await response.json();
@@ -116,7 +166,7 @@ export const UpsertSeries = () => {
             alternativeName: alternativeNameInput.value || null,
             description: descriptionInput.value || null,
             imageAddress: imageAddressInput.value || null,
-            tags: []
+            tags: seriesTags
         };
 
         if (seriesId > 0) {
@@ -167,14 +217,32 @@ export const UpsertSeries = () => {
         window.location.href = "/admin/series";
     };
 
+    const handleTagsChange = (
+        _event: SyntheticEvent,
+        tags: Array<Tag>
+    ) => {
+        setSeriesTags(tags.map(tag => tag.id));
+    };
+
+    const handleTagSearch = (
+        _event: SyntheticEvent,
+        value: string
+    ) => {
+        setTagSearch(value);
+    };
+
     return (
         <>
             {
                 shouldRenderTable
                     ? <AdminPanelUpsertSeriesForm
                         handleSubmit={handleSubmit}
+                        handleTagsChange={handleTagsChange}
+                        handleTagSearch={handleTagSearch}
                         isRequestLoading={isRequestLoading}
+                        areTagsLoading={areTagsLoading}
                         series={series}
+                        tags={tags}
                     />
                     : <Box sx={{
                         display: "flex",

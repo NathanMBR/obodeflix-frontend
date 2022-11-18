@@ -1,4 +1,5 @@
 import {
+    Autocomplete,
     Button,
     Card,
     CardContent,
@@ -9,31 +10,43 @@ import {
     TextField,
     TextFieldProps
 } from "@mui/material";
+import { CSSProperties } from "@mui/styled-engine";
 import {
     ChangeEvent,
     FormEvent,
+    SyntheticEvent,
     useEffect,
     useRef,
     useState
 } from "react";
 
+import { DefaultHeader } from "../../components";
 import {
     Series,
-    SeriesNameLanguages
+    SeriesNameLanguages,
+    Tag,
+    TagBuilder
 } from "../../types";
-import { DefaultHeader } from "../../components";
 
 export interface AdminPanelUpsertSeriesFormProps {
-    series?: Series
-    handleSubmit: (event: FormEvent<HTMLFormElement>) => void,
-    isRequestLoading: boolean
+    series?: Series;
+    tags: Array<Tag>;
+    handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+    handleTagsChange: (_event: SyntheticEvent, tags: Array<Tag>) => void;
+    handleTagSearch: (_event: SyntheticEvent, tagName: string) => void;
+    isRequestLoading: boolean;
+    areTagsLoading: boolean;
 }
 
 export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProps) => {
     const {
         series,
+        tags,
         handleSubmit,
-        isRequestLoading
+        handleTagsChange,
+        handleTagSearch,
+        isRequestLoading,
+        areTagsLoading
     } = props;
 
     type MainNameLanguageInputValue = SeriesNameLanguages | "";
@@ -71,6 +84,12 @@ export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProp
         setMainNameLanguage(newMainNameLanguage);
     }
 
+    const gridItemSpacingStyle: CSSProperties = {
+        marginTop: 2
+    };
+
+    const defaultTags = series?.seriesTags.map(seriesTag => seriesTag.tag) || [];
+
     return (
         <>
             <Paper elevation={12}>
@@ -85,7 +104,9 @@ export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProp
                         </DefaultHeader>
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                <Grid item xs={10}>
+                                <Grid item
+                                    xs={10}
+                                >
                                     <TextField
                                         name="mainName"
                                         label="Nome principal"
@@ -94,7 +115,9 @@ export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProp
                                         fullWidth
                                     />
                                 </Grid>
-                                <Grid item xs={2}>
+                                <Grid item
+                                    xs={2}
+                                >
                                     <TextField
                                         select
                                         label="Idioma"
@@ -110,7 +133,9 @@ export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProp
                                         <MenuItem value="ENGLISH">Inglês</MenuItem>
                                     </TextField>
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item
+                                    xs={12}
+                                >
                                     <TextField
                                         name="alternativeName"
                                         label="Nome alternativo"
@@ -119,7 +144,11 @@ export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProp
                                     />
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12} sx={{ marginTop: 2 }}>
+
+                            <Grid item
+                                xs={12}
+                                sx={gridItemSpacingStyle}
+                            >
                                 <TextField
                                     name="description"
                                     label="Descrição"
@@ -129,7 +158,11 @@ export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProp
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item xs={12} sx={{ marginTop: 2 }}>
+
+                            <Grid item
+                                xs={12}
+                                sx={gridItemSpacingStyle}
+                            >
                                 <TextField
                                     name="imageAddress"
                                     label="Link da imagem"
@@ -137,7 +170,56 @@ export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProp
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item xs={12} sx={{ marginTop: 2 }}>
+
+                            <Grid item
+                                xs={12}
+                                sx={gridItemSpacingStyle}
+                            >
+                                <Autocomplete
+                                    multiple
+                                    options={tags}
+                                    defaultValue={[...defaultTags]}
+                                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                                    onChange={handleTagsChange}
+                                    onInputChange={handleTagSearch}
+                                    getOptionLabel={tag => tag.name}
+                                    filterOptions={options => options}
+                                    renderInput={
+                                        params => <TextField
+                                            {...params}
+                                            InputProps={
+                                                {
+                                                    ...params.InputProps,
+                                                    endAdornment: <>
+                                                        {
+                                                            areTagsLoading
+                                                                ? <CircularProgress size={20} />
+                                                                : null
+                                                        }
+                                                        {
+                                                            params.InputProps.endAdornment
+                                                        }
+                                                    </>
+                                                }
+                                            }
+                                            variant="outlined"
+                                            label="Tags"
+                                            name="tags"
+                                        />
+                                    }
+                                    noOptionsText={
+                                        areTagsLoading
+                                            ? "Carregando..."
+                                            : "Não há tags disponíveis."
+                                    }
+                                    disableCloseOnSelect
+                                />
+                            </Grid>
+
+                            <Grid item
+                                xs={12}
+                                sx={gridItemSpacingStyle}
+                            >
                                 <Button
                                     type="submit"
                                     variant="contained"
