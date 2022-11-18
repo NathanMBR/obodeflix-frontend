@@ -20,7 +20,7 @@ export class TagBuilder implements Tag {
     public readonly deletedAt: Tag["deletedAt"];
 
     constructor(
-        private readonly tagData: Tag
+        tagData: Tag
     ) {
         this.id = tagData.id;
         this.name = tagData.name;

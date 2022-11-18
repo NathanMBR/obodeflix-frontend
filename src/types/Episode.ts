@@ -28,7 +28,7 @@ export class EpisodeBuilder implements Episode {
     public readonly deletedAt: Episode["deletedAt"]
 
     constructor(
-        private readonly episodeData: Episode
+        episodeData: Episode
     ) {
         this.id = episodeData.id
         this.name = episodeData.name

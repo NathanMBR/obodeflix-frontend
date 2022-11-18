@@ -24,7 +24,7 @@ export class UserBuilder implements User {
     public readonly deletedAt: User["deletedAt"];
 
     constructor(
-        private readonly userData: User
+        userData: User
     ) {
         this.id = userData.id;
         this.name = userData.name;

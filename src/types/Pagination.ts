@@ -16,7 +16,7 @@ export class PaginationBuilder<T extends GenericObject> implements Pagination<T>
     public readonly data: Pagination<T>["data"];
 
     constructor(
-        private readonly paginationData: Pagination<T>
+        paginationData: Pagination<T>
     ) {
         this.quantityPerPage = paginationData.quantityPerPage;
         this.totalQuantity = paginationData.totalQuantity;

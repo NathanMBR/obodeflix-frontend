@@ -30,7 +30,7 @@ export class SeriesBuilder implements Series {
     public readonly deletedAt: Series["deletedAt"];
 
     constructor(
-        private readonly seriesData: Series
+        seriesData: Series
     ) {
         this.id = seriesData.id;
         this.mainName = seriesData.mainName;
