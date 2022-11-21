@@ -40,6 +40,7 @@ export const ManageTags = () => {
     const [quantity, setQuantity] = useState(50);
     const [orderColumn, setOrderColumn] = useState<TagOrderColumn>("id");
     const [orderBy, setOrderBy] = useState<OrderBy>("asc");
+    const [search, setSearch] = useState("");
 
     const [paginatedTags, setPaginatedTags] = useState<Pagination<Tag> | null>(null);
     const [tags, setTags] = useState<Array<Tag>>([]);
@@ -82,7 +83,7 @@ export const ManageTags = () => {
         setPaginatedTags(builtPaginatedTags);
     };
 
-    const fetchAllTags = async () => fetch(`${API_URL}/tag/all?page=${page}&quantity=${quantity}&orderColumn=${orderColumn}&orderBy=${orderBy}`)
+    const fetchAllTags = async () => fetch(`${API_URL}/tag/all?page=${page}&quantity=${quantity}&orderColumn=${orderColumn}&orderBy=${orderBy}${search.length > 0 ? `&search=${search}` : ""}`)
         .then(handleFetchAllTagsResponse)
         .catch(console.error)
         .finally(() => setIsRequestLoading(false));
@@ -132,6 +133,10 @@ export const ManageTags = () => {
         setDeleteTagCardData(null);
     };
 
+    const handleSearchChange = (newSearch: string) => {
+        setSearch(newSearch);
+    };
+
     useEffect(
         () => {
             setIsRequestLoading(true);
@@ -143,7 +148,8 @@ export const ManageTags = () => {
             page,
             quantity,
             orderColumn,
-            orderBy
+            orderBy,
+            search
         ]
     );
 
@@ -177,6 +183,9 @@ export const ManageTags = () => {
                 currentQuantity={tags.length}
                 totalQuantity={paginatedTags?.totalQuantity || 0}
                 noContent={noContentWarning}
+
+                newSearch={search}
+                handleSearchChange={handleSearchChange}
 
                 quantityPerPage={quantity}
                 handleQuantityPerPageChange={handleQuantityChange}
