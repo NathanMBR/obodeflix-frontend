@@ -1,16 +1,20 @@
 import {
+    Box,
     CircularProgress,
     Divider,
     IconButton,
     Pagination as MUIPagination,
     SelectChangeEvent,
     Stack,
+    TextField,
     Tooltip,
     Typography
 } from "@mui/material";
 import { Tune } from "@mui/icons-material";
+import { CSSProperties } from "@mui/styled-engine";
 import {
     ChangeEvent,
+    useEffect,
     useState
 } from "react";
 
@@ -42,6 +46,9 @@ export interface PaginatedContentProps<GenericOrderColumn extends string> {
     orderColumns: Array<[GenericOrderColumn, string]>;
     handleOrderColumnChange: (event: SelectChangeEvent<GenericOrderColumn>) => void;
     currentOrderColumn: GenericOrderColumn;
+
+    newSearch: string;
+    handleSearchChange: (search: string) => void;
 }
 
 export const PaginatedContent = <GenericOrderColumn extends string>(props: PaginatedContentProps<GenericOrderColumn>) => {
@@ -66,18 +73,58 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
 
         orderColumns,
         handleOrderColumnChange,
-        currentOrderColumn
+        currentOrderColumn,
+
+        newSearch,
+        handleSearchChange
     } = props;
 
-    const stackStyle = {
+    const stackStyle: CSSProperties = {
         justifyContent: "space-between",
-        alignItems: "center"
+        alignItems: "center",
+        paddingBottom: 2
+    };
+
+    const searchFieldStyle: Record<"& fieldset", CSSProperties> & CSSProperties = {
+        ["& fieldset"]: {
+            borderRadius: "20px"
+        }
     };
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const [searchTimer, setSearchTimer] = useState<number | null>(null);
+
+    useEffect(
+        () => {
+            const timeInMillisecondsToWaitBeforeSearching = 300;
+
+            if (searchTimer)
+                clearTimeout(searchTimer);
+
+            const newSearchTimer = setTimeout(
+                () => {
+                    handleSearchChange(search);
+                    clearTimeout(newSearchTimer);
+                },
+                timeInMillisecondsToWaitBeforeSearching
+            );
+
+            setSearchTimer(newSearchTimer);
+        },
+
+        [
+            search
+        ]
+    );
 
     const handleToggleFilters = () => {
         setIsFilterOpen(!isFilterOpen);
+    };
+
+    const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+        console.log(event.target.value);
     };
 
     return (
@@ -85,21 +132,24 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
             <Stack direction="row" sx={stackStyle}>
                 <Typography variant="h4" component="h2">{contentTitle}</Typography>
 
-                {
-                    hidePaginationContent || isRequestLoading
-                        ? null
-                        : <>
-                            <MUIPagination
-                                page={page}
-                                count={lastPage}
-                                onChange={handlePageChange}
-                                hidePrevButton
-                                hideNextButton
-                                showFirstButton
-                                showLastButton
-                            />
-                        </>
-                }
+                <TextField
+                    sx={searchFieldStyle}
+                    onChange={onSearchInputChange}
+                    defaultValue={newSearch}
+                    size="small"
+                    variant="outlined"
+                    placeholder="Pesquisar"
+                />
+
+                <MUIPagination
+                    page={page}
+                    count={lastPage}
+                    onChange={handlePageChange}
+                    hidePrevButton
+                    hideNextButton
+                    showFirstButton
+                    showLastButton
+                />
             </Stack>
             <Divider style={{ marginBottom: 16 }} />
             {
