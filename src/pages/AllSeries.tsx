@@ -32,6 +32,7 @@ export const AllSeries = () => {
     const [quantity, setQuantity] = useState(25);
     const [orderColumn, setOrderColumn] = useState<SeriesOrderColumn>("mainName");
     const [orderBy, setOrderBy] = useState<OrderBy>("asc");
+    const [search, setSearch] = useState("");
 
     const [paginatedSeries, setPaginatedSeries] = useState<Pagination<Series> | null>(null);
     const [series, setSeries] = useState<Array<Series>>([]);
@@ -40,7 +41,7 @@ export const AllSeries = () => {
         () => {
             setIsRequestLoading(true);
 
-            fetch(`${API_URL}/series/all?page=${page}&quantity=${quantity}&orderColumn=${orderColumn}&orderBy=${orderBy}`)
+            fetch(`${API_URL}/series/all?page=${page}&quantity=${quantity}&orderColumn=${orderColumn}&orderBy=${orderBy}${search.length > 0 ? `&search=${search}` : ""}`)
                 .then(handleFetchResponse)
                 .catch(console.error)
                 .finally(() => setIsRequestLoading(false));
@@ -51,7 +52,8 @@ export const AllSeries = () => {
             page,
             quantity,
             orderColumn,
-            orderBy
+            orderBy,
+            search
         ]
     );
 
@@ -112,6 +114,10 @@ export const AllSeries = () => {
         setPaginatedSeries(builtPaginatedSeries);
     };
 
+    const handleSearchChange = (newSearch: string) => {
+        setSearch(newSearch);
+    };
+
     const noContentMessage = <>
         <Typography variant="body1">Não há séries a serem exibidas.</Typography>
     </>;
@@ -125,6 +131,9 @@ export const AllSeries = () => {
                 currentQuantity={series.length}
                 totalQuantity={paginatedSeries?.totalQuantity || 0}
                 noContent={noContentMessage}
+
+                newSearch={search}
+                handleSearchChange={handleSearchChange}
 
                 quantityPerPage={quantity}
                 handleQuantityPerPageChange={handleQuantityChange}
