@@ -124,7 +124,6 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
 
     const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
-        console.log(event.target.value);
     };
 
     return (
