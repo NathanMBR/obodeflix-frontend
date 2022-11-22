@@ -23,6 +23,7 @@ import {
   SignUp,
   Login,
   AllSeries,
+  OneSeries,
 
   AdminPanel,
   ManageSeries,
@@ -84,6 +85,7 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/series" element={<AllSeries />} />
+              <Route path="/series/:id" element={<OneSeries />} />
 
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/admin/series" element={<ManageSeries />} />
