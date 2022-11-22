@@ -119,6 +119,7 @@ export const UpsertSeries = () => {
 
         const builtSeries = new SeriesBuilder(data);
         setSeries(builtSeries);
+        setSeriesTags(builtSeries.seriesTags.map(({ tag }) => tag.id));
         setShouldRenderTable(true);
     };
 
