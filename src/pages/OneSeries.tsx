@@ -35,10 +35,7 @@ export const OneSeries = () => {
     const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
     const [reasons, setReasons] = useState<string | Array<string>>();
 
-    const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
     const handleFetchResponse = async (response: Response) => {
-        await wait(500);
         const data = await response.json();
 
         if (!response.ok) {
