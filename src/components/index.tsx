@@ -16,6 +16,7 @@ export * from "./AdminPanelDeleteSeasonCard";
 export * from "./AdminPanelDeleteSeriesCard";
 export * from "./AdminPanelDeleteTagCard";
 export * from "./AdminPanelOption";
+export * from "./AdminPanelSeasonTable";
 export * from "./AdminPanelSeriesTable";
 export * from "./AdminPanelTagTable";
 export * from "./AdminPanelUpsertSeriesForm";
