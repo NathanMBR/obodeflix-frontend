@@ -47,7 +47,7 @@ export const UpsertSeason = () => {
     const [seriesSearch, setSeriesSearch] = useState("");
     const [series, setSeries] = useState<Array<Season["series"]>>([]);
     const [seriesSearchTimer, setSeriesSearchTimer] = useState<number | null>(null);
-    const [seriesId, setSeriesId] = useState<Season["seriesId"] | null>(null);
+    const [_seriesId, setSeriesId] = useState<Season["seriesId"] | null>(null);
 
     const managementScreenPath = "/admin/seasons";
 
@@ -102,19 +102,31 @@ export const UpsertSeason = () => {
         event.preventDefault();
         setIsRequestLoading(true);
 
-        const nameInput = event.currentTarget.elements.namedItem("name") as HTMLInputElement | null;
+        const nameInput = event
+            .currentTarget
+            .elements
+            .namedItem("name") as HTMLInputElement | null;
         if (!nameInput)
             return;
 
-        const typeInput = event.currentTarget.elements.namedItem("type") as HTMLInputElement | null;
+        const typeInput = event
+            .currentTarget
+            .elements
+            .namedItem("type") as HTMLInputElement | null;
         if (!typeInput)
             return;
 
-        const positionInput = event.currentTarget.elements.namedItem("position") as HTMLInputElement | null;
+        const positionInput = event
+            .currentTarget
+            .elements
+            .namedItem("position") as HTMLInputElement | null;
         if (!positionInput)
             return;
 
-        const seriesIdInput = event.currentTarget.elements.namedItem("seriesId") as HTMLInputElement | null;
+        const seriesIdInput = event
+            .currentTarget
+            .elements
+            .namedItem("seriesId") as HTMLInputElement | null;
         if (!seriesIdInput)
             return;
 
@@ -261,6 +273,19 @@ export const UpsertSeason = () => {
                         <CircularProgress />
                     </Box>
             }
+
+            <ErrorCard
+                isOpen={!!statusCode}
+                statusCode={statusCode}
+                reasons={reasons}
+                handleClose={handleErrorCardClose}
+            />
+
+            <SuccessCard
+                message={seasonId > 0 ? "Temporada editada com sucesso!" : "Temporada criada com sucesso!"}
+                isOpen={wasUpsertSuccessful}
+                handleClose={handleSuccessCardClose}
+            />
         </>
     );
 }
