@@ -12,7 +12,8 @@ import {
 } from "@mui/material";
 import {
     Edit,
-    Delete
+    Delete,
+    Visibility
 } from "@mui/icons-material";
 import { CSSProperties } from "@mui/styled-engine";
 import { Link } from "react-router-dom";
@@ -36,9 +37,15 @@ export const AdminPanelSeasonTable = (props: AdminPanelSeasonTableProps) => {
         ["name", "Nome"],
         ["type", "Tipo"],
         ["position", "Posição"],
-        ["seriesId", "ID da Série"],
+        ["seriesId", "Série relacionada"],
         ["createdAt", "Criado em"],
         ["updatedAt", "Atualizado em"]
+    ];
+
+    const columnsToAlign: Array<keyof Season> = [
+        "type",
+        "position",
+        "seriesId"
     ];
 
     const actionIconsStyle: CSSProperties = {
@@ -53,7 +60,10 @@ export const AdminPanelSeasonTable = (props: AdminPanelSeasonTableProps) => {
                         <TableRow>
                             {
                                 seasonsFormat.map(
-                                    ([columnName, exhibitionName]) => <TableCell key={columnName}>
+                                    ([columnName, exhibitionName]) => <TableCell
+                                        key={columnName}
+                                        sx={{ textAlign: columnsToAlign.includes(columnName) ? "center" : "default" }}
+                                    >
                                         {
                                             exhibitionName
                                         }
@@ -79,13 +89,25 @@ export const AdminPanelSeasonTable = (props: AdminPanelSeasonTableProps) => {
                                                         {
                                                             fontStyle: dataToExhibit === "(vazio)"
                                                                 ? "italic"
-                                                                : "normal"
+                                                                : "normal",
+
+                                                            textAlign: columnsToAlign.includes(columnName)
+                                                                ? "center"
+                                                                : "default"
                                                         }
                                                     }
                                                     key={columnName}
                                                 >
                                                     {
-                                                        dataToExhibit
+                                                        columnName === "seriesId"
+                                                            ? <Tooltip title="Ver série">
+                                                                <Link to={`/series/${dataToExhibit}`}>
+                                                                    <IconButton>
+                                                                        <Visibility />
+                                                                    </IconButton>
+                                                                </Link>
+                                                            </Tooltip>
+                                                            : dataToExhibit
                                                     }
                                                 </TableCell>;
                                             }
