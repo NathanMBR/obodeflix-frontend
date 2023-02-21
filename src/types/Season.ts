@@ -15,6 +15,8 @@ export interface Season {
     readonly createdAt: Date;
     readonly updatedAt: Date;
     readonly deletedAt: Date | null;
+
+    readonly series: Series;
 };
 
 export class SeasonBuilder implements Season {
@@ -29,6 +31,8 @@ export class SeasonBuilder implements Season {
     public readonly updatedAt: Season["updatedAt"];
     public readonly deletedAt: Season["deletedAt"];
 
+    public readonly series: Series;
+
     constructor(
         seasonData: Season
     ) {
@@ -42,5 +46,7 @@ export class SeasonBuilder implements Season {
         this.createdAt = seasonData.createdAt;
         this.updatedAt = seasonData.updatedAt;
         this.deletedAt = seasonData.deletedAt;
+
+        this.series = seasonData.series;
     }
 }
