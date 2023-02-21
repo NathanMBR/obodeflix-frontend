@@ -69,14 +69,7 @@ export const AdminPanelTagTable = (props: AdminPanelTagTableProps) => {
                                         dataFormat.map(
                                             ([columnName]) => {
                                                 const currentColumnData = row[columnName]
-
-                                                const columnsToIgnore = [
-                                                    "id"
-                                                ];
-
-                                                const dataToExhibit = columnsToIgnore.includes(columnName)
-                                                    ? String(currentColumnData)
-                                                    : transformExhibitionData(currentColumnData);
+                                                const dataToExhibit = transformExhibitionData(currentColumnData, columnName);
 
                                                 return <TableCell
                                                     sx={
