@@ -13,7 +13,6 @@ import {
     TextField,
     TextFieldProps
 } from "@mui/material";
-import { CSSProperties } from "@mui/styled-engine";
 import {
     ChangeEvent,
     FormEvent,
@@ -84,10 +83,6 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
         const newSeasonType = event.target.value as SeasonTypeInputValue;
 
         setSeasonType(newSeasonType);
-    };
-
-    const gridItemSpacingStyle: CSSProperties = {
-        marginTop: 2
     };
 
     return (
@@ -163,7 +158,11 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                                         isOptionEqualToValue={
                                             (option, value) => option.id === value.id
                                         }
-                                        onChange={handleSeriesChange}
+                                        onChange={(_event, series) => {
+                                            handleSeriesChange(_event, series);
+                                            if (series)
+                                                setSeriesId(series.id);
+                                        }}
                                         onInputChange={handleSeriesSearch}
                                         defaultValue={season?.series || null}
                                         renderInput={
@@ -185,7 +184,6 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                                                     }
                                                 }
                                                 label="Série relacionada"
-                                                name="seriesId"
                                                 variant="outlined"
                                             />
                                         }
@@ -228,6 +226,12 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                                     </Button>
                                 </Grid>
                             </Grid>
+
+                            {
+                                seriesId
+                                    ? <input type="hidden" name="seriesId" value={seriesId}/>
+                                    : null
+                            }
                         </form>
                     </CardContent>
                 </Card>
