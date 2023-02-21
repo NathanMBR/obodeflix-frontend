@@ -1,6 +1,12 @@
-export const transformExhibitionData = (data: any) => {
+export const transformExhibitionData = (data: any, column: string = "") => {
+    const dateColumns = [
+        "createdAt",
+        "updatedAt",
+        "deletedAt"
+    ];
+
     const transformedData = String(data);
-    const isValidDate = !Number.isNaN(new Date(transformedData).getTime());
+    const isValidDate = dateColumns.includes(column);
 
     const exhibitionData = isValidDate
         ? `${new Date(transformedData)
