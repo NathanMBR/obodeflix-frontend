@@ -1,3 +1,5 @@
+import { Season } from "./Season";
+
 export type EpisodeOrderColumn = "id" | "name" | "position" | "updatedAt";
 
 export interface Episode {
@@ -12,6 +14,8 @@ export interface Episode {
     readonly createdAt: Date
     readonly updatedAt: Date
     readonly deletedAt: Date | null
+
+    readonly season: Season
 }
 
 export class EpisodeBuilder implements Episode {
@@ -27,17 +31,23 @@ export class EpisodeBuilder implements Episode {
     public readonly updatedAt: Episode["updatedAt"]
     public readonly deletedAt: Episode["deletedAt"]
 
+    public readonly season: Season;
+
     constructor(
         episodeData: Episode
     ) {
-        this.id = episodeData.id
-        this.name = episodeData.name
-        this.seasonId = episodeData.seasonId
-        this.duration = episodeData.duration
-        this.path = episodeData.path
-        this.position = episodeData.position
-        this.createdAt = episodeData.createdAt
-        this.updatedAt = episodeData.updatedAt
-        this.deletedAt = episodeData.deletedAt
+        this.id = episodeData.id;
+
+        this.name = episodeData.name;
+        this.seasonId = episodeData.seasonId;
+        this.duration = episodeData.duration;
+        this.path = episodeData.path;
+        this.position = episodeData.position;
+
+        this.createdAt = episodeData.createdAt;
+        this.updatedAt = episodeData.updatedAt;
+        this.deletedAt = episodeData.deletedAt;
+
+        this.season = episodeData.season;
     }
 }
