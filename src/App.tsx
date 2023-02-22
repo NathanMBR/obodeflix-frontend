@@ -26,13 +26,18 @@ import {
   OneSeries,
 
   AdminPanel,
+
   ManageSeries,
   UpsertSeries,
+
   ManageTags,
   UpsertTag,
+
   ManageSeasons,
   UpsertSeason,
+
   ManageEpisodes,
+  UpsertEpisode,
 
   NotFound
 } from "./pages"
@@ -98,6 +103,7 @@ function App() {
               <Route path="/admin/seasons" element={<ManageSeasons />} />
               <Route path="/admin/seasons/:id" element={<UpsertSeason />} />
               <Route path="/admin/episodes" element={<ManageEpisodes />} />
+              <Route path="/admin/episodes/:id" element={<UpsertEpisode />} />
 
               <Route path="/*" element={<NotFound />} />
             </Routes>
