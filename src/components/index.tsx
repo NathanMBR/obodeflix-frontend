@@ -21,6 +21,7 @@ export * from "./AdminPanelOption";
 export * from "./AdminPanelSeasonTable";
 export * from "./AdminPanelSeriesTable";
 export * from "./AdminPanelTagTable";
+export * from "./AdminPanelUpsertEpisodeForm";
 export * from "./AdminPanelUpsertSeasonForm";
 export * from "./AdminPanelUpsertSeriesForm";
 export * from "./AdminPanelUpsertTagForm";
