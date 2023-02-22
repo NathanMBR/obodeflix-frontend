@@ -11,5 +11,6 @@ export * from "./ManageTags";
 export * from "./UpsertTag";
 export * from "./ManageSeasons";
 export * from "./UpsertSeason";
+export * from "./ManageEpisodes";
 
 export * from "./NotFound";

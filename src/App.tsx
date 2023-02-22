@@ -32,6 +32,7 @@ import {
   UpsertTag,
   ManageSeasons,
   UpsertSeason,
+  ManageEpisodes,
 
   NotFound
 } from "./pages"
@@ -65,14 +66,14 @@ function App() {
     const newTheme = theme === "light" ? "dark" : "light"
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-  }
+  };
 
   const containerStyle: CSSProperties = {
     minHeight: "74.5vh",
     marginTop: 96,
     marginBottom: 64,
     position: "relative"
-  }
+  };
 
   return (
     <>
@@ -96,6 +97,7 @@ function App() {
               <Route path="/admin/tags/:id" element={<UpsertTag />} />
               <Route path="/admin/seasons" element={<ManageSeasons />} />
               <Route path="/admin/seasons/:id" element={<UpsertSeason />} />
+              <Route path="/admin/episodes" element={<ManageEpisodes />} />
 
               <Route path="/*" element={<NotFound />} />
             </Routes>
