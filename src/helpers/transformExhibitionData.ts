@@ -1,33 +1,36 @@
+import { getDurationTime } from "./getDurationTime";
+
 export const transformExhibitionData = (data: any, column: string = "") => {
-    const dateColumns = [
-        "createdAt",
-        "updatedAt",
-        "deletedAt"
-    ];
+    const stringifiedData = String(data);
 
-    const transformedData = String(data);
-    const isValidDate = dateColumns.includes(column);
+    const parseDate = () => `${new Date(stringifiedData)
+        .toLocaleDateString(
+            "pt-BR",
+            {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            }
+        )
+    }, ${new Date(stringifiedData)
+        .toLocaleTimeString(
+            "pt-BR",
+            {
+                hour: "numeric",
+                minute: "numeric"
+            }
+        )
+    }`;
 
-    const exhibitionData = isValidDate
-        ? `${new Date(transformedData)
-            .toLocaleDateString(
-                "pt-BR",
-                {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric"
-                }
-            )
-        }, ${new Date(transformedData)
-            .toLocaleTimeString(
-                "pt-BR",
-                {
-                    hour: "numeric",
-                    minute: "numeric"
-                }
-            )
-        }`
-        : transformedData;
+    const transformers: Record<string, () => string> = {
+        "duration": () => getDurationTime(Number(stringifiedData)),
+        "createdAt": parseDate,
+        "updatedAt": parseDate,
+        "deletedAt": parseDate
+    };
+
+    const transformer = transformers[column] || (() => stringifiedData);
+    const exhibitionData = transformer();
 
     return exhibitionData === "null"
         ? "(vazio)"
