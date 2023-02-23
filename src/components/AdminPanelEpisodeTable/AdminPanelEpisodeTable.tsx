@@ -43,7 +43,9 @@ export const AdminPanelEpisodeTable = (props: AdminPanelEpisodeTableProps) => {
     ];
 
     const columnsToAlign: Array<keyof Episode> = [
-        "seasonId"
+        "seasonId",
+        "position",
+        "duration"
     ];
 
     const actionIconsStyle: CSSProperties = {
