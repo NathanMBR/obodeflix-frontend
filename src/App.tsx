@@ -24,6 +24,7 @@ import {
   Login,
   AllSeries,
   OneSeries,
+  OneEpisode,
 
   AdminPanel,
 
@@ -94,6 +95,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/series" element={<AllSeries />} />
               <Route path="/series/:id" element={<OneSeries />} />
+              <Route path="/episodes/:id" element={<OneEpisode />} />
 
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/admin/series" element={<ManageSeries />} />
