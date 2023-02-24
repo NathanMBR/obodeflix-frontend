@@ -1,6 +1,7 @@
 import {
     Box,
-    CircularProgress
+    CircularProgress,
+    Divider
 } from "@mui/material";
 import { CSSProperties } from "@mui/styled-engine";
 import {
@@ -15,8 +16,11 @@ import {
     SeriesInfo
 } from "../components";
 import {
+    Season,
     Series,
-    SeriesBuilder
+    SeriesBuilder,
+    Pagination,
+    PaginationBuilder
 } from "../types";
 import { NotFound } from "../pages";
 import { API_URL } from "../settings";
@@ -35,6 +39,25 @@ export const OneSeries = () => {
     const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
     const [reasons, setReasons] = useState<string | Array<string>>();
 
+    const [seriesSeasons, setSeriesSeasons] = useState<Pagination<Season> | null>(null);
+    const [isSeasonsLoading, setIsSeasonsLoading] = useState(false);
+
+    const handleSeasonsResponse = async (response: Response) => {
+        const data = await response.json();
+
+        if (!response.ok) {
+            setStatusCode(response.status as ErrorCardStatusCodeProp);
+
+            if (data.reason)
+                setReasons(data.reason);
+
+            return;
+        }
+
+        const builtPagination = new PaginationBuilder<Season>(data);
+        setSeriesSeasons(builtPagination);
+    };
+
     const handleFetchResponse = async (response: Response) => {
         const data = await response.json();
 
@@ -49,6 +72,12 @@ export const OneSeries = () => {
 
         const builtSeries = new SeriesBuilder(data);
         setSeries(builtSeries);
+        setIsSeasonsLoading(true);
+
+        fetch(`${API_URL}/season/all?seriesId=${seriesId}`)
+            .then(handleSeasonsResponse)
+            .catch(console.error)
+            .finally(() => setIsSeasonsLoading(false));
     };
 
     const handleErrorCardClose = () => {
@@ -85,6 +114,7 @@ export const OneSeries = () => {
                     : <>
                         <SeriesInfo
                             series={series}
+                            seasons={seriesSeasons?.data}
                         />
                     </>
             }

@@ -1,10 +1,10 @@
 import {
     Box,
     Card,
-    CardActions,
     CardContent,
     CardMedia,
     Chip,
+    CircularProgress,
     Divider,
     Paper,
     Stack,
@@ -13,14 +13,27 @@ import {
 import { ImageNotSupported } from "@mui/icons-material";
 import { CSSProperties } from "@mui/styled-engine";
 
-import { Series } from "../../types";
+import { SeasonCard } from "./SeasonCard";
+import {
+    Season,
+    Series
+} from "../../types";
 
 export interface SeriesInfoProps {
     series?: Series;
+    seasons?: Array<Season>;
 };
 
 export const SeriesInfo = (props: SeriesInfoProps) => {
-    const { series } = props;
+    const {
+        series,
+        seasons
+    } = props;
+
+    if (!series)
+        return null;
+
+    const { seriesTags } = series;
 
     const imageStyle: CSSProperties = {
         border: "1px solid black",
@@ -51,93 +64,110 @@ export const SeriesInfo = (props: SeriesInfoProps) => {
     };
 
     return (
-        series
-            ? <>
-                <Paper elevation={12}>
-                    <Card>
-                        <CardContent>
-                            <Stack direction="column">
-                                <Box>
-                                    {
-                                        series.imageAddress
-                                            ? <>
-                                                <CardMedia
-                                                    component="img"
-                                                    src={series.imageAddress || ""}
-                                                    sx={imageStyle}
+        <>
+            <Paper elevation={12}>
+                <Card>
+                    <CardContent>
+                        <Stack direction="column">
+                            <Box>
+                                {
+                                    series.imageAddress
+                                        ? <>
+                                            <CardMedia
+                                                component="img"
+                                                src={series.imageAddress || ""}
+                                                sx={imageStyle}
+                                            />
+                                        </>
+                                        : <>
+                                            <Stack
+                                                direction="column"
+                                                sx={noImageStyle}
+                                            >
+                                                <ImageNotSupported
+                                                    sx={{ fontSize: 32 }}
                                                 />
-                                            </>
-                                            : <>
-                                                <Stack
-                                                    direction="column"
-                                                    sx={noImageStyle}
-                                                >
-                                                    <ImageNotSupported
-                                                        sx={{ fontSize: 32 }}
-                                                    />
-                                                    <Typography variant="subtitle2">
-                                                        Imagem indisponível
-                                                    </Typography>
-                                                </Stack>
-                                            </>
-                                    }
+                                                <Typography variant="subtitle2">
+                                                    Imagem indisponível
+                                                </Typography>
+                                            </Stack>
+                                        </>
+                                }
 
-                                    <Box>
-                                        <Typography
-                                            variant="h4"
-                                            component="h2"
-                                        >
-                                            {series.mainName}
-                                        </Typography>
-                                        <Divider />
-
-                                        <Typography variant="body1">
-                                            <strong>Nome alternativo:</strong> {series.alternativeName || <i>(vazio)</i>}
-                                        </Typography>
-
-                                        <Typography
-                                            variant="body1"
-                                            sx={{ textAlign: "justify" }}
-                                        >
-                                            <strong>Descrição:</strong> {series.description || <i>(vazio)</i>}
-                                        </Typography>
-
-                                        <Typography variant="body1">
-                                            <strong>
-                                                Tags:
-                                            </strong>
-                                        </Typography>
-                                        {
-                                            series.seriesTags.length > 0
-                                                ? series.seriesTags.map(
-                                                    ({ tag }) => <Chip
-                                                        key={tag.id}
-                                                        label={tag.name}
-                                                        variant="outlined"
-                                                        sx={tagStyle}
-                                                    />
-                                                )
-                                                : <i>(vazio)</i>
-                                        }
-                                    </Box>
-                                </Box>
-
-                                {/* <Box>
+                                <Box>
                                     <Typography
                                         variant="h4"
                                         component="h2"
-                                        sx={{ marginTop: 2 }}
                                     >
-                                        Temporadas
+                                        {series.mainName}
                                     </Typography>
                                     <Divider />
-                                </Box> */}
-                            </Stack>
-                        </CardContent>
-                    </Card>
-                </Paper>
-            </>
-            : null
 
+                                    <Typography variant="body1">
+                                        <strong>Nome alternativo:</strong> {series.alternativeName || <i>(vazio)</i>}
+                                    </Typography>
+
+                                    <Typography
+                                        variant="body1"
+                                        sx={{ textAlign: "justify" }}
+                                    >
+                                        <strong>Descrição:</strong> {series.description || <i>(vazio)</i>}
+                                    </Typography>
+
+                                    <Typography variant="body1">
+                                        <strong>
+                                            Tags:
+                                        </strong>
+                                    </Typography>
+                                    {
+                                        seriesTags.length > 0
+                                            ? seriesTags.map(
+                                                ({ tag }) => <Chip
+                                                    key={tag.id}
+                                                    label={tag.name}
+                                                    variant="outlined"
+                                                    sx={tagStyle}
+                                                />
+                                            )
+                                            : <i>(vazio)</i>
+                                    }
+                                </Box>
+                            </Box>
+
+                            <Box>
+                                <Typography
+                                    variant="h4"
+                                    component="h2"
+                                    sx={{ marginTop: 2 }}
+                                >
+                                    Temporadas
+                                </Typography>
+
+                                <Divider />
+
+                                {
+                                    !seasons
+                                        ? <CircularProgress />
+                                        : seasons.length > 0
+                                            ? seasons
+                                                .sort(
+                                                    (seasonA, seasonB) => seasonA.position - seasonB.position
+                                                )
+                                                .map(
+                                                    (season, index) => <SeasonCard
+                                                        key={index}
+                                                        season={season}
+                                                    />
+                                                )
+                                            : <Typography variant="body1">
+                                                Não há temporadas disponíveis.
+                                            </Typography>
+                                }
+                            </Box>
+                        </Stack>
+                    </CardContent>
+                </Card>
+            </Paper>
+        </>
     );
 };
