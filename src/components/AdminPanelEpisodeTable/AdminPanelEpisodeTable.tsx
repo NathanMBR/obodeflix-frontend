@@ -101,7 +101,7 @@ export const AdminPanelEpisodeTable = (props: AdminPanelEpisodeTableProps) => {
                                                     {
                                                         columnName === "seasonId"
                                                             ? <Tooltip title="Ver temporada">
-                                                                <Link to={`/season/${dataToExhibit}`}>
+                                                                <Link to={`/seasons/${dataToExhibit}`}>
                                                                     <IconButton>
                                                                         <Visibility />
                                                                     </IconButton>
