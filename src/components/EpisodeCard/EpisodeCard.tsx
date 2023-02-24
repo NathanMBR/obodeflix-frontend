@@ -37,7 +37,7 @@ export const EpisodeCard = (props: EpisodeCardProps) => {
                                 <Button>Baixar episódio</Button>
                             </MUILink>
 
-                            <RouterLink to={`/episode/${episode.id}`}>
+                            <RouterLink to={`/episodes/${episode.id}`}>
                                 <Button>Assistir episódio</Button>
                             </RouterLink>
                         </CardActions>
