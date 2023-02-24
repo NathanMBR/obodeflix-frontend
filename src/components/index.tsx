@@ -9,6 +9,7 @@ export * from "./PaginationFiltersCard";
 export * from "./SeriesCard";
 export * from "./SignUpForm";
 export * from "./SuccessCard";
+export * from "./EpisodeInfo";
 export * from "./SeriesInfo";
 
 export * from "./AdminPanelAddContentFAB";
