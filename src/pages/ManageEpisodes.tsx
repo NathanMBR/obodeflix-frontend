@@ -115,7 +115,7 @@ export const ManageEpisodes = () => {
                 return;
 
             fetch(
-                `${API_URL}/episode/${episode.id}`,
+                `${API_URL}/episode/inactivate/${episode.id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -208,7 +208,7 @@ export const ManageEpisodes = () => {
                 >
                     <AdminPanelEpisodeTable
                         episodes={episodes}
-                        getDeleteEpisodeHandler={getDeleteEpisodeHandler}
+                        getDeleteEpisodeHandler={getOpenDeleteEpisodeCardHandler}
                     />
                 </PaginatedContent>
 
