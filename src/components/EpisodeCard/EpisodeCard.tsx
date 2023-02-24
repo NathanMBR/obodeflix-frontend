@@ -5,11 +5,11 @@ import {
     CardContent,
     Divider,
     Grid,
-    Link,
+    Link as MUILink,
     Paper,
-    Tooltip,
     Typography
 } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 import { getDurationTime } from "../../helpers";
 import { Episode } from "../../types";
@@ -17,7 +17,7 @@ import { API_URL } from "../../settings";
 
 export interface EpisodeCardProps {
     episode: Episode;
-}
+};
 
 export const EpisodeCard = (props: EpisodeCardProps) => {
     const { episode } = props;
@@ -33,14 +33,13 @@ export const EpisodeCard = (props: EpisodeCardProps) => {
                         </CardContent>
                         <Divider />
                         <CardActions>
-                            <Link href={`${API_URL}/episode/watch/${episode.id}`}>
+                            <MUILink href={`${API_URL}/episode/watch/${episode.id}`}>
                                 <Button>Baixar episódio</Button>
-                            </Link>
-                            <Tooltip title="Indisponível">
-                                <div>
-                                    <Button disabled>Assistir episódio</Button>
-                                </div>
-                            </Tooltip>
+                            </MUILink>
+
+                            <RouterLink to={`/episode/${episode.id}`}>
+                                <Button>Assistir episódio</Button>
+                            </RouterLink>
                         </CardActions>
                     </Card>
                 </Paper>
