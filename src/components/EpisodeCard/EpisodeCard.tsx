@@ -1,5 +1,3 @@
-import { getDurationTime } from "../../helpers";
-import { Episode } from "../../types";
 import {
     Button,
     Card,
@@ -7,10 +5,15 @@ import {
     CardContent,
     Divider,
     Grid,
+    Link,
     Paper,
     Tooltip,
     Typography
 } from "@mui/material";
+
+import { getDurationTime } from "../../helpers";
+import { Episode } from "../../types";
+import { API_URL } from "../../settings";
 
 export interface EpisodeCardProps {
     episode: Episode;
@@ -30,7 +33,9 @@ export const EpisodeCard = (props: EpisodeCardProps) => {
                         </CardContent>
                         <Divider />
                         <CardActions>
-                            <Button>Baixar episódio</Button>
+                            <Link href={`${API_URL}/episode/watch/${episode.id}`}>
+                                <Button>Baixar episódio</Button>
+                            </Link>
                             <Tooltip title="Indisponível">
                                 <div>
                                     <Button disabled>Assistir episódio</Button>
