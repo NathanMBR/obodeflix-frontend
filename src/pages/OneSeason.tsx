@@ -189,56 +189,56 @@ export const OneSeason = () => {
                         <CircularProgress />
                     </Box>
                     : <>
-                                    <SeasonInfo
-                                        season={season}
-                                        sx={{ marginBottom: 4 }}
-                                    />
+                        <SeasonInfo
+                            season={season}
+                            sx={{ marginBottom: 4 }}
+                        />
 
-                                    <PaginatedContent<EpisodeOrderColumn>
-                                        contentTitle="Episódios"
-                                        hidePaginationContent={episodes.length <= 0}
-                                        isRequestLoading={isEpisodesLoading}
-                                        currentQuantity={episodes.length}
-                                        totalQuantity={paginatedSeasonEpisodes?.totalQuantity || 0}
-                                        noContent={noEpisodeMessage}
+                        <PaginatedContent<EpisodeOrderColumn>
+                            contentTitle="Episódios"
+                            hidePaginationContent={episodes.length <= 0}
+                            isRequestLoading={isEpisodesLoading}
+                            currentQuantity={episodes.length}
+                            totalQuantity={paginatedSeasonEpisodes?.totalQuantity || 0}
+                            noContent={noEpisodeMessage}
 
-                                        newSearch={search}
-                                        handleSearchChange={handleSearchChange}
+                            newSearch={search}
+                            handleSearchChange={handleSearchChange}
 
-                                        quantityPerPage={quantity}
-                                        handleQuantityPerPageChange={handleQuantityChange}
+                            quantityPerPage={quantity}
+                            handleQuantityPerPageChange={handleQuantityChange}
 
-                                        page={page}
-                                        handlePageChange={handlePageChange}
-                                        lastPage={paginatedSeasonEpisodes?.lastPage || 1}
+                            page={page}
+                            handlePageChange={handlePageChange}
+                            lastPage={paginatedSeasonEpisodes?.lastPage || 1}
 
-                                        orderBy={orderBy}
-                                        handleOrderByChange={handleOrderByChange}
+                            orderBy={orderBy}
+                            handleOrderByChange={handleOrderByChange}
 
-                                        orderColumns={
-                                            [
-                                                ["id", "ID"],
-                                                ["name", "Nome"],
-                                                ["position", "Ordem cronológica"],
-                                                ["updatedAt", "Recentemente atualizado"],
-                                            ]
-                                        }
-                                        handleOrderColumnChange={handleOrderColumnChange}
-                                        currentOrderColumn={orderColumn}
-                                    >
-                                        <Grid container
-                                            spacing={2}
-                                        >
-                                            {
-                                                episodes.map(
-                                                    (episode, index) => <EpisodeCard
-                                                        key={index}
-                                                        episode={episode}
-                                                    />
-                                                )
-                                            }
-                                        </Grid>
-                                    </PaginatedContent>
+                            orderColumns={
+                                [
+                                    ["id", "ID"],
+                                    ["name", "Nome"],
+                                    ["position", "Ordem cronológica"],
+                                    ["updatedAt", "Recentemente atualizado"],
+                                ]
+                            }
+                            handleOrderColumnChange={handleOrderColumnChange}
+                            currentOrderColumn={orderColumn}
+                        >
+                            <Grid container
+                                spacing={2}
+                            >
+                                {
+                                    episodes.map(
+                                        (episode, index) => <EpisodeCard
+                                            key={index}
+                                            episode={episode}
+                                        />
+                                    )
+                                }
+                            </Grid>
+                        </PaginatedContent>
                     </>
             }
 
