@@ -3,6 +3,7 @@ export * from "./SignUp";
 export * from "./Login";
 export * from "./AllSeries";
 export * from "./OneSeries";
+export * from "./OneSeason";
 export * from "./OneEpisode";
 
 export * from "./AdminPanel";

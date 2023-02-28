@@ -11,6 +11,7 @@ export * from "./SignUpForm";
 export * from "./SuccessCard";
 export * from "./EpisodeInfo";
 export * from "./SeriesInfo";
+export * from "./SeasonInfo";
 
 export * from "./AdminPanelAddContentFAB";
 export * from "./AdminPanelDeleteEpisodeCard";
