@@ -28,9 +28,9 @@ import { API_URL } from "../settings";
 export type OneEpisodeParams = Record<"id", string>;
 
 export const OneEpisode = () => {
-    const seriesId = Number(useParams<OneEpisodeParams>().id);
+    const episodeId = Number(useParams<OneEpisodeParams>().id);
 
-    if (Number.isNaN(seriesId) || seriesId <= 0)
+    if (Number.isNaN(episodeId) || episodeId <= 0)
         return <NotFound />;
 
     const [episode, setEpisode] = useState<Episode | undefined>(undefined);
@@ -65,7 +65,7 @@ export const OneEpisode = () => {
         () => {
             setIsRequestLoading(true);
 
-            fetch(`${API_URL}/episode/get/${seriesId}`)
+            fetch(`${API_URL}/episode/get/${episodeId}`)
                 .then(handleEpisodeFetchResponse)
                 .catch(console.error)
                 .finally(() => setIsRequestLoading(false));
@@ -87,11 +87,8 @@ export const OneEpisode = () => {
                     ? <Box sx={loadingStyle}>
                         <CircularProgress />
                     </Box>
-                    : <>
-                        <>
-                            <EpisodeInfo episode={episode} />
-                        </>
-                    </>
+                    : <EpisodeInfo episode={episode} />
+                        
             }
 
             <ErrorCard
