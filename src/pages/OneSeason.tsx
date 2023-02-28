@@ -195,7 +195,7 @@ export const OneSeason = () => {
                                     />
 
                                     <PaginatedContent<EpisodeOrderColumn>
-                                        contentTitle={`Episódios de ${season?.name}`}
+                                        contentTitle="Episódios"
                                         hidePaginationContent={episodes.length <= 0}
                                         isRequestLoading={isEpisodesLoading}
                                         currentQuantity={episodes.length}
