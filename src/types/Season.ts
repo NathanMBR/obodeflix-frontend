@@ -1,6 +1,11 @@
 import { Series } from "../types";
 
-export type SeasonTypes = "TV" | "MOVIE" | "OTHER";
+export const SeasonTypesEnum = {
+    TV: "Série de TV",
+    MOVIE: "Filme",
+    OTHER: "Outro"
+};
+export type SeasonTypes = keyof typeof SeasonTypesEnum;
 
 export type SeasonOrderColumn = "id" | "name" | "updatedAt";
 
