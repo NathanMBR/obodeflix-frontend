@@ -1,12 +1,9 @@
 import {
     Box,
-    Card,
-    CardContent,
     CardMedia,
     Chip,
     CircularProgress,
     Divider,
-    Paper,
     Stack,
     Typography
 } from "@mui/material";
@@ -65,109 +62,103 @@ export const SeriesInfo = (props: SeriesInfoProps) => {
 
     return (
         <>
-            <Paper elevation={12}>
-                <Card>
-                    <CardContent>
-                        <Stack direction="column">
-                            <Box>
-                                {
-                                    series.imageAddress
-                                        ? <>
-                                            <CardMedia
-                                                component="img"
-                                                src={series.imageAddress || ""}
-                                                sx={imageStyle}
-                                            />
-                                        </>
-                                        : <>
-                                            <Stack
-                                                direction="column"
-                                                sx={noImageStyle}
-                                            >
-                                                <ImageNotSupported
-                                                    sx={{ fontSize: 32 }}
-                                                />
-                                                <Typography variant="subtitle2">
-                                                    Imagem indisponível
-                                                </Typography>
-                                            </Stack>
-                                        </>
-                                }
-
-                                <Box>
-                                    <Typography
-                                        variant="h4"
-                                        component="h2"
-                                    >
-                                        {series.mainName}
-                                    </Typography>
-                                    <Divider />
-
-                                    <Typography variant="body1">
-                                        <strong>Nome alternativo:</strong> {series.alternativeName || <i>(vazio)</i>}
-                                    </Typography>
-
-                                    <Typography
-                                        variant="body1"
-                                        sx={{ textAlign: "justify" }}
-                                    >
-                                        <strong>Descrição:</strong> {series.description || <i>(vazio)</i>}
-                                    </Typography>
-
-                                    <Typography variant="body1">
-                                        <strong>
-                                            Tags:
-                                        </strong>
-                                    </Typography>
-                                    {
-                                        seriesTags.length > 0
-                                            ? seriesTags.map(
-                                                ({ tag }) => <Chip
-                                                    key={tag.id}
-                                                    label={tag.name}
-                                                    variant="outlined"
-                                                    sx={tagStyle}
-                                                />
-                                            )
-                                            : <i>(vazio)</i>
-                                    }
-                                </Box>
-                            </Box>
-
-                            <Box>
-                                <Typography
-                                    variant="h4"
-                                    component="h2"
-                                    sx={{ marginTop: 2 }}
+            <Stack direction="column">
+                <Box>
+                    {
+                        series.imageAddress
+                            ? <>
+                                <CardMedia
+                                    component="img"
+                                    src={series.imageAddress || ""}
+                                    sx={imageStyle}
+                                />
+                            </>
+                            : <>
+                                <Stack
+                                    direction="column"
+                                    sx={noImageStyle}
                                 >
-                                    Temporadas
+                                    <ImageNotSupported
+                                        sx={{ fontSize: 32 }}
+                                    />
+                                    <Typography variant="subtitle2">
+                                        Imagem indisponível
+                                    </Typography>
+                                </Stack>
+                            </>
+                    }
+
+                    <Box>
+                        <Typography
+                            variant="h4"
+                            component="h2"
+                        >
+                            {series.mainName}
+                        </Typography>
+                        <Divider />
+
+                        <Typography variant="body1">
+                            <strong>Nome alternativo:</strong> {series.alternativeName || <i>(vazio)</i>}
+                        </Typography>
+
+                        <Typography
+                            variant="body1"
+                            sx={{ textAlign: "justify" }}
+                        >
+                            <strong>Descrição:</strong> {series.description || <i>(vazio)</i>}
+                        </Typography>
+
+                        <Typography variant="body1">
+                            <strong>
+                                Tags:
+                            </strong>
+                        </Typography>
+                        {
+                            seriesTags.length > 0
+                                ? seriesTags.map(
+                                    ({ tag }) => <Chip
+                                        key={tag.id}
+                                        label={tag.name}
+                                        variant="outlined"
+                                        sx={tagStyle}
+                                    />
+                                )
+                                : <i>(vazio)</i>
+                        }
+                    </Box>
+                </Box>
+
+                <Box>
+                    <Typography
+                        variant="h4"
+                        component="h2"
+                        sx={{ marginTop: 2 }}
+                    >
+                        Temporadas
+                    </Typography>
+
+                    <Divider />
+
+                    {
+                        !seasons
+                            ? <CircularProgress />
+                            : seasons.length > 0
+                                ? seasons
+                                    .sort(
+                                        (seasonA, seasonB) => seasonA.position - seasonB.position
+                                    )
+                                    .map(
+                                        (season, index) => <SeasonCard
+                                            key={index}
+                                            season={season}
+                                        />
+                                    )
+                                : <Typography variant="body1">
+                                    Não há temporadas disponíveis.
                                 </Typography>
-
-                                <Divider />
-
-                                {
-                                    !seasons
-                                        ? <CircularProgress />
-                                        : seasons.length > 0
-                                            ? seasons
-                                                .sort(
-                                                    (seasonA, seasonB) => seasonA.position - seasonB.position
-                                                )
-                                                .map(
-                                                    (season, index) => <SeasonCard
-                                                        key={index}
-                                                        season={season}
-                                                    />
-                                                )
-                                            : <Typography variant="body1">
-                                                Não há temporadas disponíveis.
-                                            </Typography>
-                                }
-                            </Box>
-                        </Stack>
-                    </CardContent>
-                </Card>
-            </Paper>
+                    }
+                </Box>
+            </Stack>
         </>
     );
 };

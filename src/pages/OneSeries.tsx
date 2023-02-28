@@ -1,7 +1,6 @@
 import {
     Box,
-    CircularProgress,
-    Divider
+    CircularProgress
 } from "@mui/material";
 import { CSSProperties } from "@mui/styled-engine";
 import {
@@ -40,7 +39,6 @@ export const OneSeries = () => {
     const [reasons, setReasons] = useState<string | Array<string>>();
 
     const [seriesSeasons, setSeriesSeasons] = useState<Pagination<Season> | null>(null);
-    const [isSeasonsLoading, setIsSeasonsLoading] = useState(false);
 
     const handleSeasonsResponse = async (response: Response) => {
         const data = await response.json();
@@ -72,12 +70,10 @@ export const OneSeries = () => {
 
         const builtSeries = new SeriesBuilder(data);
         setSeries(builtSeries);
-        setIsSeasonsLoading(true);
 
         fetch(`${API_URL}/season/all?seriesId=${seriesId}`)
             .then(handleSeasonsResponse)
-            .catch(console.error)
-            .finally(() => setIsSeasonsLoading(false));
+            .catch(console.error);
     };
 
     const handleErrorCardClose = () => {
