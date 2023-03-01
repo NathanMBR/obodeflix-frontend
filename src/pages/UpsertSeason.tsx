@@ -106,6 +106,7 @@ export const UpsertSeason = () => {
             .currentTarget
             .elements
             .namedItem("name") as HTMLInputElement | null;
+
         if (!nameInput)
             return;
 
@@ -113,6 +114,7 @@ export const UpsertSeason = () => {
             .currentTarget
             .elements
             .namedItem("type") as HTMLInputElement | null;
+
         if (!typeInput)
             return;
 
@@ -120,6 +122,7 @@ export const UpsertSeason = () => {
             .currentTarget
             .elements
             .namedItem("position") as HTMLInputElement | null;
+
         if (!positionInput)
             return;
 
@@ -127,14 +130,23 @@ export const UpsertSeason = () => {
             .currentTarget
             .elements
             .namedItem("seriesId") as HTMLInputElement | null;
+
         if (!seriesIdInput)
+            return;
+
+        const imageAddressInput = event
+            .currentTarget
+            .elements
+            .namedItem("imageAddress") as HTMLInputElement | null;
+        if (!imageAddressInput)
             return;
 
         const upsertSeasonPayload = {
             name: nameInput.value,
             type: typeInput.value,
             position: Number(positionInput.value),
-            seriesId: Number(seriesIdInput.value)
+            seriesId: Number(seriesIdInput.value),
+            imageAddress: imageAddressInput.value
         };
 
         if (seasonId > 0)
