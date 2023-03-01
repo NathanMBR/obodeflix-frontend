@@ -16,6 +16,7 @@ export interface Season {
     readonly type: SeasonTypes;
     readonly position: number;
     readonly seriesId: Series["id"];
+    readonly imageAddress: string | null;
 
     readonly createdAt: Date;
     readonly updatedAt: Date;
@@ -31,6 +32,7 @@ export class SeasonBuilder implements Season {
     public readonly type: Season["type"];
     public readonly position: Season["position"];
     public readonly seriesId: Season["seriesId"];
+    public readonly imageAddress: string | null;
 
     public readonly createdAt: Season["createdAt"];
     public readonly updatedAt: Season["updatedAt"];
@@ -47,6 +49,7 @@ export class SeasonBuilder implements Season {
         this.type = seasonData.type;
         this.position = seasonData.position;
         this.seriesId = seasonData.seriesId;
+        this.imageAddress = seasonData.imageAddress;
 
         this.createdAt = seasonData.createdAt;
         this.updatedAt = seasonData.updatedAt;
