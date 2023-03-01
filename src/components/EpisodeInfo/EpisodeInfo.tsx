@@ -51,14 +51,14 @@ export const EpisodeInfo = (props: EpisodeInfoProps) => {
                             </Typography>
                             <ol>
                                 <li>Copie o link do episódio clicando com o botão direito no botão "Baixar episódio" (acima), e em seguida clicando em "Copiar endereço do link" (ou similar)</li>
-                                <li>Baixe e instale o VLC no seu computador</li>
+                                <li>Baixe e instale o VLC Media Player no seu computador</li>
                                 <li>Abra o VLC e procure a aba "Media"</li>
                                 <li>Vá até a opção "Open Network Stream"</li>
                                 <li>Insira o link que você assistir </li>
                             </ol>
 
                             <img
-                                src="../../../public/tutorial.png"
+                                src="/tutorial.png"
                                 alt="Indicação da opção no VLC"
                                 title="Indicação da opção no VLC"
                             />
