@@ -115,6 +115,10 @@ export const SeasonInfo = (props: SeasonInfoProps) => {
                         <Typography variant="body1">
                             <b>Posição cronológica:</b> {season.position}
                         </Typography>
+
+                        <Typography variant="body1">
+                            <b>Descrição:</b> {season.description ? season.description : <i>(Vazio)</i>}
+                        </Typography>
                     </Box>
                 </Box>
             </Stack>
