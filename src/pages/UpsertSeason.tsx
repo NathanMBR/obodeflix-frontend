@@ -138,7 +138,16 @@ export const UpsertSeason = () => {
             .currentTarget
             .elements
             .namedItem("imageAddress") as HTMLInputElement | null;
+
         if (!imageAddressInput)
+            return;
+
+        const descriptionInput = event
+            .currentTarget
+            .elements
+            .namedItem("description") as HTMLInputElement | null;
+
+        if (!descriptionInput)
             return;
 
         const upsertSeasonPayload = {
@@ -146,7 +155,8 @@ export const UpsertSeason = () => {
             type: typeInput.value,
             position: Number(positionInput.value),
             seriesId: Number(seriesIdInput.value),
-            imageAddress: imageAddressInput.value
+            imageAddress: imageAddressInput.value,
+            description: descriptionInput.value
         };
 
         if (seasonId > 0)

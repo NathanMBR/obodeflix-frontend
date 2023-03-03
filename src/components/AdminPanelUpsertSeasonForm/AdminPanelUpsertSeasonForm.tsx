@@ -61,6 +61,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
     const positionRef = useRef<TextFieldProps>();
     const [seriesId, setSeriesId] = useState<number | null>(null);
     const imageAddressRef = useRef<TextFieldProps>();
+    const descriptionRef = useRef<TextFieldProps>();
 
     useEffect(
         () => {
@@ -78,6 +79,9 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
 
                 if (imageAddressRef.current)
                     imageAddressRef.current.value = season.imageAddress;
+
+                if (descriptionRef.current)
+                    descriptionRef.current.value = season.description;
             }
         },
         [season]
@@ -221,6 +225,19 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                                         name="imageAddress"
                                         label="Link da imagem"
                                         inputRef={imageAddressRef}
+                                        fullWidth
+                                    />
+                                </Grid>
+
+                                <Grid item
+                                    xs={12}
+                                >
+                                    <TextField
+                                        name="description"
+                                        label="Descrição"
+                                        minRows={6}
+                                        inputRef={descriptionRef}
+                                        multiline
                                         fullWidth
                                     />
                                 </Grid>
