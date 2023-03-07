@@ -199,6 +199,18 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
                         }
                     </>
             }
+            <Divider style={{ marginTop: 32, marginBottom: 16 }} />
+            <Stack direction="row" sx={{alignItems: "center", justifyContent: "right"}}>
+                <MUIPagination
+                    page={page}
+                    count={lastPage}
+                    onChange={handlePageChange}
+                    hidePrevButton
+                    hideNextButton
+                    showFirstButton
+                    showLastButton
+                />
+            </Stack>
         </>
     );
 }
