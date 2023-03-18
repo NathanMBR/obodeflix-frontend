@@ -9,3 +9,4 @@ export * from "./Pagination";
 export * from "./OrderBy";
 export * from "./GenericObject";
 export * from "./ReactContent";
+export * from "./Theme";
