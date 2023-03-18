@@ -12,6 +12,7 @@ export * from "./SuccessCard";
 export * from "./EpisodeInfo";
 export * from "./SeriesInfo";
 export * from "./SeasonInfo";
+export * from "./CommentCard";
 
 export * from "./AdminPanelAddContentFAB";
 export * from "./AdminPanelDeleteEpisodeCard";
