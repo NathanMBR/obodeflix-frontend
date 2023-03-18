@@ -10,6 +10,7 @@ import {
 import { useParams } from "react-router-dom";
 
 import {
+    CommentCard,
     ErrorCard,
     ErrorCardStatusCodeProp,
     SeriesInfo
@@ -23,6 +24,7 @@ import {
 } from "../types";
 import { NotFound } from "../pages";
 import { API_URL } from "../settings";
+import { CommentsList } from "../layouts";
 
 export type OneSeriesParams = Record<"id", string>;
 
@@ -111,7 +113,14 @@ export const OneSeries = () => {
                         <SeriesInfo
                             series={series}
                             seasons={seriesSeasons?.data}
+                            sx={{ marginBottom: 4 }}
                         />
+
+                        {
+                            series
+                                ? <CommentsList comments={series.comments} />
+                                : null
+                        }
                     </>
             }
 
