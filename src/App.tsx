@@ -6,13 +6,12 @@ import {
   Container,
   CssBaseline,
 } from "@mui/material";
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
 import {
   BrowserRouter,
   Routes,
   Route
 } from "react-router-dom";
-import { useState } from "react";
 
 import {
   Navbar,
@@ -43,6 +42,7 @@ import {
 
   NotFound
 } from "./pages"
+import { Theme } from "./types";
 
 import "./App.css"
 
@@ -63,8 +63,6 @@ const themes = {
     }
   )
 }
-
-type Theme = "light" | "dark";
 
 function App() {
   const [theme, setTheme] = useState<Theme>(localStorage.getItem("theme") as Theme || "light");
@@ -113,7 +111,7 @@ function App() {
             </Routes>
           </Container>
 
-          <Footer />
+          <Footer theme={theme} />
         </BrowserRouter>
       </ThemeProvider>
     </>
