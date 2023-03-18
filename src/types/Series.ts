@@ -1,4 +1,7 @@
-import { Tag } from "../types";
+import {
+    Tag,
+    Comment
+} from "../types";
 
 export type SeriesNameLanguages = "ENGLISH" | "JAPANESE";
 
@@ -30,6 +33,7 @@ export interface Series {
     readonly deletedAt: Date | null;
 
     readonly seriesTags: Array<SeriesTags>;
+    readonly comments: Array<Comment.Parent>;
 }
 
 export class SeriesBuilder implements Series {
@@ -46,6 +50,7 @@ export class SeriesBuilder implements Series {
     public readonly deletedAt: Series["deletedAt"];
 
     public readonly seriesTags: Series["seriesTags"];
+    public readonly comments: Series["comments"];
 
     constructor(
         seriesData: Series
@@ -61,5 +66,6 @@ export class SeriesBuilder implements Series {
         this.deletedAt = seriesData.deletedAt;
 
         this.seriesTags = seriesData.seriesTags;
+        this.comments = seriesData.comments;
     }
 }

@@ -1,4 +1,7 @@
-import { Season } from "./Season";
+import {
+    Season,
+    Comment
+} from "../types";
 
 export type EpisodeOrderColumn = "id" | "name" | "position" | "updatedAt";
 
@@ -16,6 +19,7 @@ export interface Episode {
     readonly deletedAt: Date | null
 
     readonly season: Season
+    readonly comments: Array<Comment.Parent>
 }
 
 export class EpisodeBuilder implements Episode {
@@ -31,7 +35,8 @@ export class EpisodeBuilder implements Episode {
     public readonly updatedAt: Episode["updatedAt"]
     public readonly deletedAt: Episode["deletedAt"]
 
-    public readonly season: Season;
+    public readonly season: Episode["season"];
+    public readonly comments: Episode["comments"];
 
     constructor(
         episodeData: Episode
@@ -49,5 +54,6 @@ export class EpisodeBuilder implements Episode {
         this.deletedAt = episodeData.deletedAt;
 
         this.season = episodeData.season;
+        this.comments = episodeData.comments;
     }
 }
