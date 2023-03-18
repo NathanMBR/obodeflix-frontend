@@ -19,12 +19,14 @@ import {
 export interface SeriesInfoProps {
     series?: Series;
     seasons?: Array<Season>;
+    sx?: CSSProperties;
 };
 
 export const SeriesInfo = (props: SeriesInfoProps) => {
     const {
         series,
-        seasons
+        seasons,
+        sx
     } = props;
 
     if (!series)
@@ -61,7 +63,7 @@ export const SeriesInfo = (props: SeriesInfoProps) => {
     };
 
     return (
-        <>
+        <Box sx={sx}>
             <Stack direction="column">
                 <Box>
                     {
@@ -159,6 +161,6 @@ export const SeriesInfo = (props: SeriesInfoProps) => {
                     }
                 </Box>
             </Stack>
-        </>
+        </Box>
     );
 };
