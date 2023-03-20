@@ -37,6 +37,7 @@ export const Login = () => {
 
         localStorage.setItem("token", data.token);
         localStorage.setItem("type", data.user.type);
+        localStorage.setItem("id", data.user.id);
 
         window.location.href = "/";
     }
