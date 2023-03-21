@@ -11,14 +11,22 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
+import {
+    Edit,
+    Delete,
+    QuestionAnswer
+} from "@mui/icons-material";
 import { CSSProperties } from "@mui/styled-engine";
-import { QuestionAnswer } from "@mui/icons-material";
+import { useState } from "react"; 
 
+import { Reply } from "..";
 import { Comment } from "../../types";
+import { getFormattedDate } from "../../helpers";
 
 export interface CommentCardProps {
     comment: Comment.Parent | Comment.Child;
     isChild?: boolean;
+    handleDelete: () => void;
     sx?: CSSProperties;
 }
 
@@ -26,12 +34,27 @@ export const CommentCard = (props: CommentCardProps) => {
     const {
         comment,
         isChild,
+        handleDelete,
         sx
     } = props;
+
+    const [toggleReply, setToggleReply] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
 
     const verticalDividerStyle: CSSProperties = {
         marginLeft: 2,
         marginRight: 2
+    };
+
+    const iconColor = "action.disabled";
+
+    const formattedCreatedAt = getFormattedDate(comment.createdAt);
+    const formattedUpdatedAt = getFormattedDate(comment.updatedAt);
+    const showUpdatedAt = formattedCreatedAt !== formattedUpdatedAt;
+    const formattedDateStyle: CSSProperties = {
+        display: "inline-block",
+        marginBottom: 2,
+        fontStyle: "italic"
     };
 
     return (
@@ -43,17 +66,16 @@ export const CommentCard = (props: CommentCardProps) => {
                 <Card>
                     <CardContent>
                         <Stack direction="row">
-                            <Stack
-                                direction="column"
-                                sx={{
-                                    alignContent: "center",
-                                    justifyContent: "space-between"
-                                }}
-                            >
+                            <Stack direction="column">
                                 <Box>
-                                    <Stack direction="column">
+                                    <Stack
+                                        direction="column"
+                                        sx={{
+                                            alignItems: "center",
+                                        }}
+                                    >
                                         <Avatar
-                                            sx={{ backgroundColor: "action.disabled" }}
+                                            sx={{ backgroundColor: iconColor }}
                                         />
 
                                         <Typography variant="body2">
@@ -64,13 +86,51 @@ export const CommentCard = (props: CommentCardProps) => {
 
                                 <Box sx={{ minHeight: 32 }} />
 
-                                <Box>
-                                    <IconButton>
-                                        <Tooltip title="Responder comentário">
-                                            <QuestionAnswer sx={{ color: "action.disabled"}} />
+                                <Stack direction="column">
+                                    <IconButton
+                                        onClick={
+                                            () => {
+                                                setIsEdit(false);
+                                                setToggleReply(toggleReplyState => !toggleReplyState);
+                                            }
+                                        }
+                                    >
+                                        <Tooltip
+                                            title={
+                                                !toggleReply
+                                                    ? "Responder comentário"
+                                                    : "Cancelar resposta"
+                                            }
+                                        >
+                                            <QuestionAnswer sx={{ color: iconColor}} />
                                         </Tooltip>
                                     </IconButton>
-                                </Box>
+
+                                    {
+                                        String(comment.userId) === localStorage.getItem("id")
+                                            ? <>
+                                                <IconButton
+                                                    onClick={
+                                                        () => {
+                                                            setIsEdit(true);
+                                                            setToggleReply(toggleReplyState => !toggleReplyState)
+                                                        }
+                                                    }
+                                                >
+                                                    <Tooltip title="Editar comentário">
+                                                        <Edit sx={{ color: iconColor }} />
+                                                    </Tooltip>
+                                                </IconButton>
+
+                                                <IconButton onClick={handleDelete}>
+                                                    <Tooltip title="Excluir comentário">
+                                                        <Delete sx={{ color: iconColor }} />
+                                                    </Tooltip>
+                                                </IconButton>
+                                            </>
+                                            : null
+                                    }
+                                </Stack>
 
                             </Stack>
 
@@ -80,11 +140,50 @@ export const CommentCard = (props: CommentCardProps) => {
                                 flexItem
                             />
 
-                            <Typography variant="body1">
-                                {comment.body}
-                            </Typography>
+                            <Box>
+                                <Typography
+                                    variant="body2"
+                                    sx={formattedDateStyle}
+                                >
+                                    {
+                                        showUpdatedAt
+                                            ? `Editado em ${formattedUpdatedAt}`
+                                            : `Criado em ${formattedCreatedAt}`
+                                    }
+                                    
+                                </Typography>
+
+                                <Typography
+                                    variant="body1"
+                                    display="block"
+                                >
+                                    {comment.body}
+                                </Typography>
+                            </Box>
+
                         </Stack>
                     </CardContent>
+
+                    {
+                        toggleReply
+                            ? <>
+                                <Divider />
+
+                                <CardActions>
+                                    <Reply
+                                        comment={comment}
+                                        reference={
+                                            {
+                                                key: "parentId",
+                                                value: comment.parentId ?? comment.id
+                                            }
+                                        }
+                                        isEdit={isEdit}
+                                    />
+                                </CardActions>
+                            </>
+                            : null
+                    }
                 </Card>
             </Paper>
         </Box>

@@ -1,13 +1,20 @@
 import {
     Box,
     Divider,
-    Stack,
     Typography
 } from "@mui/material";
-
-import { Comment } from "../../types"
-import { CommentCard } from "../../components";
 import { CSSProperties } from "@mui/styled-engine";
+import { useState } from "react";
+
+import {
+    CommentCard,
+    DeleteCommentCard,
+    ErrorCard,
+    ErrorCardStatusCodeProp,
+    SuccessCard
+} from "../../components";
+import { Comment } from "../../types"
+import { API_URL } from "../../settings";
 
 export interface CommentsListProps {
     comments: Array<Comment.Parent>
@@ -15,10 +22,50 @@ export interface CommentsListProps {
 
 export const CommentsList = (props: CommentsListProps) => {
     const { comments } = props;
-    // const comments: Comment.Parent[] = []
+
+    const [commentToDelete, setCommentToDelete] = useState<Comment.Parent | Comment.Child | null>(null);
+    const [wasDeleteSuccessful, setWasDeleteSuccessful] = useState(false);
+
+    const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
+    const [reasons, setReasons] = useState<string | Array<string> | undefined>(undefined);
 
     const noCommentsStyle: CSSProperties = {
         marginTop: 2
+    };
+
+    const handleDeleteComment = () => {
+        if (!commentToDelete)
+            throw new Error("No comment to delete");
+
+        fetch(
+            `${API_URL}/comment/inactivate/${commentToDelete.id}`,
+
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            }
+        )
+            .then(
+                async response => {
+                    if (!response.ok) {
+                        const data = await response.json();
+                        setStatusCode(response.status as ErrorCardStatusCodeProp);
+
+                        if (data.reason)
+                            setReasons(data.reason);
+
+                        return;
+                    }
+
+                    setCommentToDelete(null);
+                    setWasDeleteSuccessful(true);
+                    return;
+                }
+            )
+            .catch(console.error);
     };
 
     return (
@@ -38,6 +85,7 @@ export const CommentsList = (props: CommentsListProps) => {
                         (comment, commentIndex) => <Box key={comment.id}>
                             <CommentCard
                                 comment={comment}
+                                handleDelete={() => setCommentToDelete(comment)}
                                 sx={{ marginTop: commentIndex > 0 ? 8 : 2 }}
                             />
 
@@ -45,6 +93,7 @@ export const CommentsList = (props: CommentsListProps) => {
                                 comment.children.map(
                                     reply => <Box key={reply.id}>
                                         <CommentCard
+                                            handleDelete={() => setCommentToDelete(reply)}
                                             comment={reply}
                                             sx={{ marginTop: 2 }}
                                             isChild
@@ -62,6 +111,35 @@ export const CommentsList = (props: CommentsListProps) => {
                         </Typography>
                     </Box>
             }
+
+            <DeleteCommentCard
+                comment={commentToDelete}
+                handleClose={() => setCommentToDelete(null)}
+                handleDelete={handleDeleteComment}
+            />
+
+            <SuccessCard
+                isOpen={wasDeleteSuccessful}
+                handleClose={
+                    () => {
+                        setWasDeleteSuccessful(false);
+                        window.location.reload();
+                    }
+                }
+                message="Comentário excluído com sucesso!"
+            />
+
+            <ErrorCard
+                statusCode={statusCode}
+                isOpen={!!statusCode}
+                handleClose={
+                    () => {
+                        setStatusCode(null);
+                        window.location.reload();
+                    }
+                }
+                reasons={reasons}
+            />
         </>
     );
 }

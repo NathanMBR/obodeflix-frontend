@@ -10,12 +10,12 @@ import {
 import { useParams } from "react-router-dom";
 
 import {
-    CommentCard,
     ErrorCard,
     ErrorCardStatusCodeProp,
     SeriesInfo
 } from "../components";
 import {
+    Comment,
     Season,
     Series,
     SeriesBuilder,
