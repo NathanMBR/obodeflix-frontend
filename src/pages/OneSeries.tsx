@@ -12,10 +12,10 @@ import { useParams } from "react-router-dom";
 import {
     ErrorCard,
     ErrorCardStatusCodeProp,
+    ReplyProps,
     SeriesInfo
 } from "../components";
 import {
-    Comment,
     Season,
     Series,
     SeriesBuilder,
@@ -33,6 +33,11 @@ export const OneSeries = () => {
 
     if (Number.isNaN(seriesId) || seriesId <= 0)
         return <NotFound />;
+
+    const commentsListReplyReference: ReplyProps["reference"] = {
+        key: "seriesId",
+        value: seriesId
+    };
 
     const [series, setSeries] = useState<Series | undefined>(undefined);
 
@@ -118,7 +123,10 @@ export const OneSeries = () => {
 
                         {
                             series
-                                ? <CommentsList comments={series.comments} />
+                                ? <CommentsList
+                                    comments={series.comments}
+                                    replyReference={commentsListReplyReference}                                
+                                />
                                 : null
                         }
                     </>

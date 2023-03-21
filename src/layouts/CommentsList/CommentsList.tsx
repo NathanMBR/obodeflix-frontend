@@ -11,6 +11,8 @@ import {
     DeleteCommentCard,
     ErrorCard,
     ErrorCardStatusCodeProp,
+    Reply,
+    ReplyProps,
     SuccessCard
 } from "../../components";
 import { Comment } from "../../types"
@@ -18,10 +20,14 @@ import { API_URL } from "../../settings";
 
 export interface CommentsListProps {
     comments: Array<Comment.Parent>
+    replyReference: ReplyProps["reference"]
 }
 
 export const CommentsList = (props: CommentsListProps) => {
-    const { comments } = props;
+    const {
+        comments,
+        replyReference
+    } = props;
 
     const [commentToDelete, setCommentToDelete] = useState<Comment.Parent | Comment.Child | null>(null);
     const [wasDeleteSuccessful, setWasDeleteSuccessful] = useState(false);
@@ -78,6 +84,11 @@ export const CommentsList = (props: CommentsListProps) => {
             </Typography>
 
             <Divider />
+
+            <Reply
+                sx={{ marginTop: 2 }}
+                reference={replyReference}
+            />
 
             {
                 comments.length > 0
