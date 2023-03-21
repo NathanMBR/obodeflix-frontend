@@ -19,14 +19,16 @@ import { Comment } from "../../types"
 import { API_URL } from "../../settings";
 
 export interface CommentsListProps {
-    comments: Array<Comment.Parent>
-    replyReference: ReplyProps["reference"]
+    comments: Array<Comment.Parent>;
+    replyReference: ReplyProps["reference"];
+    sx?: CSSProperties;
 }
 
 export const CommentsList = (props: CommentsListProps) => {
     const {
         comments,
-        replyReference
+        replyReference,
+        sx
     } = props;
 
     const [commentToDelete, setCommentToDelete] = useState<Comment.Parent | Comment.Child | null>(null);
@@ -75,7 +77,7 @@ export const CommentsList = (props: CommentsListProps) => {
     };
 
     return (
-        <>
+        <Box sx={sx}>
             <Typography
                 variant="h4"
                 component="h2"
@@ -151,6 +153,6 @@ export const CommentsList = (props: CommentsListProps) => {
                 }
                 reasons={reasons}
             />
-        </>
+        </Box>
     );
 }
