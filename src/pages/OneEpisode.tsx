@@ -16,7 +16,8 @@ import {
 import {
     EpisodeInfo,
     ErrorCard,
-    ErrorCardStatusCodeProp
+    ErrorCardStatusCodeProp,
+    ReplyProps
 } from "../components";
 import {
     Episode,
@@ -24,6 +25,7 @@ import {
 } from "../types";
 import { NotFound } from "../pages";
 import { API_URL } from "../settings";
+import { CommentsList } from "../layouts";
 
 export type OneEpisodeParams = Record<"id", string>;
 
@@ -32,6 +34,11 @@ export const OneEpisode = () => {
 
     if (Number.isNaN(episodeId) || episodeId <= 0)
         return <NotFound />;
+
+    const commentsListReplyReference: ReplyProps["reference"] = {
+        key: "episodeId",
+        value: episodeId
+    };
 
     const [episode, setEpisode] = useState<Episode | undefined>(undefined);
 
@@ -87,7 +94,19 @@ export const OneEpisode = () => {
                     ? <Box sx={loadingStyle}>
                         <CircularProgress />
                     </Box>
-                    : <EpisodeInfo episode={episode} />
+                    : <>
+                        <EpisodeInfo episode={episode} />
+
+                        {
+                            episode
+                                ? <CommentsList
+                                    comments={episode.comments}
+                                    replyReference={commentsListReplyReference}
+                                    sx={{ marginTop: 8 }}
+                                />
+                                : null
+                        }
+                    </>
                         
             }
 
