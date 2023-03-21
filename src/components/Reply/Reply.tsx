@@ -144,7 +144,7 @@ export const Reply = (props: ReplyProps) => {
                         >
                             <TextField
                                 name="comment"
-                                label="Comentário"
+                                label={isEdit ? "Editar comentário" : "Adicionar comentário"}
                                 minRows={6}
                                 defaultValue={isEdit ? body : undefined}
                                 onChange={handleBodyChange}
