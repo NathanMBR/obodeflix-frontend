@@ -2,11 +2,11 @@ import {
     Box,
     Button,
     CircularProgress,
-    Divider,
     Stack,
     TextField,
     Typography
 } from "@mui/material";
+import { CSSProperties as MUICSSProperties } from "@mui/styled-engine";
 import {
     ChangeEvent,
     CSSProperties,
@@ -38,13 +38,15 @@ export interface ReplyProps {
         value: number;
     };
     isEdit?: boolean;
+    sx?: MUICSSProperties;
 }
 
 export const Reply = (props: ReplyProps) => {
     const {
         comment,
         reference,
-        isEdit
+        isEdit,
+        sx
     } = props;
 
     const userToken = localStorage.getItem("token");
@@ -132,7 +134,7 @@ export const Reply = (props: ReplyProps) => {
     };
 
     return (
-        <>
+        <Box sx={sx}>
             {
                 userToken
                     ? <>
@@ -225,6 +227,6 @@ export const Reply = (props: ReplyProps) => {
                     }
                 }
             />
-        </>
+        </Box>
     );
 }
