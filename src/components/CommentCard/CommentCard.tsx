@@ -38,23 +38,28 @@ export const CommentCard = (props: CommentCardProps) => {
         sx
     } = props;
 
+    const iconColor = "action.disabled";
+
     const [toggleReply, setToggleReply] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+
+    const formattedCreatedAt = getFormattedDate(comment.createdAt);
+    const formattedUpdatedAt = getFormattedDate(comment.updatedAt);
+    const showUpdatedAt = new Date(comment.createdAt).getTime() !== new Date(comment.updatedAt).getTime();
 
     const verticalDividerStyle: CSSProperties = {
         marginLeft: 2,
         marginRight: 2
     };
 
-    const iconColor = "action.disabled";
-
-    const formattedCreatedAt = getFormattedDate(comment.createdAt);
-    const formattedUpdatedAt = getFormattedDate(comment.updatedAt);
-    const showUpdatedAt = formattedCreatedAt !== formattedUpdatedAt;
     const formattedDateStyle: CSSProperties = {
         display: "inline-block",
         marginBottom: 2,
         fontStyle: "italic"
+    };
+
+    const fullWidthStyle: CSSProperties = {
+        width: "100%"
     };
 
     return (
@@ -160,7 +165,6 @@ export const CommentCard = (props: CommentCardProps) => {
                                     {comment.body}
                                 </Typography>
                             </Box>
-
                         </Stack>
                     </CardContent>
 
@@ -171,6 +175,7 @@ export const CommentCard = (props: CommentCardProps) => {
 
                                 <CardActions>
                                     <Reply
+                                        sx={fullWidthStyle}
                                         comment={comment}
                                         reference={
                                             {
