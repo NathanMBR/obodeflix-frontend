@@ -19,8 +19,11 @@ import {
     OrderBy,
     EpisodeOrderColumn
 } from "../types";
+import {
+    MostRecentSeasons,
+    PaginatedContent
+} from "../layouts";
 import { EpisodeCard } from "../components";
-import { PaginatedContent } from "../layouts";
 import { API_URL } from "../settings";
 
 export const Main = () => {
@@ -116,6 +119,8 @@ export const Main = () => {
 
     return (
         <>
+            <MostRecentSeasons />
+
             <PaginatedContent<EpisodeOrderColumn>
                 contentTitle="Episódios mais recentes"
                 hidePaginationContent={episodes.length <= 0}
