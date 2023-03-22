@@ -57,7 +57,7 @@ export const MostRecentSeasonsCard = (props: MostRecentSeasonsCardProps) => {
                 >
                     <Card>
                         <CardActionArea
-                            style={{}}
+                            style={{ height: "100%" }}
                             LinkComponent="a"
                             href={`/seasons/${season.id}`}
                         >
