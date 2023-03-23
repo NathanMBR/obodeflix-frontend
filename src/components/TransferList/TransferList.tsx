@@ -32,6 +32,8 @@ export const TransferList = <T extends Comparable>(props: TransferListProps<T>) 
     sx
   } = props;
 
+  const height = leftList.length * 50.1;
+
   function not(a: readonly T[], b: readonly T[]) {
     return a.filter((value) => b.indexOf(value) === -1);
   }
@@ -132,9 +134,9 @@ export const TransferList = <T extends Comparable>(props: TransferListProps<T>) 
           <List
             sx={{
               width: 500,
-              height: 400,
+              height,
               bgcolor: 'background.paper',
-              overflow: 'auto',
+              overflow: 'auto'
             }}
             dense
             component="div"
@@ -182,8 +184,10 @@ export const TransferList = <T extends Comparable>(props: TransferListProps<T>) 
           items={left}
         />
       </Grid>
-      <Grid item>
-        <Grid container direction="column" alignItems="center">
+      <Grid item
+        sx={{ height }}
+      >
+        <Grid container direction="column">
           <Button
             sx={{ my: 0.5 }}
             variant="outlined"
