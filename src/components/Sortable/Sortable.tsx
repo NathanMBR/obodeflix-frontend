@@ -27,7 +27,7 @@ export const Sortable = (props: SortableProps) => {
 
     const sortableStyle = {
         transform: CSS.Transform.toString(transform),
-        transition
+        // transition
     };
 
     const finalStyle = {
