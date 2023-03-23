@@ -16,6 +16,7 @@ export * from "./CommentCard";
 export * from "./Reply";
 export * from "./DeleteCommentCard";
 export * from "./MostRecentSeasonsCard";
+export * from "./TransferList";
 
 export * from "./AdminPanelAddContentFAB";
 export * from "./AdminPanelDeleteEpisodeCard";
