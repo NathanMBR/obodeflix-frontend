@@ -12,7 +12,11 @@ export const AdminPanel = () => {
     if (!hasPermissionToAccess)
         return <NotFound />;
 
-    const panelOptions = [
+    interface PanelOption {
+        title: string;
+        link: string;
+    }
+    const panelOptions: Array<PanelOption> = [
         {
             title: "Séries",
             link: "/admin/series"
@@ -31,20 +35,32 @@ export const AdminPanel = () => {
         {
             title: "Episódios",
             link: "/admin/episodes"
+        },
+
+        {
+            title: "Importação de Episódios",
+            link: "/admin/episodes-import"
         }
     ];
 
     return (
         <>
-            <Typography variant="h4" component="h2">Painel administrativo</Typography>
+            <Typography
+                variant="h4"
+                component="h2"
+            >
+                Painel administrativo
+            </Typography>
             <Divider />
-            <Grid container spacing={2} style={{ marginTop: 2 }}>
+            <Grid container
+                spacing={2}
+                style={{ marginTop: 2 }}
+            >
                 {
                     panelOptions.map(
-                        (options, index) => <Grid
-                            item
-                            xs={6}
+                        (options, index) => <Grid item
                             key={index}
+                            xs={index === panelOptions.length - 1 ? 12 : 6}
                         >
                             <AdminPanelOption
                                 title={options.title}

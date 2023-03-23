@@ -4,6 +4,7 @@ import {
     CardContent,
     CardActions,
     Divider,
+    Paper,
     Typography
 } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -28,25 +29,27 @@ export const AdminPanelOption = (props: AdminPanelOptionProps) => {
 
     return (
         <>
-            <Card>
-                <CardContent>
-                    <Typography
-                        variant="h5"
-                        component="h3"
-                        textAlign="center"
-                    >
-                        {title}
-                    </Typography>
-                </CardContent>
+            <Paper elevation={12}>
+                <Card>
+                    <CardContent>
+                        <Typography
+                            variant="h5"
+                            component="h3"
+                            textAlign="center"
+                        >
+                            {title}
+                        </Typography>
+                    </CardContent>
 
-                <Divider />
+                    <Divider />
 
-                <CardActions sx={cardActionsStyle}>
-                    <Link to={link}>
-                        <Button>Gerenciar</Button>
-                    </Link>
-                </CardActions>
-            </Card>
+                    <CardActions sx={cardActionsStyle}>
+                        <Link to={link}>
+                            <Button>Gerenciar</Button>
+                        </Link>
+                    </CardActions>
+                </Card>
+            </Paper>
         </>
     );
 }
