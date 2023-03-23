@@ -19,6 +19,7 @@ export * from "./MostRecentSeasonsCard";
 export * from "./TransferList";
 export * from "./Sortable";
 export * from "./EpisodeFileCard";
+export * from "./GoToTopFAB";
 
 export * from "./AdminPanelAddContentFAB";
 export * from "./AdminPanelDeleteEpisodeCard";
