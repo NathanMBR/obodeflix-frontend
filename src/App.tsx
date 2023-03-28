@@ -6,7 +6,10 @@ import {
   Container,
   CssBaseline,
 } from "@mui/material";
-import { CSSProperties, useState } from "react";
+import {
+  CSSProperties,
+  useState
+} from "react";
 import {
   BrowserRouter,
   Routes,
@@ -40,11 +43,13 @@ import {
   ManageEpisodes,
   UpsertEpisode,
 
+  UpsertEpisodeImports,
+
   NotFound
-} from "./pages"
+} from "./pages";
 import { Theme } from "./types";
 
-import "./App.css"
+import "./App.css";
 
 const themes = {
   light: createTheme(
@@ -62,13 +67,16 @@ const themes = {
       }
     }
   )
-}
+};
 
 function App() {
-  const [theme, setTheme] = useState<Theme>(localStorage.getItem("theme") as Theme || "light");
+  const [theme, setTheme] = useState<Theme>(localStorage.getItem("theme") as Theme | null || "light");
 
   const handleThemeChange = () => {
-    const newTheme = theme === "light" ? "dark" : "light"
+    const newTheme = theme === "light"
+      ? "dark"
+      : "light";
+
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
   };
@@ -106,6 +114,7 @@ function App() {
               <Route path="/admin/seasons/:id" element={<UpsertSeason />} />
               <Route path="/admin/episodes" element={<ManageEpisodes />} />
               <Route path="/admin/episodes/:id" element={<UpsertEpisode />} />
+              <Route path="/admin/episodes-import" element={<UpsertEpisodeImports/>} />
 
               <Route path="/*" element={<NotFound />} />
             </Routes>
