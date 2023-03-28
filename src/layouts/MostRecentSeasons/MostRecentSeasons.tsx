@@ -35,7 +35,7 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
             setIsRequestLoading(true);
 
             fetch(
-                `${API_URL}/season/all?page=1&quantity=5&orderColumn=id&orderBy=desc`
+                `${API_URL}/season/all?page=1&quantity=10&orderColumn=id&orderBy=desc`
             )
                 .then(
                     async response => {
@@ -92,7 +92,7 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
                                             season => <MostRecentSeasonsCard
                                                 key={season.id}
                                                 season={season}
-                                                xs={12 / paginatedSeasons.data.length}
+                                                xs={2.4}
                                             />
                                         )
                                     }
