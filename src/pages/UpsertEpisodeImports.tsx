@@ -79,6 +79,8 @@ export const UpsertEpisodeImports = () => {
     const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
     const [reasons, setReasons] = useState<string | Array<string> | undefined>(undefined);
     const [wasUpsertSuccessful, setWasUpsertSuccessful] = useState(false);
+    const [sortRegex, setSortRegex] = useState<RegExp | null>(null);
+    const [isRefreshingSort, setIsRefreshingSort] = useState(false);
 
     const handleChosenEpisodes = (chosenEpisodesCb: Array<string>) => {
         setChosenEpisodes(chosenEpisodesCb);
@@ -119,10 +121,6 @@ export const UpsertEpisodeImports = () => {
     const handleImport = async () => {
         setIsImportLoading(true);
         setImportProgress(0);
-
-        // const episodesToImport = episodeFiles.filter(
-        //     episodeFile => chosenEpisodes.includes(episodeFile.filename)
-        // );
 
         let wasImportSuccessful = true;
 
@@ -183,6 +181,27 @@ export const UpsertEpisodeImports = () => {
         setIsImportLoading(false);
         setImportProgress(100);
         setWasUpsertSuccessful(wasImportSuccessful);
+    };
+
+    const handleEpisodeSort = (previousEpisode: string, currentEpisode: string) => {
+        if (!sortRegex)
+            return 0;
+
+        const previousEpisodeNumberRawList = previousEpisode.match(sortRegex);
+        const currentEpisodeNumberRawList = currentEpisode.match(sortRegex);
+
+        const previousEpisodeNumberRaw = previousEpisodeNumberRawList
+            ? previousEpisodeNumberRawList[1]
+            : "";
+
+        const currentEpisodeNumberRaw = currentEpisodeNumberRawList
+            ? currentEpisodeNumberRawList[1]
+            : "";
+
+        const previousEpisodeNumber = Number(previousEpisodeNumberRaw);
+        const currentEpisodeNumber = Number(currentEpisodeNumberRaw);
+
+        return previousEpisodeNumber - currentEpisodeNumber;
     };
 
     useEffect(
@@ -504,47 +523,109 @@ export const UpsertEpisodeImports = () => {
                                                                                         Passo 3: Ordenar episódios
                                                                                     </Typography>
 
-                                                                                    <DndContext
-                                                                                        sensors={sensors}
-                                                                                        collisionDetection={closestCenter}
-                                                                                        onDragEnd={handleDragEnd}
-                                                                                    >
-                                                                                        <SortableContext
-                                                                                            items={chosenEpisodes}
-                                                                                            strategy={verticalListSortingStrategy}
-                                                                                        >
-                                                                                            {
-                                                                                                chosenEpisodes.map(
-                                                                                                    (chosenEpisode, index) => <Sortable
-                                                                                                        key={index}
-                                                                                                        id={chosenEpisode}
-                                                                                                    >
-                                                                                                        <EpisodeFileCard
-                                                                                                            episodeTitle={chosenEpisode}
-                                                                                                            sx={{ marginBottom: 2 }}
-                                                                                                        />
-                                                                                                    </Sortable>
-                                                                                                )
-                                                                                            }
-                                                                                        </SortableContext>
-                                                                                    </DndContext>
+                                                                                    {
+                                                                                        isRefreshingSort
+                                                                                            ? <CircularProgress sx={{ marginTop: 4 }} />
+                                                                                            : <>
+                                                                                                <Grid container
+                                                                                                    spacing={2}
+                                                                                                    sx={{ marginBottom: 2 }}
+                                                                                                >
+                                                                                                    <Grid item xs={4.5}>
+                                                                                                        <TextField
+                                                                                                            label="Regex de ordenação (opcional)"
+                                                                                                            onChange={
+                                                                                                                event => {
+                                                                                                                    const rawRegex = event.currentTarget.value;
+                                                                                                                    setSortRegex(null);
 
-                                                                                    <Button
-                                                                                        variant="contained"
-                                                                                        onClick={handleImport}
-                                                                                        disabled={!!isImportLoading}
-                                                                                        sx={{ marginTop: 4 }}
-                                                                                        fullWidth
-                                                                                    >
-                                                                                        {
-                                                                                            isImportLoading
-                                                                                                ? <CircularProgress
-                                                                                                    variant="determinate"
-                                                                                                    value={importProgress}
-                                                                                                />
-                                                                                                : "Importar"
-                                                                                        }
-                                                                                    </Button>
+                                                                                                                    setSortRegex(
+                                                                                                                        rawRegex
+                                                                                                                            ? new RegExp(event.currentTarget.value)
+                                                                                                                            : null
+                                                                                                                    );
+                                                                                                                }
+                                                                                                            }
+                                                                                                            size="small"
+                                                                                                            fullWidth
+                                                                                                        />
+                                                                                                    </Grid>
+
+                                                                                                    <Grid item xs={1.5}>
+                                                                                                        <Button
+                                                                                                            variant="contained"
+                                                                                                            onClick={
+                                                                                                                () => {
+                                                                                                                    setIsRefreshingSort(true);
+                                                                                                                    setChosenEpisodes(
+                                                                                                                        previousChosenEpisodes => previousChosenEpisodes.sort(handleEpisodeSort)
+                                                                                                                    );
+
+                                                                                                                    const averageTimeToLoadPerItemInMilliseconds = 3.378;
+                                                                                                                    const timeUntilStopRefreshingInMilliseconds = Math.round(
+                                                                                                                        averageTimeToLoadPerItemInMilliseconds * chosenEpisodes.length
+                                                                                                                    );
+                                                                                                                    setTimeout(
+                                                                                                                        () => {
+                                                                                                                            setIsRefreshingSort(false);
+                                                                                                                            setSortRegex(null);
+                                                                                                                        },
+
+                                                                                                                        timeUntilStopRefreshingInMilliseconds
+                                                                                                                    );
+                                                                                                                }
+                                                                                                            }
+                                                                                                            disabled={!sortRegex}
+                                                                                                            fullWidth
+                                                                                                        >
+                                                                                                            Ordenar
+                                                                                                        </Button>
+                                                                                                    </Grid>
+                                                                                                </Grid>
+
+                                                                                                <DndContext
+                                                                                                    sensors={sensors}
+                                                                                                    collisionDetection={closestCenter}
+                                                                                                    onDragEnd={handleDragEnd}
+                                                                                                >
+                                                                                                    <SortableContext
+                                                                                                        items={chosenEpisodes}
+                                                                                                        strategy={verticalListSortingStrategy}
+                                                                                                    >
+                                                                                                        {
+                                                                                                            chosenEpisodes.map(
+                                                                                                                chosenEpisode => <Sortable
+                                                                                                                    key={chosenEpisode}
+                                                                                                                    id={chosenEpisode}
+                                                                                                                >
+                                                                                                                    <EpisodeFileCard
+                                                                                                                        episodeTitle={chosenEpisode}
+                                                                                                                        sx={{ marginBottom: 2 }}
+                                                                                                                    />
+                                                                                                                </Sortable>
+                                                                                                            )
+                                                                                                        }
+                                                                                                    </SortableContext>
+                                                                                                </DndContext>
+
+                                                                                                <Button
+                                                                                                    variant="contained"
+                                                                                                    onClick={handleImport}
+                                                                                                    disabled={!!isImportLoading}
+                                                                                                    sx={{ marginTop: 4 }}
+                                                                                                    fullWidth
+                                                                                                >
+                                                                                                    {
+                                                                                                        isImportLoading
+                                                                                                            ? <CircularProgress
+                                                                                                                variant="determinate"
+                                                                                                                value={importProgress}
+                                                                                                            />
+                                                                                                            : "Importar"
+                                                                                                    }
+                                                                                                </Button>
+                                                                                            </>
+                                                                                    }
                                                                                 </Box>
                                                                                 : null
                                                                         }
