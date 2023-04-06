@@ -356,6 +356,7 @@ export const UpsertEpisodeImports = () => {
                     ? <CircularProgress
                         variant="determinate"
                         value={importProgress}
+                        size={20}
                     />
                     : "Importar"
             }
