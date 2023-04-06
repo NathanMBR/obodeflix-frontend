@@ -344,6 +344,24 @@ export const UpsertEpisodeImports = () => {
         }
     };
 
+    const importButton = (
+        <Button
+            variant="contained"
+            onClick={handleImport}
+            disabled={!!isImportLoading}
+            fullWidth
+        >
+            {
+                isImportLoading
+                    ? <CircularProgress
+                        variant="determinate"
+                        value={importProgress}
+                    />
+                    : "Importar"
+            }
+        </Button>
+    );
+
     return (
         <>
             <Typography
@@ -581,6 +599,10 @@ export const UpsertEpisodeImports = () => {
                                                                                                             Ordenar
                                                                                                         </Button>
                                                                                                     </Grid>
+
+                                                                                                    <Grid item xs={6}>
+                                                                                                        {importButton}
+                                                                                                    </Grid>
                                                                                                 </Grid>
 
                                                                                                 <DndContext
@@ -608,22 +630,9 @@ export const UpsertEpisodeImports = () => {
                                                                                                     </SortableContext>
                                                                                                 </DndContext>
 
-                                                                                                <Button
-                                                                                                    variant="contained"
-                                                                                                    onClick={handleImport}
-                                                                                                    disabled={!!isImportLoading}
-                                                                                                    sx={{ marginTop: 4 }}
-                                                                                                    fullWidth
-                                                                                                >
-                                                                                                    {
-                                                                                                        isImportLoading
-                                                                                                            ? <CircularProgress
-                                                                                                                variant="determinate"
-                                                                                                                value={importProgress}
-                                                                                                            />
-                                                                                                            : "Importar"
-                                                                                                    }
-                                                                                                </Button>
+                                                                                                <Box sx={{ marginTop: 6 }}>
+                                                                                                    {importButton}
+                                                                                                </Box>
                                                                                             </>
                                                                                     }
                                                                                 </Box>
