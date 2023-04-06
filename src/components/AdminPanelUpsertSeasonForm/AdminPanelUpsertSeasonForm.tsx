@@ -10,6 +10,7 @@ import {
     MenuItem,
     Paper,
     Switch,
+    SwitchProps,
     TextField,
     TextFieldProps
 } from "@mui/material";
@@ -37,6 +38,7 @@ export interface AdminPanelUpsertSeasonFormProps {
     areSeriesLoading: boolean;
     showSeriesAlternativeNames: boolean;
     handleToggleSeriesNames: () => void;
+    handleToggleExcludeFromRecent: (event: ChangeEvent<HTMLInputElement>) => void;
     handleSeriesChange: (_event: SyntheticEvent, series: Series | null) => void;
     handleSeriesSearch: (_event: SyntheticEvent, seriesName: string) => void;
 };
@@ -50,6 +52,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
         areSeriesLoading,
         showSeriesAlternativeNames,
         handleToggleSeriesNames,
+        handleToggleExcludeFromRecent,
         handleSeriesChange,
         handleSeriesSearch
     } = props;
@@ -62,6 +65,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
     const [seriesId, setSeriesId] = useState<number | null>(null);
     const imageAddressRef = useRef<TextFieldProps>();
     const descriptionRef = useRef<TextFieldProps>();
+    const excludeFromRecentRef = useRef<SwitchProps>();
 
     useEffect(
         () => {
@@ -209,9 +213,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                                     <FormGroup>
                                         <FormControlLabel
                                             control={
-                                                <Switch
-                                                    onClick={handleToggleSeriesNames}
-                                                />
+                                                <Switch onClick={handleToggleSeriesNames} />
                                             }
                                             label="Exibir nomes alternativos"
                                         />
@@ -219,7 +221,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                                 </Grid>
 
                                 <Grid item
-                                    xs={12}
+                                    xs={10}
                                 >
                                     <TextField
                                         name="imageAddress"
@@ -227,6 +229,23 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                                         inputRef={imageAddressRef}
                                         fullWidth
                                     />
+                                </Grid>
+
+                                <Grid item
+                                    xs={2}
+                                >
+                                    <FormGroup>
+                                        <FormControlLabel
+                                            control={
+                                                <Switch
+                                                    onClick={handleToggleExcludeFromRecent as any}
+                                                    defaultChecked={season?.excludeFromMostRecent}
+                                                    name="exclude-from-most-recent"
+                                                />
+                                            }
+                                            label="Ocultar nos mais recentes"
+                                        />
+                                    </FormGroup>
                                 </Grid>
 
                                 <Grid item

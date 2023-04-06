@@ -4,6 +4,7 @@ import {
 } from "@mui/material";
 import { CSSProperties } from "@mui/styled-engine";
 import {
+    ChangeEvent,
     FormEvent,
     SyntheticEvent,
     useEffect,
@@ -48,6 +49,7 @@ export const UpsertSeason = () => {
     const [series, setSeries] = useState<Array<Season["series"]>>([]);
     const [seriesSearchTimer, setSeriesSearchTimer] = useState<number | null>(null);
     const [_seriesId, setSeriesId] = useState<Season["seriesId"] | null>(null);
+    const [excludeFromMostRecent, setExcludeFromMostRecent] = useState(false);
 
     const managementScreenPath = "/admin/seasons";
 
@@ -156,7 +158,8 @@ export const UpsertSeason = () => {
             position: Number(positionInput.value),
             seriesId: Number(seriesIdInput.value),
             imageAddress: imageAddressInput.value,
-            description: descriptionInput.value
+            description: descriptionInput.value,
+            excludeFromMostRecent: excludeFromMostRecent
         };
 
         if (seasonId > 0)
@@ -206,6 +209,11 @@ export const UpsertSeason = () => {
 
     const handleToggleSeriesNames = () => {
         setShowSeriesAlternativeNames(!showSeriesAlternativeNames)
+    };
+
+    const handleToggleExcludeFromRecent = (event: ChangeEvent<HTMLInputElement>) => {
+        setExcludeFromMostRecent(event.target.checked);
+        console.log(event.target.checked)
     };
 
     const handleSeriesResponse = async (response: Response) => {
@@ -290,6 +298,7 @@ export const UpsertSeason = () => {
                         areSeriesLoading={areSeriesLoading}
                         showSeriesAlternativeNames={showSeriesAlternativeNames}
                         handleToggleSeriesNames={handleToggleSeriesNames}
+                        handleToggleExcludeFromRecent={handleToggleExcludeFromRecent}
                     />
                     : <Box sx={notRenderedTableBoxStyle}>
                         <CircularProgress />
