@@ -35,7 +35,7 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
             setIsRequestLoading(true);
 
             fetch(
-                `${API_URL}/season/all?page=1&quantity=10&orderColumn=id&orderBy=desc`
+                `${API_URL}/season/recent?page=1&quantity=10`
             )
                 .then(
                     async response => {
