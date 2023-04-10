@@ -3,9 +3,15 @@ import {
     CircularProgress,
     Divider,
     Grid,
+    IconButton,
+    Stack,
     Typography
 } from "@mui/material";
 import { CSSProperties } from "@mui/styled-engine";
+import {
+    KeyboardArrowLeft,
+    KeyboardArrowRight
+} from "@mui/icons-material";
 import {
     useEffect,
     useState
@@ -29,13 +35,14 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
 
     const [paginatedSeasons, setPaginatedSeasons] = useState<PaginationBuilder<Season> | null>(null);
     const [isRequestLoading, setIsRequestLoading] = useState(false);
+    const [page, setPage] = useState(1);
 
     useEffect(
         () => {
             setIsRequestLoading(true);
 
             fetch(
-                `${API_URL}/season/recent?page=1&quantity=10`
+                `${API_URL}/season/recent?page=${page}&quantity=10`
             )
                 .then(
                     async response => {
@@ -52,7 +59,9 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
                 .finally(() => setIsRequestLoading(false))
         },
 
-        []
+        [
+            page
+        ]
     );
 
     const placeholderStyleMargin = 8;
@@ -61,16 +70,47 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
         marginTop: placeholderStyleMargin,
         marginBottom: placeholderStyleMargin
     };
+    const changePageContainerStyle: CSSProperties = {
+        flexGrow: 100,
+        display: "flex",
+        justifyContent: "right"
+    };
+    const iconButtonStyle: CSSProperties = {
+        width: "50px",
+        height: "50px"
+    };
 
     return (
         <Box sx={sx}>
-            <Typography
-                variant="h4"
-                component="h2"
-                sx={{ marginBottom: 2 }}
-            >
-                Séries/Temporadas mais recentes
-            </Typography>
+            <Stack direction="row" display="flex">
+                <Box>
+                    <Typography
+                        variant="h4"
+                        component="h2"
+                        sx={{ marginBottom: 2 }}
+                    >
+                        Séries/Temporadas mais recentes
+                    </Typography>
+                </Box>
+
+                <Box sx={changePageContainerStyle}>
+                    <IconButton
+                        onClick={() => setPage(page - 1)}
+                        disabled={page <= 1}
+                        sx={iconButtonStyle}
+                    >
+                        <KeyboardArrowLeft />
+                    </IconButton>
+
+                    <IconButton
+                        onClick={() => setPage(page + 1)}
+                        disabled={!!paginatedSeasons && paginatedSeasons.lastPage <= page}
+                        sx={iconButtonStyle}
+                    >
+                        <KeyboardArrowRight />
+                    </IconButton>
+                </Box>
+            </Stack>
 
             <Divider sx={{ marginBottom: 2 }} />
 
