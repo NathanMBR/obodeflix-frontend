@@ -51,8 +51,8 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
                         if (!response.ok)
                             return console.error(data);
 
-                        const paginatedSeasons = new PaginationBuilder<Season>(data);
-                        setPaginatedSeasons(paginatedSeasons);
+                        const builtPaginatedSeasons = new PaginationBuilder<Season>(data);
+                        setPaginatedSeasons(builtPaginatedSeasons);
                     }
                 )
                 .catch(console.error)
@@ -104,7 +104,7 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
 
                     <IconButton
                         onClick={() => setPage(page + 1)}
-                        disabled={!!paginatedSeasons && paginatedSeasons.lastPage <= page}
+                        disabled={!paginatedSeasons || paginatedSeasons.lastPage <= page}
                         sx={iconButtonStyle}
                     >
                         <KeyboardArrowRight />
