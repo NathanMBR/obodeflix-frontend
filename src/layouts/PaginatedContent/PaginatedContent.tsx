@@ -163,7 +163,7 @@ export const PaginatedContent = <GenericOrderColumn extends string>(props: Pagin
                                     <Stack direction="row" sx={stackStyle}>
                                         <Typography variant="body1">
                                             {
-                                                `Exibindo ${currentQuantity} de ${totalQuantity} resultado${totalQuantity > 1 ? "s" : ""}`
+                                                `Exibindo ${quantityPerPage * (page - 1) + 1} - ${Math.min(quantityPerPage * page, totalQuantity)} (${currentQuantity}) de ${totalQuantity} resultado${totalQuantity > 1 ? "s" : ""}`
                                             }
                                         </Typography>
                                         <IconButton onClick={handleToggleFilters}>
