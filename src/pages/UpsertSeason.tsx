@@ -213,7 +213,6 @@ export const UpsertSeason = () => {
 
     const handleToggleExcludeFromRecent = (event: ChangeEvent<HTMLInputElement>) => {
         setExcludeFromMostRecent(event.target.checked);
-        console.log(event.target.checked)
     };
 
     const handleSeriesResponse = async (response: Response) => {
