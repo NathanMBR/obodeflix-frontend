@@ -4,7 +4,10 @@ import {
     Button,
     CircularProgress,
     Divider,
+    FormGroup,
+    FormControlLabel,
     Grid,
+    Switch,
     TextField,
     Typography
 } from "@mui/material";
@@ -25,6 +28,7 @@ import {
     verticalListSortingStrategy
 } from "@dnd-kit/sortable";
 import {
+    ChangeEvent,
     useEffect,
     useState
 } from "react";
@@ -81,6 +85,7 @@ export const UpsertEpisodeImports = () => {
     const [wasUpsertSuccessful, setWasUpsertSuccessful] = useState(false);
     const [sortRegex, setSortRegex] = useState<RegExp | null>(null);
     const [isRefreshingSort, setIsRefreshingSort] = useState(false);
+    const [isPositionIncludedInTitle, setIsPositionIncludedInTitle] = useState(false);
 
     const handleChosenEpisodes = (chosenEpisodesCb: Array<string>) => {
         setChosenEpisodes(chosenEpisodesCb);
@@ -143,8 +148,12 @@ export const UpsertEpisodeImports = () => {
         for (let i = 0; i < episodesToImport.length; i++) {
             const episodeToImport = episodesToImport[i];
 
+            const episodeNumber = isPositionIncludedInTitle
+                ? i + initialPosition
+                : i + 1;
+
             const episodeToImportPayload = {
-                name: `${seasonName} Episódio ${i + 1}`,
+                name: `${seasonName} Episódio ${episodeNumber}`,
                 seasonId,
                 duration: episodeToImport.duration,
                 path: episodeToImport.path,
@@ -202,6 +211,10 @@ export const UpsertEpisodeImports = () => {
         const currentEpisodeNumber = Number(currentEpisodeNumberRaw);
 
         return previousEpisodeNumber - currentEpisodeNumber;
+    };
+
+    const handleToggleEpisodeNumberPosition = (event: ChangeEvent<HTMLInputElement>) => {
+        setIsPositionIncludedInTitle(!!event.target.checked);
     };
 
     useEffect(
@@ -394,7 +407,7 @@ export const UpsertEpisodeImports = () => {
                                     </Typography>
 
                                     <Grid container spacing={2}>
-                                        <Grid item xs={10}>
+                                        <Grid item xs={9}>
                                             <Autocomplete
                                                 options={seasons}
                                                 getOptionLabel={
@@ -440,7 +453,7 @@ export const UpsertEpisodeImports = () => {
                                             />
                                         </Grid>
 
-                                        <Grid item xs={2}>
+                                        <Grid item xs={3}>
                                             <TextField
                                                 name="position"
                                                 label="Posição inicial"
@@ -462,7 +475,7 @@ export const UpsertEpisodeImports = () => {
                                             />
                                         </Grid>
 
-                                        <Grid item xs={12}>
+                                        <Grid item xs={9}>
                                             <Autocomplete
                                                 options={folders}
                                                 getOptionLabel={option => option}
@@ -500,6 +513,17 @@ export const UpsertEpisodeImports = () => {
                                                     />
                                                 }
                                             />
+                                        </Grid>
+
+                                        <Grid item xs={3}>
+                                            <FormGroup>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch onClick={handleToggleEpisodeNumberPosition as any} />
+                                                    }
+                                                    label="Considerar posição no número do episódio"
+                                                />
+                                            </FormGroup>
                                         </Grid>
                                     </Grid>
 
