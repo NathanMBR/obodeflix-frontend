@@ -42,7 +42,7 @@ export const MostRecentSeasons = (props: MostRecentSeasonsProps) => {
             setIsRequestLoading(true);
 
             fetch(
-                `${API_URL}/season/recent?page=${page}&quantity=10`
+                `${API_URL}/season/recent?page=${page}&quantity=5`
             )
                 .then(
                     async response => {
