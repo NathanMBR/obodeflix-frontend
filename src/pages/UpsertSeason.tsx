@@ -74,6 +74,7 @@ export const UpsertSeason = () => {
 
             const builtSeason = new SeasonBuilder(seasonData);
             setSeason(builtSeason);
+            setExcludeFromMostRecent(builtSeason.excludeFromMostRecent);
         } catch (error) {
             console.error(error);
         } finally {
