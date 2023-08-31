@@ -11,6 +11,7 @@
   "dependencies": {
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/sortable": "^7.0.2",
+    "@dnd-kit/utilities": "^3.2.1",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "^4.5.8",
@@ -26,5 +27,11 @@
     "@vitejs/plugin-react": "^2.2.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite@>=3.0.2 <3.2.7": ">=3.2.7",
+      "semver@>=6.0.0 <6.3.1": ">=6.3.1"
+    }
   }
 }
