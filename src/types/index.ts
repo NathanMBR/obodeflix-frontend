@@ -5,6 +5,7 @@ export * from "./Season";
 export * from "./Episode";
 export * from "./Comment";
 export * from "./EpisodeFile";
+export * from "./Track";
 
 export * from "./Pagination";
 export * from "./OrderBy";
