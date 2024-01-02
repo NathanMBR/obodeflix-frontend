@@ -16,5 +16,6 @@ export * from "./UpsertSeason";
 export * from "./ManageEpisodes";
 export * from "./UpsertEpisode";
 export * from "./UpsertEpisodeImports";
+export * from "./UnusedFolders"
 
 export * from "./NotFound";

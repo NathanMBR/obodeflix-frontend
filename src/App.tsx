@@ -45,6 +45,8 @@ import {
 
   UpsertEpisodeImports,
 
+  UnusedFolders,
+
   NotFound
 } from "./pages";
 import { Theme } from "./types";
@@ -115,6 +117,7 @@ function App() {
               <Route path="/admin/episodes" element={<ManageEpisodes />} />
               <Route path="/admin/episodes/:id" element={<UpsertEpisode />} />
               <Route path="/admin/episodes-import" element={<UpsertEpisodeImports/>} />
+              <Route path="/admin/unused-folders" element={<UnusedFolders />} />
 
               <Route path="/*" element={<NotFound />} />
             </Routes>
