@@ -36,7 +36,6 @@ export const UnusedFolders = () => {
 
       if (data.reason) {
         setReasons(data.reason)
-        console.log(data.reason)
       }
 
       return
