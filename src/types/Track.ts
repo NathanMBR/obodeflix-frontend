@@ -1,4 +1,5 @@
 export type TrackTypes = "SUBTITLE" | "AUDIO"
+export type NewTrackFieldsToOmit = "seasonId" | "createdAt" | "updatedAt" | "deletedAt"
 
 export interface Track {
   readonly id: number
