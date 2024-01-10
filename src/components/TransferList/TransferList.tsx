@@ -1,27 +1,27 @@
 import {
-    Button,
-    Card,
-    CardHeader,
-    Checkbox,
-    Divider,
-    Grid,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText
+  Button,
+  Card,
+  CardHeader,
+  Checkbox,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
 } from "@mui/material";
-import { CSSProperties } from "@mui/styled-engine";
 import {
-    ReactNode,
-    useState
+  type CSSProperties,
+  type ReactNode,
+  useState
 } from "react";
 
 type Comparable = number | string;
 export interface TransferListProps<T extends Comparable> {
-    leftList: Array<T>;
-    rightList?: Array<T>;
-    handleChosen: (chosen: Array<T>) => void;
-    sx?: CSSProperties;
+  leftList: Array<T>;
+  rightList?: Array<T>;
+  handleChosen: (chosen: Array<T>) => void;
+  sx?: CSSProperties;
 };
 
 export const TransferList = <T extends Comparable>(props: TransferListProps<T>) => {
@@ -32,16 +32,14 @@ export const TransferList = <T extends Comparable>(props: TransferListProps<T>) 
     sx
   } = props;
 
-  const height = leftList.length * 50.1;
-
   function not(a: readonly T[], b: readonly T[]) {
     return a.filter((value) => b.indexOf(value) === -1);
   }
-  
+
   function intersection(a: readonly T[], b: readonly T[]) {
     return a.filter((value) => b.indexOf(value) !== -1);
   }
-  
+
   function union(a: readonly T[], b: readonly T[]) {
     return [...a, ...not(b, a)];
   }
@@ -134,7 +132,6 @@ export const TransferList = <T extends Comparable>(props: TransferListProps<T>) 
           <List
             sx={{
               width: 500,
-              height,
               bgcolor: 'background.paper',
               overflow: 'auto'
             }}
@@ -144,7 +141,7 @@ export const TransferList = <T extends Comparable>(props: TransferListProps<T>) 
           >
             {items.map((value: T) => {
               const labelId = `transfer-list-all-item-${value}-label`;
-    
+
               return (
                 <ListItem
                   key={value}
@@ -175,7 +172,8 @@ export const TransferList = <T extends Comparable>(props: TransferListProps<T>) 
     <Grid container
         spacing={2}
         justifyContent="center"
-        alignItems="center"
+        alignItems="flex-start"
+        position="relative"
         sx={sx}
     >
       <Grid item>
@@ -185,7 +183,8 @@ export const TransferList = <T extends Comparable>(props: TransferListProps<T>) 
         />
       </Grid>
       <Grid item
-        sx={{ height }}
+        position="sticky"
+        top={64}
       >
         <Grid container direction="column">
           <Button
