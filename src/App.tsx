@@ -43,7 +43,7 @@ import {
   ManageEpisodes,
   UpsertEpisode,
 
-  UpsertEpisodeImports,
+  EpisodeImports,
 
   UnusedFolders,
 
@@ -116,7 +116,7 @@ function App() {
               <Route path="/admin/seasons/:id" element={<UpsertSeason />} />
               <Route path="/admin/episodes" element={<ManageEpisodes />} />
               <Route path="/admin/episodes/:id" element={<UpsertEpisode />} />
-              <Route path="/admin/episodes-import" element={<UpsertEpisodeImports/>} />
+              <Route path="/admin/episodes-import" element={<EpisodeImports/>} />
               <Route path="/admin/unused-folders" element={<UnusedFolders />} />
 
               <Route path="/*" element={<NotFound />} />

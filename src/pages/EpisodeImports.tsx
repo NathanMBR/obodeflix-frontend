@@ -11,7 +11,6 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import { CSSProperties } from "@mui/styled-engine";
 import {
     closestCenter,
     DndContext,
@@ -28,30 +27,31 @@ import {
     verticalListSortingStrategy
 } from "@dnd-kit/sortable";
 import {
-    ChangeEvent,
+    type ChangeEvent,
+    type CSSProperties,
     useEffect,
-    useState
+    useState,
 } from "react";
 
 import {
     EpisodeFileCard,
     ErrorCard,
-    ErrorCardStatusCodeProp,
+    type ErrorCardStatusCodeProp,
     GoToTopFAB,
     Sortable,
     SuccessCard,
     TransferList
 } from "../components";
-import { NotFound } from "../pages";
 import {
-    EpisodeFile,
-    EpisodeFileBuilder,
-    PaginationBuilder,
-    Season
+  type EpisodeFile,
+  EpisodeFileBuilder,
+  PaginationBuilder,
+  type Season
 } from "../types";
+import { NotFound } from "../pages";
 import { API_URL } from "../settings";
 
-export const UpsertEpisodeImports = () => {
+export const EpisodeImports = () => {
     interface FolderData {
         name: string;
         index: number;
@@ -254,7 +254,7 @@ export const UpsertEpisodeImports = () => {
                 .then(handleSeasonsResponse)
                 .catch(console.error)
                 .finally(() => setAreSeasonsLoading(false));
-                
+
         },
 
         []
