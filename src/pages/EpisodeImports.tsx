@@ -40,7 +40,8 @@ import {
   GoToTopFAB,
   Sortable,
   SuccessCard,
-  TransferList
+  TransferList,
+  UnexpectedError
 } from "../components";
 import {
   type EpisodeFile,
@@ -61,10 +62,6 @@ export const EpisodeImports = () => {
   const hasPermissionToAccess = userToken && localStorage.getItem("type") === "ADMIN";
   if (!hasPermissionToAccess)
     return <NotFound />;
-
-  const unexpectedErrorComponent = <Typography variant="body1">
-    Um erro inesperado ocorreu.
-  </Typography>;
 
   const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [folders, setFolders] = useState<Array<string>>([]);
@@ -664,7 +661,7 @@ export const EpisodeImports = () => {
                                         : null
                                     }
                                   </Box>
-                                  : unexpectedErrorComponent
+                                  : <UnexpectedError />
                               }
                             </Box>
                           }
@@ -673,7 +670,7 @@ export const EpisodeImports = () => {
                       : null
                   }
                 </Box>
-                : unexpectedErrorComponent
+                : <UnexpectedError />
             }
           </Box>
       }
