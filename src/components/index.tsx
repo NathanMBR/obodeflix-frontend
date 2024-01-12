@@ -21,6 +21,7 @@ export * from "./Sortable"
 export * from "./EpisodeFileCard"
 export * from "./GoToTopFAB"
 export * from "./UnexpectedError"
+export * from "./TracksManager"
 
 export * from "./AdminPanelAddContentFAB"
 export * from "./AdminPanelDeleteEpisodeCard"
