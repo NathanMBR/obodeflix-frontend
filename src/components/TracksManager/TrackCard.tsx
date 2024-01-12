@@ -113,7 +113,7 @@ export const TrackCard = (props: TrackCardProps) => {
                 <Select
                   labelId="track-type"
                   label="Tipo da faixa"
-                  defaultValue={trackTypeOptions[0].type}
+                  defaultValue={track.type}
                   onChange={event => setTrackType(event.target.value as TrackTypes)}
                   fullWidth
                 >
