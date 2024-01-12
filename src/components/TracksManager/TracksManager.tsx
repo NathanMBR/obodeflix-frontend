@@ -10,18 +10,38 @@ type RawTrack = Omit<Track, NewTrackFieldsToOmit>
 
 export type TracksManagerProps = {
   tracks: Array<RawTrack>,
-  addTrack: () => void,
-  handleTrackChange: (id: number, trackData: RawTrack) => void,
-  removeTrack: (id: number) => void
+  handleTracksChange: (rawTracks: Array<RawTrack>) => void,
 }
 
 export const TracksManager = (props: TracksManagerProps) => {
   const {
     tracks,
-    addTrack,
-    handleTrackChange,
-    removeTrack
+    handleTracksChange
   } = props
+
+  const addTrack = () => handleTracksChange([
+    ...tracks,
+    {
+      id: Math.round(Math.random() * 1_000_000),
+      title: "Nova faixa",
+      type: "AUDIO",
+      index: 0
+    }
+  ])
+
+  const updateTrack = (trackId: number, trackData: RawTrack) => {
+    const updatedTracks = [...tracks]
+    const indexToUpdate = tracks.findIndex(track => track.id === trackId)
+    updatedTracks[indexToUpdate] = trackData
+
+    handleTracksChange(updatedTracks)
+  }
+
+  const removeTrack = (trackId: number) => {
+    const updatedTracks = tracks.filter(track => track.id !== trackId)
+
+    handleTracksChange(updatedTracks)
+  }
 
   return (
     <>
@@ -50,7 +70,7 @@ export const TracksManager = (props: TracksManagerProps) => {
           track => <TrackCard
             key={track.id}
             track={track}
-            handleTrackChange={handleTrackChange}
+            handleTrackChange={updateTrack}
             removeTrack={removeTrack}
           />
         )
