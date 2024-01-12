@@ -2,20 +2,21 @@ import {
   Divider,
   Grid,
   Typography
-} from "@mui/material";
+} from "@mui/material"
 
-import { NotFound } from "../pages";
-import { AdminPanelOption } from "../components";
+import { NotFound } from "../pages"
+import { AdminPanelOption } from "../components"
 
 export const AdminPanel = () => {
-  const hasPermissionToAccess = localStorage.getItem("token") && localStorage.getItem("type") === "ADMIN";
+  const hasPermissionToAccess = localStorage.getItem("token") && localStorage.getItem("type") === "ADMIN"
   if (!hasPermissionToAccess)
-    return <NotFound />;
+    return <NotFound />
 
   interface PanelOption {
-    title: string;
-    link: string;
+    title: string
+    link: string
   }
+
   const panelOptions: Array<PanelOption> = [
     {
       title: "Séries",
@@ -45,8 +46,13 @@ export const AdminPanel = () => {
     {
       title: "Pastas não importadas",
       link: "/admin/unused-folders"
+    },
+
+    {
+      title: "Importação de Faixas",
+      link: "/admin/tracks-import"
     }
-  ];
+  ]
 
   return (
     <>
@@ -56,10 +62,12 @@ export const AdminPanel = () => {
       >
         Painel administrativo
       </Typography>
+
       <Divider />
+
       <Grid container
         spacing={2}
-        style={{ marginTop: 2 }}
+        mt={2}
       >
         {
           panelOptions.map(
