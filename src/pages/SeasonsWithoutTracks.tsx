@@ -46,7 +46,7 @@ export const SeasonsWithoutTracks = () => {
       setIsRequestLoading(true)
 
       const fetchSeasonsWithoutTracks = async () => {
-        const url = new URL(`${API_URL}/season/no-tracks`)
+        const url = new URL(`${API_URL}/season/no-tracks`, window.location.origin)
         const urlString = url.toString()
         const response = await fetch(
           urlString,

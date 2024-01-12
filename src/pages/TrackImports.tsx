@@ -65,7 +65,7 @@ export const TrackImports = () => {
       const timeInMillisecondsToWaitBeforeSearching = 350
 
       const fetchSeasons = async () => {
-        const url = new URL(`${API_URL}/season/all`)
+        const url = new URL(`${API_URL}/season/all`, window.location.origin)
         url.searchParams.append("page", "1")
         url.searchParams.append("quantity", "50")
         url.searchParams.append("orderColumn", "name")
@@ -121,7 +121,7 @@ export const TrackImports = () => {
       const timeInMillisecondsToWaitBeforeSearching = 350
 
       const fetchEpisodes = async () => {
-        const url = new URL(`${API_URL}/episode/all`)
+        const url = new URL(`${API_URL}/episode/all`, window.location.origin)
         url.searchParams.append("page", "1")
         url.searchParams.append("quantity", "50")
         url.searchParams.append("orderColumn", "id")
@@ -177,7 +177,7 @@ export const TrackImports = () => {
       setAreTracksLoading(true)
 
       const fetchTracks = async () => {
-        const url = new URL(`${API_URL}/episode/tracks/${chosenEpisodeId}`)
+        const url = new URL(`${API_URL}/episode/tracks/${chosenEpisodeId}`, window.location.origin)
         const urlString = url.toString()
         const response = await fetch(
           urlString,
@@ -233,7 +233,7 @@ export const TrackImports = () => {
 
     setIsUpdatingSeasonTracks(true)
 
-    const url = new URL(`${API_URL}/season/update/${chosenSeason.id}`)
+    const url = new URL(`${API_URL}/season/update/${chosenSeason.id}`, window.location.origin)
     const urlString = url.toString()
     const body = {
       ...chosenSeason,
