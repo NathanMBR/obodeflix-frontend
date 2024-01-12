@@ -47,6 +47,7 @@ import {
   TrackImports,
 
   UnusedFolders,
+  SeasonsWithoutTracks,
 
   NotFound
 } from "./pages";
@@ -120,6 +121,7 @@ function App() {
               <Route path="/admin/episodes-import" element={<EpisodeImports/>} />
               <Route path="/admin/unused-folders" element={<UnusedFolders />} />
               <Route path="/admin/tracks-import" element={<TrackImports />} />
+              <Route path="/admin/seasons-without-tracks" element={<SeasonsWithoutTracks />} />
 
               <Route path="/*" element={<NotFound />} />
             </Routes>
