@@ -10,12 +10,10 @@ import {
   Grid,
   MenuItem,
   Paper,
-  Stack,
   Switch,
   TextField,
   type TextFieldProps,
-  Typography
-} from "@mui/material";
+} from "@mui/material"
 import {
   type ChangeEvent,
   type FormEvent,
@@ -23,34 +21,34 @@ import {
   useEffect,
   useRef,
   useState,
-} from "react";
+} from "react"
 
 import {
   DefaultHeader,
   TracksManager
-} from "../../components";
+} from "../../components"
 import type {
   Season,
   SeasonTypes,
   Series,
   Track,
   NewTrackFieldsToOmit
-} from "../../types";
+} from "../../types"
 
 export interface AdminPanelUpsertSeasonFormProps {
-  season?: Season;
-  series: Array<Series>;
-  tracks: Array<Omit<Track, NewTrackFieldsToOmit>> ;
-  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  isRequestLoading: boolean;
-  areSeriesLoading: boolean;
-  showSeriesAlternativeNames: boolean;
-  handleToggleSeriesNames: () => void;
-  handleToggleExcludeFromRecent: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleSeriesChange: (_event: SyntheticEvent, series: Series | null) => void;
-  handleSeriesSearch: (_event: SyntheticEvent, seriesName: string) => void;
-  handleTracksChange: (tracks: Array<Omit<Track, NewTrackFieldsToOmit>>) => void;
-};
+  season?: Season
+  series: Array<Series>
+  tracks: Array<Omit<Track, NewTrackFieldsToOmit>>
+  handleSubmit: (event: FormEvent<HTMLFormElement>) => void
+  isRequestLoading: boolean
+  areSeriesLoading: boolean
+  showSeriesAlternativeNames: boolean
+  handleToggleSeriesNames: () => void
+  handleToggleExcludeFromRecent: (event: ChangeEvent<HTMLInputElement>) => void
+  handleSeriesChange: (_event: SyntheticEvent, series: Series | null) => void
+  handleSeriesSearch: (_event: SyntheticEvent, seriesName: string) => void
+  handleTracksChange: (tracks: Array<Omit<Track, NewTrackFieldsToOmit>>) => void
+}
 
 export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProps) => {
   const {
@@ -66,70 +64,45 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
     handleSeriesChange,
     handleSeriesSearch,
     handleTracksChange
-  } = props;
+  } = props
 
-  type SeasonTypeInputValue = SeasonTypes | "";
+  type SeasonTypeInputValue = SeasonTypes | ""
 
-  const nameRef = useRef<TextFieldProps>();
-  const [seasonType, setSeasonType] = useState<SeasonTypeInputValue>("");
-  const positionRef = useRef<TextFieldProps>();
-  const [seriesId, setSeriesId] = useState<number | null>(null);
-  const imageAddressRef = useRef<TextFieldProps>();
-  const descriptionRef = useRef<TextFieldProps>();
+  const nameRef = useRef<TextFieldProps>()
+  const [seasonType, setSeasonType] = useState<SeasonTypeInputValue>("")
+  const positionRef = useRef<TextFieldProps>()
+  const [seriesId, setSeriesId] = useState<number | null>(null)
+  const imageAddressRef = useRef<TextFieldProps>()
+  const descriptionRef = useRef<TextFieldProps>()
 
   useEffect(
     () => {
       if (season) {
         if (nameRef.current)
-          nameRef.current.value = season.name;
+          nameRef.current.value = season.name
 
         if (positionRef.current)
-          positionRef.current.value = season.position;
+          positionRef.current.value = season.position
 
-        setSeasonType(season.type);
+        setSeasonType(season.type)
 
         if (season.seriesId)
-          setSeriesId(season.seriesId);
+          setSeriesId(season.seriesId)
 
         if (imageAddressRef.current)
-          imageAddressRef.current.value = season.imageAddress;
+          imageAddressRef.current.value = season.imageAddress
 
         if (descriptionRef.current)
-          descriptionRef.current.value = season.description;
+          descriptionRef.current.value = season.description
       }
     },
     [season]
-  );
-
-  const handleSeasonTypeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const newSeasonType = event.target.value as SeasonTypeInputValue;
-
-    setSeasonType(newSeasonType);
-  };
-
-  const addTrack = () => handleTracksChange(
-    [
-      ...tracks,
-      {
-        id: Math.round(Math.random() * 1_000_000),
-        title: "Nova faixa",
-        type: "AUDIO",
-        index: 0
-      }
-    ]
   )
 
-  const handleTrackChange = (id: number, trackData: Omit<Track, NewTrackFieldsToOmit>) => {
-    const updatedTracks = [...tracks];
-    const indexToUpdate = tracks.findIndex(track => track.id === id);
-    updatedTracks[indexToUpdate] = trackData;
-    handleTracksChange(updatedTracks);
-  }
+  const handleSeasonTypeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const newSeasonType = event.target.value as SeasonTypeInputValue
 
-  const removeTrack = (id: number) => {
-    const updatedTracks = tracks.filter(track => track.id !== id)
-
-    handleTracksChange(updatedTracks);
+    setSeasonType(newSeasonType)
   }
 
   return (
@@ -206,9 +179,10 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                       (option, value) => option.id === value.id
                     }
                     onChange={(_event, series) => {
-                      handleSeriesChange(_event, series);
+                      handleSeriesChange(_event, series)
+
                       if (series)
-                        setSeriesId(series.id);
+                        setSeriesId(series.id)
                     }}
                     onInputChange={handleSeriesSearch}
                     defaultValue={season?.series || null}
@@ -303,9 +277,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
 
                   <TracksManager
                     tracks={tracks}
-                    addTrack={addTrack}
-                    handleTrackChange={handleTrackChange}
-                    removeTrack={removeTrack}
+                    handleTracksChange={handleTracksChange}
                   />
                 </Grid>
 
@@ -337,5 +309,5 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
         </Card>
       </Paper>
     </>
-  );
-};
+  )
+}
