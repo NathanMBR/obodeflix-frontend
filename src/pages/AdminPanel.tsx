@@ -51,6 +51,11 @@ export const AdminPanel = () => {
     {
       title: "Importação de Faixas",
       link: "/admin/tracks-import"
+    },
+
+    {
+      title: "Temporadas sem faixas",
+      link: "/admin/seasons-without-tracks"
     }
   ]
 
