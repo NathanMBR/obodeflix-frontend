@@ -25,7 +25,10 @@ import {
   useState,
 } from "react";
 
-import { DefaultHeader } from "../../components";
+import {
+  DefaultHeader,
+  TracksManager
+} from "../../components";
 import type {
   Season,
   SeasonTypes,
@@ -33,8 +36,6 @@ import type {
   Track,
   NewTrackFieldsToOmit
 } from "../../types";
-
-import { TrackCard } from "./TrackCard";
 
 export interface AdminPanelUpsertSeasonFormProps {
   season?: Season;
@@ -300,36 +301,12 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                 >
                   <Divider sx={{ mb: 1, mt: 2 }} />
 
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    padding={2}
-                  >
-                    <Typography
-                      variant="h5"
-                      component="h3"
-                    >
-                      Faixas
-                    </Typography>
-
-                    <Button
-                      variant="contained"
-                      onClick={addTrack}
-                    >
-                      Adicionar faixa
-                    </Button>
-                  </Stack>
-
-                  {
-                    tracks.map(
-                      track => <TrackCard
-                        key={track.id}
-                        track={track}
-                        handleTrackChange={handleTrackChange}
-                        removeTrack={removeTrack}
-                      />
-                    )
-                  }
+                  <TracksManager
+                    tracks={tracks}
+                    addTrack={addTrack}
+                    handleTrackChange={handleTrackChange}
+                    removeTrack={removeTrack}
+                  />
                 </Grid>
 
                 <Grid item
