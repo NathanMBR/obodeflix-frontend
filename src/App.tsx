@@ -7,7 +7,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import {
-  CSSProperties,
+  type CSSProperties,
   useState
 } from "react";
 import {
@@ -44,12 +44,13 @@ import {
   UpsertEpisode,
 
   EpisodeImports,
+  TrackImports,
 
   UnusedFolders,
 
   NotFound
 } from "./pages";
-import { Theme } from "./types";
+import type { Theme } from "./types";
 
 import "./App.css";
 
@@ -118,6 +119,7 @@ function App() {
               <Route path="/admin/episodes/:id" element={<UpsertEpisode />} />
               <Route path="/admin/episodes-import" element={<EpisodeImports/>} />
               <Route path="/admin/unused-folders" element={<UnusedFolders />} />
+              <Route path="/admin/tracks-import" element={<TrackImports />} />
 
               <Route path="/*" element={<NotFound />} />
             </Routes>
