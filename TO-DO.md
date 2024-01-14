@@ -1,6 +1,6 @@
 # To-do List
 
-- Animes em destaque
-- Colocar imagem da série nos cards
-- Perfil de usuário
-- Comentários
+- User profile
+- Series: update season order with drag-and-drop
+- Season: split add track button into add audio / subtitle buttons
+- Season: add import name / description / image from series button
