@@ -19,15 +19,19 @@ export const TracksManager = (props: TracksManagerProps) => {
     handleTracksChange
   } = props
 
-  const addTrack = () => handleTracksChange([
-    ...tracks,
-    {
-      id: Math.round(Math.random() * 1_000_000),
-      title: "Nova faixa",
-      type: "AUDIO",
-      index: 0
-    }
-  ])
+  const addTrack = (type: RawTrack["type"]) => {
+    const currentTypeTracks = tracks.filter(track => track.type === type)
+
+    handleTracksChange([
+      ...tracks,
+      {
+        id: Math.round(Math.random() * 1_000_000),
+        title: "Nova faixa",
+        type,
+        index: currentTypeTracks.length,
+      }
+    ])
+  }
 
   const updateTrack = (trackId: number, trackData: RawTrack) => {
     const updatedTracks = [...tracks]
@@ -49,6 +53,8 @@ export const TracksManager = (props: TracksManagerProps) => {
         direction="row"
         justifyContent="space-between"
         padding={2}
+        pl={0}
+        pr={0}
       >
         <Typography
           variant="h5"
@@ -57,12 +63,24 @@ export const TracksManager = (props: TracksManagerProps) => {
           Faixas
         </Typography>
 
-        <Button
-          variant="contained"
-          onClick={addTrack}
+        <Stack
+          direction="row"
+          spacing={2}
         >
-          Adicionar faixa
-        </Button>
+          <Button
+            variant="contained"
+            onClick={() => addTrack("AUDIO")}
+          >
+            Adicionar faixa de áudio
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => addTrack("SUBTITLE")}
+          >
+            Adicionar faixa de legenda
+          </Button>
+        </Stack>
       </Stack>
 
       {
