@@ -68,32 +68,28 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
 
   type SeasonTypeInputValue = SeasonTypes | ""
 
-  const nameRef = useRef<TextFieldProps>()
+  const [name, setName] = useState("")
   const [seasonType, setSeasonType] = useState<SeasonTypeInputValue>("")
   const positionRef = useRef<TextFieldProps>()
   const [seriesId, setSeriesId] = useState<number | null>(null)
-  const imageAddressRef = useRef<TextFieldProps>()
-  const descriptionRef = useRef<TextFieldProps>()
+  const [imageAddress, setImageAddress] = useState("")
+  const [description, setDescription] = useState("")
 
   useEffect(
     () => {
       if (season) {
-        if (nameRef.current)
-          nameRef.current.value = season.name
+        setName(season.name)
 
         if (positionRef.current)
           positionRef.current.value = season.position
 
         setSeasonType(season.type)
 
-        if (season.seriesId)
-          setSeriesId(season.seriesId)
+        setSeriesId(season.seriesId)
 
-        if (imageAddressRef.current)
-          imageAddressRef.current.value = season.imageAddress
+        setImageAddress(season.imageAddress || "")
 
-        if (descriptionRef.current)
-          descriptionRef.current.value = season.description
+        setDescription(season.description || "")
       }
     },
     [season]
@@ -103,6 +99,19 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
     const newSeasonType = event.target.value as SeasonTypeInputValue
 
     setSeasonType(newSeasonType)
+  }
+
+  const importSeriesData = () => {
+    if (!seriesId)
+      return
+
+    const chosenSeries = series.find(oneSeries => oneSeries.id === seriesId)
+    if (!chosenSeries)
+      return console.error("Expected chosen series")
+
+    setName(chosenSeries.mainName)
+    setDescription(chosenSeries.description || "")
+    setImageAddress(chosenSeries.imageAddress || "")
   }
 
   return (
@@ -119,24 +128,19 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
             </DefaultHeader>
 
             <form onSubmit={handleSubmit}>
-              <Grid container
-                spacing={2}
-              >
-                <Grid item
-                  xs={10}
-                >
+              <Grid container spacing={2}>
+                <Grid item xs={8.5}>
                   <TextField
                     name="name"
                     label="Nome"
-                    inputRef={nameRef}
+                    value={name}
+                    onChange={event => setName(event.target.value)}
                     required
                     fullWidth
                   />
                 </Grid>
 
-                <Grid item
-                  xs={2}
-                >
+                <Grid item xs={2}>
                   <TextField
                     select
                     name="type"
@@ -152,9 +156,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                   </TextField>
                 </Grid>
 
-                <Grid item
-                  xs={1.5}
-                >
+                <Grid item xs={1.5}>
                   <TextField
                     type="number"
                     name="position"
@@ -165,9 +167,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                   />
                 </Grid>
 
-                <Grid item
-                  xs={8.5}
-                >
+                <Grid item xs={8.5}>
                   <Autocomplete
                     options={series}
                     getOptionLabel={
@@ -181,8 +181,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                     onChange={(_event, series) => {
                       handleSeriesChange(_event, series)
 
-                      if (series)
-                        setSeriesId(series.id)
+                      setSeriesId(series?.id || null)
                     }}
                     onInputChange={handleSeriesSearch}
                     defaultValue={season?.series || null}
@@ -216,9 +215,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                   />
                 </Grid>
 
-                <Grid item
-                  xs={2}
-                >
+                <Grid item xs={2}>
                   <FormGroup>
                     <FormControlLabel
                       control={
@@ -229,20 +226,41 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                   </FormGroup>
                 </Grid>
 
-                <Grid item
-                  xs={10}
-                >
+                <Grid item xs={1.5}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    disabled={!seriesId}
+                    onClick={importSeriesData}
+                    fullWidth
+                  >
+                    Usar dados <br /> da série
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12}>
                   <TextField
                     name="imageAddress"
                     label="Link da imagem"
-                    inputRef={imageAddressRef}
+                    value={imageAddress}
+                    onChange={event => setImageAddress(event.target.value)}
                     fullWidth
                   />
                 </Grid>
 
-                <Grid item
-                  xs={2}
-                >
+                <Grid item xs={12}>
+                  <TextField
+                    name="description"
+                    label="Descrição"
+                    minRows={6}
+                    value={description}
+                    onChange={event => setDescription(event.target.value)}
+                    multiline
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
                   <FormGroup>
                     <FormControlLabel
                       control={
@@ -252,27 +270,12 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                           name="exclude-from-most-recent"
                         />
                       }
-                      label="Ocultar nos mais recentes"
+                      label="Ocultar temporada na lista de mais recentes"
                     />
                   </FormGroup>
                 </Grid>
 
-                <Grid item
-                  xs={12}
-                >
-                  <TextField
-                    name="description"
-                    label="Descrição"
-                    minRows={6}
-                    inputRef={descriptionRef}
-                    multiline
-                    fullWidth
-                  />
-                </Grid>
-
-                <Grid item
-                  xs={12}
-                >
+                <Grid item xs={12}>
                   <Divider sx={{ mb: 1, mt: 2 }} />
 
                   <TracksManager
@@ -281,13 +284,11 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                   />
                 </Grid>
 
-                <Grid item
-                  xs={12}
-                >
+                <Grid item xs={12}>
                   <Button
+                    disabled={isRequestLoading}
                     type="submit"
                     variant="contained"
-                    disabled={isRequestLoading}
                     fullWidth
                   >
                     {
@@ -301,7 +302,11 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
 
               {
                 seriesId
-                  ? <input type="hidden" name="seriesId" value={seriesId}/>
+                  ? <input
+                    value={seriesId}
+                    type="hidden"
+                    name="seriesId"
+                  />
                   : null
               }
             </form>
