@@ -12,14 +12,12 @@ import {
   Paper,
   Switch,
   TextField,
-  type TextFieldProps,
 } from "@mui/material"
 import {
   type ChangeEvent,
   type FormEvent,
   type SyntheticEvent,
   useEffect,
-  useRef,
   useState,
 } from "react"
 
@@ -70,27 +68,22 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
 
   const [name, setName] = useState("")
   const [seasonType, setSeasonType] = useState<SeasonTypeInputValue>("")
-  const positionRef = useRef<TextFieldProps>()
+  const [position, setPosition] = useState(1)
   const [seriesId, setSeriesId] = useState<number | null>(null)
   const [imageAddress, setImageAddress] = useState("")
   const [description, setDescription] = useState("")
 
   useEffect(
     () => {
-      if (season) {
-        setName(season.name)
+      if (!season)
+        return
 
-        if (positionRef.current)
-          positionRef.current.value = season.position
-
-        setSeasonType(season.type)
-
-        setSeriesId(season.seriesId)
-
-        setImageAddress(season.imageAddress || "")
-
-        setDescription(season.description || "")
-      }
+      setName(season.name)
+      setPosition(season.position)
+      setSeasonType(season.type)
+      setSeriesId(season.seriesId)
+      setImageAddress(season.imageAddress || "")
+      setDescription(season.description || "")
     },
     [season]
   )
@@ -112,6 +105,7 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
     setName(chosenSeries.mainName)
     setDescription(chosenSeries.description || "")
     setImageAddress(chosenSeries.imageAddress || "")
+    setPosition(1)
   }
 
   return (
@@ -161,7 +155,8 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
                     type="number"
                     name="position"
                     label="Posição"
-                    defaultValue={season?.position || null}
+                    value={position}
+                    onChange={event => setPosition(Number(event.target.value) || 1)}
                     required
                     fullWidth
                   />
