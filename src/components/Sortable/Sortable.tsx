@@ -4,6 +4,8 @@ import { CSS } from "@dnd-kit/utilities";
 
 import { ReactContent } from "../../types";
 
+import "./Sortable.css"
+
 export interface SortableProps {
     id: number | string;
     children: ReactContent;
@@ -37,6 +39,7 @@ export const Sortable = (props: SortableProps) => {
 
     return (
         <div
+            className="sortable"
             style={finalStyle}
             ref={setNodeRef}
             {...attributes}

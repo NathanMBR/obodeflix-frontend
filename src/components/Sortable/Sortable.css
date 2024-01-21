@@ -1,0 +1,7 @@
+.sortable {
+  cursor: grab;
+}
+
+.sortable :active {
+  cursor: grabbing;
+}
