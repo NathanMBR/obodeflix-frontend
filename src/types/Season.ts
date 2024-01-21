@@ -8,7 +8,7 @@ export const SeasonTypesEnum = {
 }
 export type SeasonTypes = keyof typeof SeasonTypesEnum
 
-export type SeasonOrderColumn = "id" | "name" | "updatedAt"
+export type SeasonOrderColumn = "id" | "name" | "position" | "updatedAt"
 
 export interface Season {
   readonly id: number
