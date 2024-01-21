@@ -1,271 +1,321 @@
 import {
-    Box,
-    CircularProgress
-} from "@mui/material";
+  Box,
+  CircularProgress
+} from "@mui/material"
 import {
-    FormEvent,
-    SyntheticEvent,
-    useEffect,
-    useState
-} from "react";
-import { useParams } from "react-router-dom";
+  type FormEvent,
+  type SyntheticEvent,
+  useEffect,
+  useState
+} from "react"
+import { useParams } from "react-router-dom"
 
 import {
-    AdminPanelUpsertSeriesForm,
-    ErrorCard,
-    ErrorCardStatusCodeProp,
-    SuccessCard
-} from "../components";
-import { NotFound } from "../pages";
+  AdminPanelUpsertSeriesForm,
+  ErrorCard,
+  type ErrorCardStatusCodeProp,
+  SuccessCard
+} from "../components"
+import { NotFound } from "../pages"
 import {
-    PaginationBuilder,
-    Series,
-    SeriesBuilder,
-    Tag
-} from "../types";
-import { API_URL } from "../settings";
+  PaginationBuilder,
+  type Season,
+  type Series,
+  SeriesBuilder,
+  type Tag,
+} from "../types"
+import { API_URL } from "../settings"
 
 export type UpsertSeriesParams = Record<"id", string>
 
 export const UpsertSeries = () => {
-    if (!localStorage.getItem("token") || localStorage.getItem("type") !== "ADMIN")
-        return <NotFound />;
+  if (!localStorage.getItem("token") || localStorage.getItem("type") !== "ADMIN")
+    return <NotFound />
 
-    const seriesId = Number(useParams<UpsertSeriesParams>().id);
-    if (Number.isNaN(seriesId) || seriesId < 0)
-        return <NotFound />;
+  const seriesId = Number(useParams<UpsertSeriesParams>().id)
+  if (Number.isNaN(seriesId) || seriesId < 0)
+    return <NotFound />
 
-    const [shouldRenderTable, setShouldRenderTable] = useState(false);
-    const [isRequestLoading, setIsRequestLoading] = useState(false);
-    const [areTagsLoading, setAreTagsLoading] = useState(true);
-    const [series, setSeries] = useState<Series | undefined>(undefined);
-    const [tags, setTags] = useState<Array<Tag>>([]);
-    const [seriesTags, setSeriesTags] = useState<Array<Tag["id"]>>([]);
-    const [tagSearch, setTagSearch] = useState("");
-    const [tagSearchTimer, setTagSearchTimer] = useState<number | null>(null);
-    const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
-    const [reasons, setReasons] = useState<string | Array<string>>();
-    const [wasUpsertSuccessful, setWasUpsertSuccessful] = useState(false);
+  const [shouldRenderTable, setShouldRenderTable] = useState(false)
+  const [isRequestLoading, setIsRequestLoading] = useState(false)
+  const [areSeasonsLoading, setAreSeasonsLoading] = useState(false)
+  const [areTagsLoading, setAreTagsLoading] = useState(true)
+  const [series, setSeries] = useState<Series | undefined>(undefined)
+  const [seasons, setSeasons] = useState<Array<Season>>([])
+  const [tags, setTags] = useState<Array<Tag>>([])
+  const [seriesTags, setSeriesTags] = useState<Array<Tag["id"]>>([])
+  const [tagSearch, setTagSearch] = useState("")
+  const [tagSearchTimer, setTagSearchTimer] = useState<number | null>(null)
+  const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null)
+  const [reasons, setReasons] = useState<string | Array<string>>()
+  const [wasUpsertSuccessful, setWasUpsertSuccessful] = useState(false)
 
-    useEffect(
+  useEffect(
+    () => {
+      if (seriesId > 0) {
+        setIsRequestLoading(true)
+
+        fetch(`${API_URL}/series/get/${seriesId}`)
+          .then(handleGetFetchResponse)
+          .catch(console.error)
+          .finally(() => setIsRequestLoading(false))
+      } else
+        setShouldRenderTable(true)
+
+      fetch(`${API_URL}/tag/all?page=1&quantity=50&orderColumn=name&orderBy=asc`)
+        .then(handleTagsResponse)
+        .catch(console.error)
+        .finally(() => setAreTagsLoading(false))
+    },
+    []
+  )
+
+  useEffect(
+    () => {
+      setAreTagsLoading(false)
+      const timeInMillisecondsToWaitBeforeSearching = 300
+
+      if (tagSearchTimer)
+        clearTimeout(tagSearchTimer)
+
+      const newTagSearchTimer = setTimeout(
         () => {
-            if (seriesId > 0) {
-                setIsRequestLoading(true);
+          setAreTagsLoading(true)
 
-                fetch(`${API_URL}/series/get/${seriesId}`)
-                    .then(handleGetFetchResponse)
-                    .catch(console.error)
-                    .finally(() => setIsRequestLoading(false));
-            } else
-                setShouldRenderTable(true);
-
-            fetch(`${API_URL}/tag/all?page=1&quantity=50&orderColumn=name&orderBy=asc`)
-                .then(handleTagsResponse)
-                .catch(console.error)
-                .finally(() => setAreTagsLoading(false));
+          fetch(
+            `${API_URL}/tag/all?page=1&quantity=50&orderColumn=name&orderBy=asc${tagSearch.length > 0 ? `&search=${tagSearch}` : ""}`
+          )
+            .then(handleTagsResponse)
+            .catch(console.error)
+            .finally(() => setAreTagsLoading(false))
         },
-        []
-    );
+        timeInMillisecondsToWaitBeforeSearching
+      )
 
-    useEffect(
-        () => {
-            setAreTagsLoading(false);
-            const timeInMillisecondsToWaitBeforeSearching = 300;
+      setTagSearchTimer(newTagSearchTimer)
+    },
+    [tagSearch]
+  )
 
-            if (tagSearchTimer)
-                clearTimeout(tagSearchTimer);
+  useEffect(
+    () => {
+      if (!series)
+        return
 
-            const newTagSearchTimer = setTimeout(
-                () => {
-                    setAreTagsLoading(true);
+      setAreSeasonsLoading(true)
 
-                    fetch(
-                        `${API_URL}/tag/all?page=1&quantity=50&orderColumn=name&orderBy=asc${tagSearch.length > 0 ? `&search=${tagSearch}` : ""}`
-                    )
-                        .then(handleTagsResponse)
-                        .catch(console.error)
-                        .finally(() => setAreTagsLoading(false));
-                },
-                timeInMillisecondsToWaitBeforeSearching
-            );
+      const url = new URL(`${API_URL}/season/all`, window.location.origin)
+      url.searchParams.set("seriesId", String(series.id))
+      url.searchParams.set("orderColumn", "position")
+      url.searchParams.set("orderBy", "asc")
 
-            setTagSearchTimer(newTagSearchTimer);
-        },
-        [tagSearch]
-    );
+      const stringUrl = url.toString()
+      fetch(stringUrl)
+        .then(handleGetSeasonsResponse)
+        .catch(console.error)
+        .finally(() => setAreSeasonsLoading(false))
+    },
 
-    const handleTagsResponse = async (response: Response) => {
-        const data = await response.json();
+    [series]
+  )
 
-        if (!response.ok)
-            return setTags([]);
+  const handleGetSeasonsResponse = async (response: Response) => {
+    const data = await response.json()
 
-        const builtPaginatedTags = new PaginationBuilder<Tag>(data);
-        setTags(builtPaginatedTags.data);
-    };
+    if (!response.ok)
+      return
 
-    const handleGetFetchResponse = async (response: Response) => {
-        const data = await response.json();
+    const builtPaginatedSeasons = new PaginationBuilder<Season>(data)
+    setSeasons(builtPaginatedSeasons.data)
+  }
 
-        if (!response.ok) {
-            setStatusCode(response.status as ErrorCardStatusCodeProp);
-            setShouldRenderTable(true);
+  const handleTagsResponse = async (response: Response) => {
+    const data = await response.json()
 
-            if (data.reason)
-                setReasons(data.reason);
+    if (!response.ok)
+      return setTags([])
 
-            return;
-        }
+    const builtPaginatedTags = new PaginationBuilder<Tag>(data)
+    setTags(builtPaginatedTags.data)
+  }
 
-        const builtSeries = new SeriesBuilder(data);
-        setSeries(builtSeries);
-        setSeriesTags(builtSeries.seriesTags.map(({ tag }) => tag.id));
-        setShouldRenderTable(true);
-    };
+  const handleGetFetchResponse = async (response: Response) => {
+    const data = await response.json()
 
-    const handleUpsertFetchResponse = async (response: Response) => {
-        const data = await response.json();
+    if (!response.ok) {
+      setStatusCode(response.status as ErrorCardStatusCodeProp)
+      setShouldRenderTable(true)
 
-        if (!response.ok) {
-            setStatusCode(response.status as ErrorCardStatusCodeProp);
-            if (data.reason)
-                setReasons(data.reason);
+      if (data.reason)
+        setReasons(data.reason)
 
-            return;
-        }
-
-        setWasUpsertSuccessful(true);
+      return
     }
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsRequestLoading(true);
+    const builtSeries = new SeriesBuilder(data)
+    setSeries(builtSeries)
+    setSeriesTags(builtSeries.seriesTags.map(({ tag }) => tag.id))
+    setShouldRenderTable(true)
+  }
 
-        const mainNameInput = event.currentTarget.elements.namedItem("mainName") as HTMLInputElement | null;
-        if (!mainNameInput)
-            return;
+  const handleUpsertFetchResponse = async (response: Response) => {
+    const data = await response.json()
 
-        const mainNameLanguageInput = event.currentTarget.elements.namedItem("mainNameLanguage") as HTMLInputElement | null;
-        if (!mainNameLanguageInput)
-            return;
+    if (!response.ok) {
+      setStatusCode(response.status as ErrorCardStatusCodeProp)
+      if (data.reason)
+        setReasons(data.reason)
 
-        const alternativeNameInput = event.currentTarget.elements.namedItem("alternativeName") as HTMLInputElement | null;
-        if (!alternativeNameInput)
-            return;
+      return
+    }
 
-        const descriptionInput = event.currentTarget.elements.namedItem("description") as HTMLInputElement | null;
-        if (!descriptionInput)
-            return;
+    setWasUpsertSuccessful(true)
+  }
 
-        const imageAddressInput = event.currentTarget.elements.namedItem("imageAddress") as HTMLInputElement | null;
-        if (!imageAddressInput)
-            return;
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsRequestLoading(true)
 
-        const upsertSeriesPayload = {
-            mainName: mainNameInput.value,
-            mainNameLanguage: mainNameLanguageInput.value,
-            alternativeName: alternativeNameInput.value || null,
-            description: descriptionInput.value || null,
-            imageAddress: imageAddressInput.value || null,
-            tags: seriesTags
-        };
+    const mainNameInput = event.currentTarget.elements.namedItem("mainName") as HTMLInputElement | null
+    if (!mainNameInput)
+      return
 
-        if (seriesId > 0) {
-            fetch(
-                `${API_URL}/series/update/${seriesId}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    },
-                    body: JSON.stringify(upsertSeriesPayload)
-                }
-            )
-                .then(handleUpsertFetchResponse)
-                .catch(console.error)
-                .finally(() => setIsRequestLoading(false));
+    const mainNameLanguageInput = event.currentTarget.elements.namedItem("mainNameLanguage") as HTMLInputElement | null
+    if (!mainNameLanguageInput)
+      return
 
-            return;
+    const alternativeNameInput = event.currentTarget.elements.namedItem("alternativeName") as HTMLInputElement | null
+    if (!alternativeNameInput)
+      return
+
+    const descriptionInput = event.currentTarget.elements.namedItem("description") as HTMLInputElement | null
+    if (!descriptionInput)
+      return
+
+    const imageAddressInput = event.currentTarget.elements.namedItem("imageAddress") as HTMLInputElement | null
+    if (!imageAddressInput)
+      return
+
+    const upsertSeriesPayload = {
+      mainName: mainNameInput.value,
+      mainNameLanguage: mainNameLanguageInput.value,
+      alternativeName: alternativeNameInput.value || null,
+      description: descriptionInput.value || null,
+      imageAddress: imageAddressInput.value || null,
+      tags: seriesTags,
+      seasonsOrder: seasons.map(
+        (season, index) => {
+          return {
+            id: season.id,
+            position: index + 1
+          }
         }
+      )
+    }
 
-        fetch(
-            `${API_URL}/series/create`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify(upsertSeriesPayload)
-            }
-        )
-            .then(handleUpsertFetchResponse)
-            .catch(console.error)
-            .finally(() => setIsRequestLoading(false));
-    };
+    if (seriesId > 0) {
+      fetch(
+        `${API_URL}/series/update/${seriesId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          },
+          body: JSON.stringify(upsertSeriesPayload)
+        }
+      )
+        .then(handleUpsertFetchResponse)
+        .catch(console.error)
+        .finally(() => setIsRequestLoading(false))
 
-    const handleErrorCardClose = () => {
-        setStatusCode(null);
-        setReasons(undefined);
+      return
+    }
 
-        if (statusCode === 404)
-            window.location.href = "/admin/series";
-    };
+    fetch(
+      `${API_URL}/series/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify(upsertSeriesPayload)
+      }
+    )
+      .then(handleUpsertFetchResponse)
+      .catch(console.error)
+      .finally(() => setIsRequestLoading(false))
+  }
 
-    const handleSuccessCardClose = () => {
-        setWasUpsertSuccessful(false);
-        window.location.href = "/admin/series";
-    };
+  const handleErrorCardClose = () => {
+    setStatusCode(null)
+    setReasons(undefined)
 
-    const handleTagsChange = (
-        _event: SyntheticEvent,
-        tags: Array<Tag>
-    ) => {
-        setSeriesTags(tags.map(tag => tag.id));
-    };
+    if (statusCode === 404)
+      window.location.href = "/admin/series"
+  }
 
-    const handleTagSearch = (
-        _event: SyntheticEvent,
-        value: string
-    ) => {
-        setTagSearch(value);
-    };
+  const handleSuccessCardClose = () => {
+    setWasUpsertSuccessful(false)
+    window.location.href = "/admin/series"
+  }
 
-    return (
-        <>
-            {
-                shouldRenderTable
-                    ? <AdminPanelUpsertSeriesForm
-                        handleSubmit={handleSubmit}
-                        handleTagsChange={handleTagsChange}
-                        handleTagSearch={handleTagSearch}
-                        isRequestLoading={isRequestLoading}
-                        areTagsLoading={areTagsLoading}
-                        series={series}
-                        tags={tags}
-                    />
-                    : <Box sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
-                        <CircularProgress />
-                    </Box>
-            }
+  const handleTagsChange = (
+    _event: SyntheticEvent,
+    tags: Array<Tag>
+  ) => {
+    setSeriesTags(tags.map(tag => tag.id))
+  }
 
-            <ErrorCard
-                isOpen={!!statusCode}
-                statusCode={statusCode}
-                reasons={reasons}
-                handleClose={handleErrorCardClose}
-            />
+  const handleTagSearch = (
+    _event: SyntheticEvent,
+    value: string
+  ) => {
+    setTagSearch(value)
+  }
 
-            <SuccessCard
-                message={seriesId > 0 ? "Série editada com sucesso!" : "Série cadastrada com sucesso!"}
-                isOpen={wasUpsertSuccessful}
-                handleClose={handleSuccessCardClose}
-            />
-        </>
-    );
+  const handleSeasonsChange = (seasons: Array<Season>) => {
+    setSeasons(seasons)
+  }
+
+  return (
+    <>
+      {
+        shouldRenderTable
+          ? <AdminPanelUpsertSeriesForm
+            series={series}
+            tags={tags}
+            seasons={seasons}
+            isRequestLoading={isRequestLoading}
+            areTagsLoading={areTagsLoading}
+            areSeasonsLoading={areSeasonsLoading}
+            handleSubmit={handleSubmit}
+            handleTagsChange={handleTagsChange}
+            handleTagSearch={handleTagSearch}
+            handleSeasonsChange={handleSeasonsChange}
+          />
+          : <Box sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+            <CircularProgress />
+          </Box>
+      }
+
+      <ErrorCard
+        isOpen={!!statusCode}
+        statusCode={statusCode}
+        reasons={reasons}
+        handleClose={handleErrorCardClose}
+      />
+
+      <SuccessCard
+        message={seriesId > 0 ? "Série editada com sucesso!" : "Série cadastrada com sucesso!"}
+        isOpen={wasUpsertSuccessful}
+        handleClose={handleSuccessCardClose}
+      />
+    </>
+  )
 }
