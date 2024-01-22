@@ -7,4 +7,3 @@
 - Search tables default orderColumn should be name/title
 - Upsert Series: add "no seasons available" message when have 0 seasons
 - Episodes Import: add ignore patterns sort option
-- Episode: add "see related seasons"
