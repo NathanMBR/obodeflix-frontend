@@ -15,7 +15,7 @@ import { Link } from "react-router-dom"
 import type { CSSProperties } from "react"
 
 import {
-  Season,
+  type Season,
   SeasonTypesEnum
 } from "../../types"
 
@@ -32,6 +32,8 @@ export const SeasonInfo = (props: SeasonInfoProps) => {
 
   if (!season)
     return null
+
+  const seasonType = SeasonTypesEnum[season.type]
 
   const imageStyle: CSSProperties = {
     border: "1px solid black",
@@ -75,12 +77,9 @@ export const SeasonInfo = (props: SeasonInfoProps) => {
                   direction="column"
                   sx={noImageStyle}
                 >
-                  <ImageNotSupported
-                    sx={{ fontSize: 32 }}
-                  />
-                  <Typography variant="subtitle2">
-                    Imagem indisponível
-                  </Typography>
+                  <ImageNotSupported sx={{ fontSize: 32 }}/>
+
+                  <Typography variant="subtitle2">Imagem indisponível</Typography>
                 </Stack>
               </>
           }
@@ -88,7 +87,8 @@ export const SeasonInfo = (props: SeasonInfoProps) => {
           <Box>
             <Stack
               direction="row"
-              sx={{ marginBottom: 2 }}
+              mb={2}
+              spacing={1}
             >
               <Typography
                 variant="h4"
@@ -109,7 +109,7 @@ export const SeasonInfo = (props: SeasonInfoProps) => {
             <Divider style={{ marginBottom: 16 }} />
 
             <Typography variant="body1">
-              <b>Tipo:</b> {SeasonTypesEnum[season.type]}
+              <b>Tipo:</b> {seasonType}
             </Typography>
 
             <Typography variant="body1">
