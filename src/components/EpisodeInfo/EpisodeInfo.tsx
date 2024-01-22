@@ -1,60 +1,107 @@
 import {
-    Button,
-    Divider,
-    Link,
-    Stack,
-    Typography
-} from "@mui/material";
+  Button,
+  Divider,
+  Fade,
+  IconButton,
+  Link as MUILink,
+  Snackbar,
+  Stack,
+  Tooltip,
+  Typography
+} from "@mui/material"
+import { useState } from "react"
+import { Visibility } from "@mui/icons-material"
+import { Link as ReactRouterLink } from "react-router-dom"
 
-import { Episode } from "../../types";
-import { API_URL } from "../../settings";
+import type { Episode } from "../../types"
+import { API_URL } from "../../settings"
 
 export interface EpisodeInfoProps {
-    episode?: Episode
-};
+  episode?: Episode
+}
 
 export const EpisodeInfo = (props: EpisodeInfoProps) => {
-    const { episode } = props;
+  const { episode } = props
 
-    if (!episode)
-        return null;
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false)
 
-    return (
-        <>
-            <Stack direction="row">
-                <Typography
-                    variant="h4"
-                    component="h2"
-                >
-                    Assistir {episode.name}
-                </Typography>
+  if (!episode)
+    return null
 
-                <Link
-                    href={`${API_URL}/episode/watch/${episode.id}`}
-                    sx={{ marginLeft: "32px" }}
-                >
-                    <Button variant="contained">Baixar episódio</Button>
-                </Link>
-            </Stack>
+  const episodeDownloadLink = `${API_URL}/episode/watch/${episode.id}`
 
-            <Divider />
+  return (
+    <>
+      <Stack
+        direction="row"
+        spacing={1}
+      >
+        <Typography
+          variant="h4"
+          component="h2"
+        >
+          Assistir {episode.name}
+        </Typography>
 
-            <Typography variant="body1">
-                Para assistir ao episódio sem precisar baixá-lo, siga os seguintes passos:
-            </Typography>
-            <ol>
-                <li>Copie o link do episódio clicando com o botão direito no botão "Baixar episódio" (acima), e em seguida clicando em "Copiar endereço do link" (ou similar)</li>
-                <li>Baixe e instale o VLC Media Player no seu computador</li>
-                <li>Abra o VLC e procure a aba "Media"</li>
-                <li>Vá até a opção "Open Network Stream"</li>
-                <li>Insira o link que você assistir </li>
-            </ol>
+        <Tooltip title="Ver temporada relacionada">
+          <ReactRouterLink to={`/seasons/${episode.seasonId}`}>
+            <IconButton>
+              <Visibility />
+            </IconButton>
+          </ReactRouterLink>
+        </Tooltip>
+      </Stack>
 
-            <img
-                src="/tutorial.png"
-                alt="Indicação da opção no VLC"
-                title="Indicação da opção no VLC"
-            />
-        </>
-    );
-};
+      <Divider />
+
+      <Stack
+        direction="row"
+        spacing={2}
+        mt={2}
+        mb={2}
+      >
+        <MUILink
+          href="#"
+          onClick={() => {
+            navigator.clipboard.writeText(episodeDownloadLink)
+            setIsSnackbarOpen(true)
+          }}
+        >
+          <Button variant="contained">Copiar link</Button>
+        </MUILink>
+
+        <MUILink href={episodeDownloadLink}>
+          <Button variant="contained">Baixar episódio</Button>
+        </MUILink>
+      </Stack>
+
+
+      <Typography variant="body1">
+        Para assistir ao episódio sem precisar baixá-lo, siga os seguintes passos:
+      </Typography>
+
+      <ol>
+        <li>Copie o link do episódio clicando no botão "Copiar link" acima</li>
+        <li>Baixe e instale o VLC Media Player no seu computador</li>
+        <li>Abra o VLC e procure a aba "Mídia" ou "Media"</li>
+        <li>Vá até a opção "Abrir Transmissão de Rede" ou "Open Network Stream"</li>
+        <li>Insira o link e clique em "Play"</li>
+      </ol>
+
+      <img
+        src="/tutorial.png"
+        alt="Indicação da opção no VLC"
+        title="Indicação da opção no VLC"
+      />
+
+      <Snackbar
+        message="Link copiado!"
+        autoHideDuration={2500}
+        open={isSnackbarOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        onClose={() => setIsSnackbarOpen(false)}
+        TransitionComponent={Fade}
+      />
+    </>
+  )
+}
