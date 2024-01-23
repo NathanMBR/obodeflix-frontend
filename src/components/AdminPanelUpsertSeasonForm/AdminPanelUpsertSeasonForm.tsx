@@ -1,15 +1,12 @@
 import {
   Autocomplete,
   Button,
-  Card,
-  CardContent,
   CircularProgress,
   Divider,
   FormControlLabel,
   FormGroup,
   Grid,
   MenuItem,
-  Paper,
   Switch,
   TextField,
 } from "@mui/material"
@@ -23,6 +20,7 @@ import {
 
 import {
   DefaultHeader,
+  SaveFAB,
   TracksManager
 } from "../../components"
 import type {
@@ -110,204 +108,188 @@ export const AdminPanelUpsertSeasonForm = (props: AdminPanelUpsertSeasonFormProp
 
   return (
     <>
-      <Paper elevation={12}>
-        <Card>
-          <CardContent>
-            <DefaultHeader style={{ textAlign: "center" }}>
-              {
-                season
-                  ? "Editar temporada"
-                  : "Cadastrar temporada"
+      <DefaultHeader style={{ textAlign: "center" }}>
+        {
+          season
+            ? "Editar temporada"
+            : "Cadastrar temporada"
+        }
+      </DefaultHeader>
+
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={8.5}>
+            <TextField
+              name="name"
+              label="Nome"
+              value={name}
+              onChange={event => setName(event.target.value)}
+              required
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={2}>
+            <TextField
+              select
+              name="type"
+              label="Tipo"
+              onChange={handleSeasonTypeChange}
+              SelectProps={{ value: seasonType }}
+              required
+              fullWidth
+            >
+              <MenuItem value="TV">TV</MenuItem>
+              <MenuItem value="MOVIE">Filme</MenuItem>
+              <MenuItem value="OTHER">Outro</MenuItem>
+            </TextField>
+          </Grid>
+
+          <Grid item xs={1.5}>
+            <TextField
+              type="number"
+              name="position"
+              label="Posição"
+              value={position}
+              onChange={event => setPosition(Number(event.target.value) || 1)}
+              required
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={8.5}>
+            <Autocomplete
+              options={series}
+              getOptionLabel={
+                series => showSeriesAlternativeNames && series.alternativeName
+                  ? series.alternativeName
+                  : series.mainName
               }
-            </DefaultHeader>
+              isOptionEqualToValue={
+                (option, value) => option.id === value.id
+              }
+              onChange={(_event, series) => {
+                handleSeriesChange(_event, series)
 
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid item xs={8.5}>
-                  <TextField
-                    name="name"
-                    label="Nome"
-                    value={name}
-                    onChange={event => setName(event.target.value)}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-
-                <Grid item xs={2}>
-                  <TextField
-                    select
-                    name="type"
-                    label="Tipo"
-                    onChange={handleSeasonTypeChange}
-                    SelectProps={{ value: seasonType }}
-                    required
-                    fullWidth
-                  >
-                    <MenuItem value="TV">TV</MenuItem>
-                    <MenuItem value="MOVIE">Filme</MenuItem>
-                    <MenuItem value="OTHER">Outro</MenuItem>
-                  </TextField>
-                </Grid>
-
-                <Grid item xs={1.5}>
-                  <TextField
-                    type="number"
-                    name="position"
-                    label="Posição"
-                    value={position}
-                    onChange={event => setPosition(Number(event.target.value) || 1)}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-
-                <Grid item xs={8.5}>
-                  <Autocomplete
-                    options={series}
-                    getOptionLabel={
-                      series => showSeriesAlternativeNames && series.alternativeName
-                        ? series.alternativeName
-                        : series.mainName
-                    }
-                    isOptionEqualToValue={
-                      (option, value) => option.id === value.id
-                    }
-                    onChange={(_event, series) => {
-                      handleSeriesChange(_event, series)
-
-                      setSeriesId(series?.id || null)
-                    }}
-                    onInputChange={handleSeriesSearch}
-                    defaultValue={season?.series || null}
-                    renderInput={
-                      params => <TextField
-                        {...params}
-                        InputProps={
-                          {
-                            ...params.InputProps,
-                            endAdornment: <>
-                              {
-                                areSeriesLoading
-                                  ? <CircularProgress size={20} />
-                                  : null
-                              }
-                              {
-                                params.InputProps.endAdornment
-                              }
-                            </>
-                          }
-                        }
-                        label="Série relacionada"
-                        variant="outlined"
-                      />
-                    }
-                    noOptionsText={
-                      areSeriesLoading
-                        ? "Carregando..."
-                        : "Não há séries disponíveis."
-                    }
-                  />
-                </Grid>
-
-                <Grid item xs={2}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch onClick={handleToggleSeriesNames} />
-                      }
-                      label="Exibir nomes alternativos"
-                    />
-                  </FormGroup>
-                </Grid>
-
-                <Grid item xs={1.5}>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    disabled={!seriesId}
-                    onClick={importSeriesData}
-                    fullWidth
-                  >
-                    Usar dados <br /> da série
-                  </Button>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <TextField
-                    name="imageAddress"
-                    label="Link da imagem"
-                    value={imageAddress}
-                    onChange={event => setImageAddress(event.target.value)}
-                    fullWidth
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <TextField
-                    name="description"
-                    label="Descrição"
-                    minRows={6}
-                    value={description}
-                    onChange={event => setDescription(event.target.value)}
-                    multiline
-                    fullWidth
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          onClick={handleToggleExcludeFromRecent as any}
-                          defaultChecked={season?.excludeFromMostRecent}
-                          name="exclude-from-most-recent"
-                        />
-                      }
-                      label="Ocultar temporada na lista de mais recentes"
-                    />
-                  </FormGroup>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Divider sx={{ mb: 1, mt: 2 }} />
-
-                  <TracksManager
-                    tracks={tracks}
-                    handleTracksChange={handleTracksChange}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Button
-                    disabled={isRequestLoading}
-                    type="submit"
-                    variant="contained"
-                    fullWidth
-                  >
+                setSeriesId(series?.id || null)
+              }}
+              onInputChange={handleSeriesSearch}
+              defaultValue={season?.series || null}
+              renderInput={
+                params => <TextField
+                  {...params}
+                  InputProps={
                     {
-                      isRequestLoading
-                        ? <CircularProgress size={20} />
-                        : "Salvar"
+                      ...params.InputProps,
+                      endAdornment: <>
+                        {
+                          areSeriesLoading
+                            ? <CircularProgress size={20} />
+                            : null
+                        }
+                        {
+                          params.InputProps.endAdornment
+                        }
+                      </>
                     }
-                  </Button>
-                </Grid>
-              </Grid>
-
-              {
-                seriesId
-                  ? <input
-                    value={seriesId}
-                    type="hidden"
-                    name="seriesId"
-                  />
-                  : null
+                  }
+                  label="Série relacionada"
+                  variant="outlined"
+                />
               }
-            </form>
-          </CardContent>
-        </Card>
-      </Paper>
+              noOptionsText={
+                areSeriesLoading
+                  ? "Carregando..."
+                  : "Não há séries disponíveis."
+              }
+            />
+          </Grid>
+
+          <Grid item xs={2}>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Switch onClick={handleToggleSeriesNames} />
+                }
+                label="Exibir nomes alternativos"
+              />
+            </FormGroup>
+          </Grid>
+
+          <Grid item xs={1.5}>
+            <Button
+              variant="contained"
+              size="small"
+              disabled={!seriesId}
+              onClick={importSeriesData}
+              fullWidth
+            >
+              Usar dados <br /> da série
+            </Button>
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              name="imageAddress"
+              label="Link da imagem"
+              value={imageAddress}
+              onChange={event => setImageAddress(event.target.value)}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              name="description"
+              label="Descrição"
+              minRows={6}
+              value={description}
+              onChange={event => setDescription(event.target.value)}
+              multiline
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Switch
+                    onClick={handleToggleExcludeFromRecent as any}
+                    defaultChecked={season?.excludeFromMostRecent}
+                    name="exclude-from-most-recent"
+                  />
+                }
+                label="Ocultar temporada na lista de mais recentes"
+              />
+            </FormGroup>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Divider sx={{ mb: 1, mt: 2 }} />
+
+            <TracksManager
+              tracks={tracks}
+              handleTracksChange={handleTracksChange}
+            />
+          </Grid>
+        </Grid>
+
+        {
+          seriesId
+            ? <input
+              value={seriesId}
+              type="hidden"
+              name="seriesId"
+            />
+            : null
+        }
+
+        <SaveFAB
+          loading={isRequestLoading}
+          submit
+        />
+      </form>
     </>
   )
 }

@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  Button,
   Card,
   CardContent,
   CircularProgress,
@@ -21,13 +20,13 @@ import {
   PointerSensor,
   useSensor,
   useSensors
-} from "@dnd-kit/core";
+} from "@dnd-kit/core"
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy
-} from "@dnd-kit/sortable";
+} from "@dnd-kit/sortable"
 import {
   type ChangeEvent,
   type FormEvent,
@@ -41,6 +40,7 @@ import { DragHandle } from "@mui/icons-material"
 
 import {
   DefaultHeader,
+  SaveFAB,
   Sortable
 } from "../../components"
 import type {
@@ -156,212 +156,194 @@ export const AdminPanelUpsertSeriesForm = (props: AdminPanelUpsertSeriesFormProp
 
   return (
     <>
-      <Paper elevation={12}>
-        <Card>
-          <CardContent>
-            <DefaultHeader style={{ textAlign: "center" }}>
-              {
-                series
-                  ? "Editar série"
-                  : "Cadastrar série"
-              }
-            </DefaultHeader>
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid item
-                  xs={10}
-                >
-                  <TextField
-                    name="mainName"
-                    label="Nome principal"
-                    inputRef={mainNameRef}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item
-                  xs={2}
-                >
-                  <TextField
-                    select
-                    label="Idioma"
-                    name="mainNameLanguage"
-                    onChange={handleMainNameLanguageChange}
-                    SelectProps={{
-                      value: mainNameLanguage
-                    }}
-                    required
-                    fullWidth
-                  >
-                    <MenuItem value="JAPANESE">Japonês</MenuItem>
-                    <MenuItem value="ENGLISH">Inglês</MenuItem>
-                  </TextField>
-                </Grid>
-                <Grid item
-                  xs={12}
-                >
-                  <TextField
-                    name="alternativeName"
-                    label="Nome alternativo"
-                    inputRef={alternativeNameRef}
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
 
-              <Grid item
-                xs={12}
-                mt={2}
-              >
-                <TextField
-                  name="description"
-                  label="Descrição"
-                  minRows={6}
-                  inputRef={descriptionRef}
-                  multiline
-                  fullWidth
-                />
-              </Grid>
+      <DefaultHeader style={{ textAlign: "center" }}>
+        {
+          series
+            ? "Editar série"
+            : "Cadastrar série"
+        }
+      </DefaultHeader>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item
+            xs={10}
+          >
+            <TextField
+              name="mainName"
+              label="Nome principal"
+              inputRef={mainNameRef}
+              required
+              fullWidth
+            />
+          </Grid>
+          <Grid item
+            xs={2}
+          >
+            <TextField
+              select
+              label="Idioma"
+              name="mainNameLanguage"
+              onChange={handleMainNameLanguageChange}
+              SelectProps={{
+                value: mainNameLanguage
+              }}
+              required
+              fullWidth
+            >
+              <MenuItem value="JAPANESE">Japonês</MenuItem>
+              <MenuItem value="ENGLISH">Inglês</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item
+            xs={12}
+          >
+            <TextField
+              name="alternativeName"
+              label="Nome alternativo"
+              inputRef={alternativeNameRef}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
 
-              <Grid item
-                xs={12}
-                mt={2}
-              >
-                <TextField
-                  name="imageAddress"
-                  label="Link da imagem"
-                  inputRef={imageAddressRef}
-                  fullWidth
-                />
-              </Grid>
+        <Grid item
+          xs={12}
+          mt={2}
+        >
+          <TextField
+            name="description"
+            label="Descrição"
+            minRows={6}
+            inputRef={descriptionRef}
+            multiline
+            fullWidth
+          />
+        </Grid>
 
-              <Grid item
-                xs={12}
-                mt={2}
-              >
-                <Autocomplete
-                  multiple
-                  options={tags}
-                  defaultValue={[...defaultTags]}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  onChange={handleTagsChange}
-                  onInputChange={handleTagSearch}
-                  getOptionLabel={tag => tag.name}
-                  filterOptions={options => options}
-                  renderInput={
-                    params => <TextField
-                      {...params}
-                      InputProps={
-                        {
-                          ...params.InputProps,
-                          endAdornment: <>
-                            {
-                              areTagsLoading
-                                ? <CircularProgress size={20} />
-                                : null
-                            }
-                            {
-                              params.InputProps.endAdornment
-                            }
-                          </>
-                        }
+        <Grid item
+          xs={12}
+          mt={2}
+        >
+          <TextField
+            name="imageAddress"
+            label="Link da imagem"
+            inputRef={imageAddressRef}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item
+          xs={12}
+          mt={2}
+        >
+          <Autocomplete
+            multiple
+            options={tags}
+            defaultValue={[...defaultTags]}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={handleTagsChange}
+            onInputChange={handleTagSearch}
+            getOptionLabel={tag => tag.name}
+            filterOptions={options => options}
+            renderInput={
+              params => <TextField
+                {...params}
+                InputProps={
+                  {
+                    ...params.InputProps,
+                    endAdornment: <>
+                      {
+                        areTagsLoading
+                          ? <CircularProgress size={20} />
+                          : null
                       }
-                      variant="outlined"
-                      label="Tags"
-                      name="tags"
-                    />
+                      {
+                        params.InputProps.endAdornment
+                      }
+                    </>
                   }
-                  noOptionsText={
-                    areTagsLoading
-                      ? "Carregando..."
-                      : "Não há tags disponíveis."
-                  }
-                  disableCloseOnSelect
-                />
-              </Grid>
+                }
+                variant="outlined"
+                label="Tags"
+                name="tags"
+              />
+            }
+            noOptionsText={
+              areTagsLoading
+                ? "Carregando..."
+                : "Não há tags disponíveis."
+            }
+            disableCloseOnSelect
+          />
+        </Grid>
 
-              <Grid item
-                xs={12}
+        {
+          series
+            ? <Grid item
+              xs={12}
+              mt={4}
+            >
+              <Divider />
+
+              <Typography
+                variant="h5"
+                component="h3"
                 mt={4}
               >
-                <Divider />
+                Temporadas
+              </Typography>
 
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  mt={4}
-                >
-                  Temporadas
-                </Typography>
-
-                {
-                  areSeasonsLoading
-                    ? <CircularProgress />
-                    : <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={handleDragEnd}
+              {
+                areSeasonsLoading
+                  ? <CircularProgress />
+                  : <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <SortableContext
+                      items={seasons.map(season => season.id)}
+                      strategy={verticalListSortingStrategy}
                     >
-                      <SortableContext
-                        items={seasons.map(season => season.id)}
-                        strategy={verticalListSortingStrategy}
-                      >
-                        {
-                          seasons.map(
-                            season => <Sortable
-                              id={season.id}
-                              key={season.id}
+                      {
+                        seasons.map(
+                          season => <Sortable
+                            id={season.id}
+                            key={season.id}
+                          >
+                            <Paper
+                              elevation={12}
+                              sx={{ margin: 2 }}
                             >
-                              <Paper
-                                elevation={12}
-                                sx={{ margin: 2 }}
-                              >
-                                <Card>
-                                  <CardContent>
-                                    <Stack
-                                      direction="row"
-                                      spacing={2}
-                                    >
-                                      <DragHandle />
+                              <Card>
+                                <CardContent>
+                                  <Stack
+                                    direction="row"
+                                    spacing={2}
+                                  >
+                                    <DragHandle />
 
-                                      <Typography variant="body1">{season.name}</Typography>
-                                    </Stack>
-                                  </CardContent>
-                                </Card>
-                              </Paper>
-                            </Sortable>
-                          )
-                        }
-                      </SortableContext>
-                    </DndContext>
-                }
-              </Grid>
+                                    <Typography variant="body1">{season.name}</Typography>
+                                  </Stack>
+                                </CardContent>
+                              </Card>
+                            </Paper>
+                          </Sortable>
+                        )
+                      }
+                    </SortableContext>
+                  </DndContext>
+              }
+            </Grid>
+            : null
+        }
 
-              <Grid item
-                xs={12}
-                mt={2}
-              >
-                <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={
-                    isRequestLoading ||
-                    !mainNameRef.current?.value ||
-                    !mainNameLanguage
-                  }
-                  fullWidth
-                >
-                  {
-                    isRequestLoading
-                      ? <CircularProgress size={24} />
-                      : "Salvar"
-                  }
-                </Button>
-              </Grid>
-            </form>
-          </CardContent>
-        </Card>
-      </Paper>
+        <SaveFAB
+          loading={isRequestLoading}
+          submit
+        />
+      </form>
     </>
   )
 }
