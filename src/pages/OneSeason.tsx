@@ -14,6 +14,7 @@ import {
 import { useParams } from "react-router-dom"
 
 import {
+  EditFAB,
   EpisodeCard,
   ErrorCard,
   type ErrorCardStatusCodeProp,
@@ -54,6 +55,14 @@ export const OneSeason = () => {
   const [orderColumn, setOrderColumn] = useState<EpisodeOrderColumn>("position")
   const [orderBy, setOrderBy] = useState<OrderBy>("asc")
   const [search, setSearch] = useState("")
+
+  const userToken = localStorage.getItem("token")
+  const userType = localStorage.getItem("type")
+  const showEditFAB =
+    !!userToken &&
+    userType === "ADMIN" &&
+    !isRequestLoading &&
+    !!season
 
   const handleSeasonFetchResponse = async (response: Response) => {
     const data = await response.json()
@@ -245,6 +254,11 @@ export const OneSeason = () => {
         statusCode={statusCode}
         reasons={reasons}
         handleClose={handleErrorCardClose}
+      />
+
+      <EditFAB
+        href={`/admin/seasons/${seasonId}`}
+        enabled={showEditFAB}
       />
     </>
   )
