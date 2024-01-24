@@ -10,6 +10,7 @@ import {
 import { useParams } from "react-router-dom"
 
 import {
+  EditFAB,
   ErrorCard,
   type ErrorCardStatusCodeProp,
   type ReplyProps,
@@ -46,6 +47,14 @@ export const OneSeries = () => {
   const [reasons, setReasons] = useState<string | Array<string>>()
 
   const [seriesSeasons, setSeriesSeasons] = useState<Pagination<Season> | null>(null)
+
+  const userToken = localStorage.getItem("token")
+  const userType = localStorage.getItem("type")
+  const showEditFAB =
+    !!userToken &&
+    userType === "ADMIN" &&
+    !isRequestLoading &&
+    !!series
 
   const handleSeasonsResponse = async (response: Response) => {
     const data = await response.json()
@@ -138,6 +147,11 @@ export const OneSeries = () => {
         statusCode={statusCode}
         reasons={reasons}
         handleClose={handleErrorCardClose}
+      />
+
+      <EditFAB
+        href={`/admin/series/${seriesId}`}
+        enabled={showEditFAB}
       />
     </>
   )
