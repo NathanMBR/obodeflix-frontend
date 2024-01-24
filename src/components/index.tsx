@@ -23,6 +23,7 @@ export * from "./GoToTopFAB"
 export * from "./UnexpectedError"
 export * from "./TracksManager"
 export * from "./SaveFAB"
+export * from "./EditFAB"
 
 export * from "./AdminPanelAddContentFAB"
 export * from "./AdminPanelDeleteEpisodeCard"
