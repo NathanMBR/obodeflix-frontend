@@ -1,121 +1,130 @@
 import {
-    Box,
-    CircularProgress,
-    Link as MUILink
-} from "@mui/material";
-import { CSSProperties } from "@mui/styled-engine";
+  Box,
+  CircularProgress
+} from "@mui/material"
 import {
-    useEffect,
-    useState
-} from "react";
-import {
-    useParams,
-    Link as RouterLink
-} from "react-router-dom";
+  type CSSProperties,
+  useEffect,
+  useState
+} from "react"
+import { useParams } from "react-router-dom"
 
 import {
-    EpisodeInfo,
-    ErrorCard,
-    ErrorCardStatusCodeProp,
-    ReplyProps
-} from "../components";
+  EditFAB,
+  EpisodeInfo,
+  ErrorCard,
+  type ErrorCardStatusCodeProp,
+  type ReplyProps
+} from "../components"
 import {
-    Episode,
-    EpisodeBuilder
-} from "../types";
-import { NotFound } from "../pages";
-import { API_URL } from "../settings";
-import { CommentsList } from "../layouts";
+  type Episode,
+  EpisodeBuilder
+} from "../types"
+import { CommentsList } from "../layouts"
+import { NotFound } from "../pages"
+import { API_URL } from "../settings"
 
-export type OneEpisodeParams = Record<"id", string>;
+export type OneEpisodeParams = Record<"id", string>
 
 export const OneEpisode = () => {
-    const episodeId = Number(useParams<OneEpisodeParams>().id);
+  const episodeId = Number(useParams<OneEpisodeParams>().id)
 
-    if (Number.isNaN(episodeId) || episodeId <= 0)
-        return <NotFound />;
+  if (Number.isNaN(episodeId) || episodeId <= 0)
+    return <NotFound />
 
-    const commentsListReplyReference: ReplyProps["reference"] = {
-        key: "episodeId",
-        value: episodeId
-    };
+  const commentsListReplyReference: ReplyProps["reference"] = {
+    key: "episodeId",
+    value: episodeId
+  }
 
-    const [episode, setEpisode] = useState<Episode | undefined>(undefined);
+  const [episode, setEpisode] = useState<Episode | undefined>(undefined)
 
-    const [isRequestLoading, setIsRequestLoading] = useState(false);
-    const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
-    const [reasons, setReasons] = useState<string | Array<string>>();
+  const [isRequestLoading, setIsRequestLoading] = useState(false)
+  const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null)
+  const [reasons, setReasons] = useState<string | Array<string>>()
 
-    const handleEpisodeFetchResponse = async (response: Response) => {
-        const data = await response.json();
+  const userToken = localStorage.getItem("token")
+  const userType = localStorage.getItem("type")
+  const showEditFAB =
+    !!userToken &&
+    userType === "ADMIN" &&
+    !isRequestLoading &&
+    !!episode
 
-        if (!response.ok) {
-            setStatusCode(response.status as ErrorCardStatusCodeProp);
+  const handleEpisodeFetchResponse = async (response: Response) => {
+    const data = await response.json()
 
-            if (data.reason)
-                setReasons(data.reason);
+    if (!response.ok) {
+      setStatusCode(response.status as ErrorCardStatusCodeProp)
 
-            return;
-        }
+      if (data.reason)
+        setReasons(data.reason)
 
-        const builtEpisode = new EpisodeBuilder(data);
-        setEpisode(builtEpisode);
-    };
+      return
+    }
 
-    const handleErrorCardClose = () => {
-        setStatusCode(null);
-        setReasons(undefined);
-        history.back();
-    };
+    const builtEpisode = new EpisodeBuilder(data)
+    setEpisode(builtEpisode)
+  }
 
-    useEffect(
-        () => {
-            setIsRequestLoading(true);
+  const handleErrorCardClose = () => {
+    setStatusCode(null)
+    setReasons(undefined)
+    history.back()
+  }
 
-            fetch(`${API_URL}/episode/get/${episodeId}`)
-                .then(handleEpisodeFetchResponse)
-                .catch(console.error)
-                .finally(() => setIsRequestLoading(false));
-        },
+  useEffect(
+    () => {
+      setIsRequestLoading(true)
 
-        []
-    );
+      fetch(`${API_URL}/episode/get/${episodeId}`)
+        .then(handleEpisodeFetchResponse)
+        .catch(console.error)
+        .finally(() => setIsRequestLoading(false))
+    },
 
-    const loadingStyle: CSSProperties = {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-    };
+    []
+  )
 
-    return (
-        <>
+  const loadingStyle: CSSProperties = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  }
+
+  return (
+    <>
+      {
+        isRequestLoading
+          ? <Box sx={loadingStyle}>
+            <CircularProgress />
+          </Box>
+          : <>
+            <EpisodeInfo episode={episode} />
+
             {
-                isRequestLoading
-                    ? <Box sx={loadingStyle}>
-                        <CircularProgress />
-                    </Box>
-                    : <>
-                        <EpisodeInfo episode={episode} />
-
-                        {
-                            episode
-                                ? <CommentsList
-                                    comments={episode.comments}
-                                    replyReference={commentsListReplyReference}
-                                    sx={{ marginTop: 8 }}
-                                />
-                                : null
-                        }
-                    </>
-                        
+              episode
+                ? <CommentsList
+                  comments={episode.comments}
+                  replyReference={commentsListReplyReference}
+                  sx={{ marginTop: 8 }}
+                />
+                : null
             }
+          </>
+      }
 
-            <ErrorCard
-                isOpen={!!statusCode}
-                statusCode={statusCode}
-                reasons={reasons}
-                handleClose={handleErrorCardClose}
-            />
-        </>
-    );
-};
+      <ErrorCard
+        isOpen={!!statusCode}
+        statusCode={statusCode}
+        reasons={reasons}
+        handleClose={handleErrorCardClose}
+      />
+
+      <EditFAB
+        href={`/admin/episodes/${episodeId}`}
+        enabled={showEditFAB}
+      />
+    </>
+  )
+}
