@@ -1,232 +1,231 @@
 import {
-    Box,
-    Button,
-    CircularProgress,
-    Stack,
-    TextField,
-    Typography
-} from "@mui/material";
-import { CSSProperties as MUICSSProperties } from "@mui/styled-engine";
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  TextField,
+  Typography
+} from "@mui/material"
 import {
-    ChangeEvent,
-    CSSProperties,
-    FormEvent,
-    useEffect,
-    useState
-} from "react";
-import { Link } from "react-router-dom";
+  type ChangeEvent,
+  type CSSProperties,
+  type FormEvent,
+  useEffect,
+  useState
+} from "react"
+import { Link } from "react-router-dom"
 
 import {
-    ErrorCard,
-    ErrorCardStatusCodeProp,
-    SuccessCard
-} from "../../components";
-import { Comment } from "../../types";
-import { API_URL } from "../../settings";
+  ErrorCard,
+  type ErrorCardStatusCodeProp,
+  SuccessCard
+} from "../../components"
+import type { Comment } from "../../types"
+import { API_URL } from "../../settings"
 
 interface CommentData {
-    body: string;
-    parentId?: number;
-    seriesId?: number;
-    episodeId?: number;
+  body: string
+  parentId?: number
+  seriesId?: number
+  episodeId?: number
 }
 
 export interface ReplyProps {
-    comment?: Comment.Parent | Comment.Child;
-    reference: {
-        key: "parentId" | "seriesId" | "episodeId";
-        value: number;
-    };
-    isEdit?: boolean;
-    sx?: MUICSSProperties;
+  comment?: Comment.Parent | Comment.Child
+  reference: {
+    key: "parentId" | "seriesId" | "episodeId"
+    value: number
+  }
+  isEdit?: boolean
+  sx?: CSSProperties
 }
 
 export const Reply = (props: ReplyProps) => {
-    const {
-        comment,
-        reference,
-        isEdit,
-        sx
-    } = props;
+  const {
+    comment,
+    reference,
+    isEdit,
+    sx
+  } = props
 
-    const userToken = localStorage.getItem("token");
+  const userToken = localStorage.getItem("token")
 
-    const [isRequestLoading, setIsRequestLoading] = useState(false);
-    const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null);
-    const [reasons, setReasons] = useState<string | Array<string> | undefined>(undefined);
-    const [wasUpsertSuccessful, setWasUpsertSuccessful] = useState(false);
+  const [isRequestLoading, setIsRequestLoading] = useState(false)
+  const [statusCode, setStatusCode] = useState<ErrorCardStatusCodeProp>(null)
+  const [reasons, setReasons] = useState<string | Array<string> | undefined>(undefined)
+  const [wasUpsertSuccessful, setWasUpsertSuccessful] = useState(false)
 
-    const [body, setBody] = useState("");
+  const [body, setBody] = useState("")
 
-    useEffect(
-        () => {
-            if (comment)
-                setBody(comment.body);
-        },
-        []
-    );
+  useEffect(
+    () => {
+      if (comment)
+        setBody(comment.body)
+    },
+    []
+  )
 
-    const handleFetchResponse = async (response: Response) => {
-        const data = await response.json();
+  const handleFetchResponse = async (response: Response) => {
+    const data = await response.json()
 
-        if (!response.ok) {
-            setStatusCode(response.status as ErrorCardStatusCodeProp);
+    if (!response.ok) {
+      setStatusCode(response.status as ErrorCardStatusCodeProp)
 
-            if (data.reason)
-                setReasons(data.reason);
+      if (data.reason)
+        setReasons(data.reason)
 
-            return;
+      return
+    }
+
+    setWasUpsertSuccessful(true)
+  }
+
+  const handleBodyChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setBody(event.currentTarget.value)
+  }
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsRequestLoading(true)
+
+    const commentData: CommentData = {
+      body
+    }
+    commentData[reference.key] = reference.value
+
+    if (isEdit)
+      return fetch(
+        `${API_URL}/comment/update/${comment!.id}`,
+
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${userToken}`
+          },
+          body: JSON.stringify(commentData)
         }
+      )
+        .then(handleFetchResponse)
+        .catch(console.error)
+        .finally(() => setIsRequestLoading(false))
 
-        setWasUpsertSuccessful(true);
-    };
+    return fetch(
+      `${API_URL}/comment/create`,
 
-    const handleBodyChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        setBody(event.currentTarget.value);
-    };
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${userToken}`
+        },
+        body: JSON.stringify(commentData)
+      }
+    )
+      .then(handleFetchResponse)
+      .catch(console.error)
+      .finally(() => setIsRequestLoading(false))
+  }
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsRequestLoading(true);
+  const fullSizeStyle: CSSProperties = {
+    width: "100%",
+    height: "100%"
+  }
 
-        const commentData: CommentData = {
-            body
-        };
-        commentData[reference.key] = reference.value;
+  return (
+    <Box sx={sx}>
+      {
+        userToken
+          ? <>
+            <form
+              style={fullSizeStyle}
+              onSubmit={handleSubmit}
+            >
+              <TextField
+                name="comment"
+                label={isEdit ? "Editar comentário" : "Adicionar comentário"}
+                minRows={6}
+                defaultValue={isEdit ? body : undefined}
+                onChange={handleBodyChange}
+                sx={{ marginBottom: 2 }}
+                multiline
+                fullWidth
+              />
 
-        if (isEdit)
-            return fetch(
-                `${API_URL}/comment/update/${comment!.id}`,
-
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={
+                  isRequestLoading ||
+                  !body
+                }
+                fullWidth
+              >
                 {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${userToken}`
-                    },
-                    body: JSON.stringify(commentData)
+                  isRequestLoading
+                    ? <CircularProgress
+                      size={24}
+                      color="inherit"
+                    />
+                    : "Salvar comentário"
                 }
-            )
-                .then(handleFetchResponse)
-                .catch(console.error)
-                .finally(() => setIsRequestLoading(false));
+              </Button>
+            </form>
+          </>
+          : <>
+            <Stack
+              direction="column"
+              sx={{ alignItems: "center", width: "100%" }}
+            >
+              <Typography variant="body1">
+                Você precisa estar logado para comentar.
 
-        return fetch(
-            `${API_URL}/comment/create`,
+                <Link to="/login">
+                  <Button>
+                    Fazer login
+                  </Button>
+                </Link>
+              </Typography>
 
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${userToken}`
-                },
-                body: JSON.stringify(commentData)
-            }
-        )
-            .then(handleFetchResponse)
-            .catch(console.error)
-            .finally(() => setIsRequestLoading(false));
-    };
+              <Typography variant="body2">
+                Não tem uma conta?
 
-    const fullSizeStyle: CSSProperties = {
-        width: "100%",
-        height: "100%"
-    };
+                <Link to="/signup">
+                  <Button size="small">
+                    Criar conta
+                  </Button>
+                </Link>
+              </Typography>
+            </Stack>
+          </>
+      }
 
-    return (
-        <Box sx={sx}>
-            {
-                userToken
-                    ? <>
-                        <form
-                            style={fullSizeStyle}
-                            onSubmit={handleSubmit}
-                        >
-                            <TextField
-                                name="comment"
-                                label={isEdit ? "Editar comentário" : "Adicionar comentário"}
-                                minRows={6}
-                                defaultValue={isEdit ? body : undefined}
-                                onChange={handleBodyChange}
-                                sx={{ marginBottom: 2 }}
-                                multiline
-                                fullWidth
-                            />
+      <ErrorCard
+        isOpen={!!statusCode}
+        statusCode={statusCode}
+        reasons={reasons}
+        handleClose={
+          () => {
+            setStatusCode(null)
+            setReasons(undefined)
+          }
+        }
+      />
 
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                disabled={
-                                    isRequestLoading ||
-                                    !body
-                                }
-                                fullWidth
-                            >
-                                {
-                                    isRequestLoading
-                                        ? <CircularProgress
-                                            size={24}
-                                            color="inherit"
-                                        />
-                                        : "Salvar comentário"
-                                }
-                            </Button>
-                        </form>
-                    </>
-                    : <>
-                        <Stack
-                            direction="column"
-                            sx={{ alignItems: "center", width: "100%" }}
-                        >
-                            <Typography variant="body1">
-                                Você precisa estar logado para comentar.
-
-                                <Link to="/login">
-                                    <Button>
-                                        Fazer login
-                                    </Button>
-                                </Link>
-                            </Typography>
-
-                            <Typography variant="body2">
-                                Não tem uma conta?
-
-                                <Link to="/signup">
-                                    <Button size="small">
-                                        Criar conta
-                                    </Button>
-                                </Link>
-                            </Typography>
-                        </Stack>
-                    </>
-            }
-
-            <ErrorCard
-                isOpen={!!statusCode}
-                statusCode={statusCode}
-                reasons={reasons}
-                handleClose={
-                    () => {
-                        setStatusCode(null);
-                        setReasons(undefined);
-                    }
-                }
-            />
-
-            <SuccessCard
-                message={
-                    isEdit
-                        ? "Comentário editado com sucesso!"
-                        : "Comentário criado com sucesso!"
-                }
-                isOpen={wasUpsertSuccessful}
-                handleClose={
-                    () => {
-                        setWasUpsertSuccessful(false);
-                        window.location.reload();
-                    }
-                }
-            />
-        </Box>
-    );
+      <SuccessCard
+        message={
+          isEdit
+            ? "Comentário editado com sucesso!"
+            : "Comentário criado com sucesso!"
+        }
+        isOpen={wasUpsertSuccessful}
+        handleClose={
+          () => {
+            setWasUpsertSuccessful(false)
+            window.location.reload()
+          }
+        }
+      />
+    </Box>
+  )
 }
