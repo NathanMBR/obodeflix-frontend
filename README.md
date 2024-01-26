@@ -8,13 +8,13 @@ It has the name "OBODE" because that's the way some of my friends call me. It co
 ## Requirements
 * The backend side of this project (see [here](https://github.com/NathanMBR/obodeflix-backend))
 * Node.js version 16 or higher
-* Yarn 1
+* PNPM
 
 ## Setup
 1. Make sure you have the backend side of this project running in your machine
 2. Create a `.env` file following the same pattern as in the ".example.env" file
-3. Install the packages with `yarn install`
-4. Run the project with `yarn dev`
+3. Install the packages with `pnpm install`
+4. Run the project with `pnpm dev`
 5. Access the URL that will appear in the terminal
 
 ## Environment variables
