@@ -39,7 +39,7 @@ export const ManageSeasons = () => {
 
   const [page, setPage] = useState(1)
   const [quantity, setQuantity] = useState(50)
-  const [orderColumn, setOrderColumn] = useState<SeasonOrderColumn>("id")
+  const [orderColumn, setOrderColumn] = useState<SeasonOrderColumn>("name")
   const [orderBy, setOrderBy] = useState<OrderBy>("asc")
   const [search, setSearch] = useState("")
 
@@ -84,10 +84,26 @@ export const ManageSeasons = () => {
     setPaginatedSeasons(builtPaginatedSeasons)
   }
 
-  const fetchAllSeasons = async () => fetch(`${API_URL}/season/all?page=${page}&quantity=${quantity}&orderColumn=${orderColumn}&orderBy=${orderBy}${search.length > 0 ? `&search=${search}` : ""}`)
-    .then(handleFetchAllSeasonsResponse)
-    .catch(console.error)
-    .finally(() => setIsRequestLoading(false))
+  const fetchAllSeasons = async () => {
+    try {
+      const url = new URL(`${API_URL}/season/all`, window.location.origin)
+      url.searchParams.append("page", String(page))
+      url.searchParams.append("quantity", String(quantity))
+      url.searchParams.append("orderColumn", String(orderColumn))
+      url.searchParams.append("orderBy", String(orderBy))
+
+      if (search)
+        url.searchParams.append("search", search)
+
+      const urlString = url.toString()
+      const response = await fetch(urlString)
+      await handleFetchAllSeasonsResponse(response)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsRequestLoading(false)
+    }
+  }
 
   const handleDeleteSeasonResponse = async (response: Response) => {
     if (!response.ok)
@@ -115,12 +131,15 @@ export const ManageSeasons = () => {
       if (!season)
         return
 
+      const url = new URL(`${API_URL}/season/inactivate/${season.id}`, window.location.origin)
+      const urlString = url.toString()
+
       fetch(
-        `${API_URL}/season/inactivate/${season.id}`,
+        urlString,
         {
           method: "DELETE",
           headers: {
-            "Authorization": `Bearer ${userToken}`
+            Authorization: `Bearer ${userToken}`
           }
         }
       )
