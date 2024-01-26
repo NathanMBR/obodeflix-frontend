@@ -198,7 +198,6 @@ export const ManageTags = () => {
     <Box sx={{ position: "relative" }}>
       <PaginatedContent<TagOrderColumn>
         contentTitle="Gerenciar tags"
-        hidePaginationContent={tags.length <= 0}
         isRequestLoading={isRequestLoading}
         currentQuantity={tags.length}
         totalQuantity={paginatedTags?.totalQuantity || 0}

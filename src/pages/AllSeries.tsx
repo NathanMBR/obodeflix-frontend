@@ -126,7 +126,6 @@ export const AllSeries = () => {
         <>
             <PaginatedContent<SeriesOrderColumn>
                 contentTitle="Séries"
-                hidePaginationContent={series.length <= 0}
                 isRequestLoading={isRequestLoading}
                 currentQuantity={series.length}
                 totalQuantity={paginatedSeries?.totalQuantity || 0}

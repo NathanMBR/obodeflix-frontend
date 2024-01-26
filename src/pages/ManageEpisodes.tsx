@@ -199,7 +199,6 @@ export const ManageEpisodes = () => {
       <Box sx={{ position: "relative" }}>
         <PaginatedContent<EpisodeOrderColumn>
           contentTitle="Gerenciar episódios"
-          hidePaginationContent={episodes.length <= 0}
           isRequestLoading={isRequestLoading}
           currentQuantity={episodes.length}
           totalQuantity={paginatedEpisodes?.totalQuantity || 0}

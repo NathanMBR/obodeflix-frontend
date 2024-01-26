@@ -199,7 +199,6 @@ export const ManageSeasons = () => {
       <Box sx={{ position: "relative" }}>
         <PaginatedContent<SeasonOrderColumn>
           contentTitle="Gerenciar temporadas"
-          hidePaginationContent={seasons.length <= 0}
           isRequestLoading={isRequestLoading}
           currentQuantity={seasons.length}
           totalQuantity={paginatedSeasons?.totalQuantity || 0}

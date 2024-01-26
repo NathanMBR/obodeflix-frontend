@@ -202,7 +202,6 @@ export const ManageSeries = () => {
       <Box sx={{ position: "relative" }}>
         <PaginatedContent<SeriesOrderColumn>
           contentTitle="Gerenciar séries"
-          hidePaginationContent={series.length <= 0}
           isRequestLoading={isRequestLoading}
           currentQuantity={series.length}
           totalQuantity={paginatedSeries?.totalQuantity || 0}
