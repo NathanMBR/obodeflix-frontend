@@ -60,15 +60,18 @@ export const EpisodeInfo = (props: EpisodeInfoProps) => {
         mt={2}
         mb={2}
       >
-        <MUILink
-          href="#"
+        <Button
+          variant="contained"
           onClick={() => {
-            navigator.clipboard.writeText(episodeDownloadLink)
+            const linkToCopy = new URL(episodeDownloadLink, window.location.origin).toString()
+
+            navigator.clipboard.writeText(linkToCopy)
             setIsSnackbarOpen(true)
           }}
         >
-          <Button variant="contained">Copiar link</Button>
-        </MUILink>
+          Copiar link
+        </Button>
+
 
         <MUILink href={episodeDownloadLink}>
           <Button variant="contained">Baixar episódio</Button>
